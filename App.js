@@ -1,19 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
+// import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+import Products from './components/screens/Products';
+import ProductsNavigator from './components/navigation/Navigator';
+
+// const Drawer = createDrawerNavigator();
+
+const fetchFonts = () => {
+    return Font.loadAsync({
+        'lato': require('./assets/fonts/Lato-Medium.ttf'),
+        'lato-bold': require('./assets/fonts/Lato-Bold.ttf')
+    });
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    if (!isLoaded) {
+        return (
+            <AppLoading 
+                startAsync={fetchFonts} 
+                onFinish={() => setIsLoaded(true)} 
+                onError={err => console.log(err)}
+            />
+        );
+    }
+
+    return (
+        <NavigationContainer>
+            <ProductsNavigator />
+        </NavigationContainer>
+    );
+}
