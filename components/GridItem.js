@@ -1,29 +1,24 @@
 import React from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    TouchableNativeFeedback
-} from "react-native";
+import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
+
+import StyledText from './StyledText';
+import { colors } from '../utils/variables';
 
 const gridItem = props => {
     const { id, name } = props.item;
 
     const buttonHandler = (route, id) => {
-        props.navigation.navigate({
-            routeName: route,
-            params: { id }
-        });
+        props.navigation.navigate(route, { id })
     };
 
     return (
         <View style={styles.gridItem}>
             <TouchableNativeFeedback
                 style={{ flex: 1 }}
-                onPress={() => buttonHandler("CategoryMeals", id)}
+                onPress={() => buttonHandler('ProductDetails', id)}
             >
                 <View style={styles.container}>
-                    <Text style={styles.name}>{name}</Text>
+                    <StyledText style={styles.name}>{name}</StyledText>
                 </View>
             </TouchableNativeFeedback>
         </View>
@@ -35,25 +30,27 @@ const styles = StyleSheet.create({
         flex: 1,
         margin: 15,
         height: 150,
-        borderRadius: 10,
+        borderRadius: 5,
         overflow: 'hidden',
-        elevation: 5
+        elevation: 3
     },
     container: {
         flex: 1,
         borderRadius: 10,
-        shadowColor: "black",
-        shadowOpacity: 0.25,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 10,
         justifyContent: "flex-end",
         alignItems: "flex-end",
-        padding: 15,
+        padding: 0,
+        // transform: [{ rotate: '-8deg'}],
     },
     name: {
-        fontFamily: "lato-bold",
+        letterSpacing: 1,
         fontSize: 22,
-        textAlign: "right"
+        backgroundColor: colors.shadow,
+        width: '100%',
+        color: 'white',
+        textAlign: 'right',
+        padding: 20,
+        paddingVertical: 4
     }
 });
 

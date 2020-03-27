@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Products from '../screens/Products';
+import ProductDetails from '../screens/ProductDetails';
 import { colors } from '../../utils/variables';
 
 const Stack = createStackNavigator();
@@ -24,6 +24,11 @@ const ProductsNavigator = () => (
         <Stack.Screen 
             name="Products"
             component={Products}
+            options={navOptions} 
+        />
+        <Stack.Screen 
+            name="ProductDetails"
+            component={ProductDetails}
             options={navOptions} 
         />
     </Stack.Navigator>

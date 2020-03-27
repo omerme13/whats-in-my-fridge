@@ -1,11 +1,10 @@
 import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import GridItem from '../GridItem';
 import HeaderButton from '../HeaderButton';
-import StyledText from '../StyledText';
-
+import { PRODUCTS } from '../../data/data';
 
 const products = props => {
 
@@ -15,16 +14,10 @@ const products = props => {
         );
     };
 
-    const productsArr = [
-        { id: 1, name: 'banana' },
-        { id: 2, name: 'cheese' }
-    ];
-
-
     return(
         <FlatList 
             keyExtractor={item => item.id} 
-            data={productsArr} 
+            data={PRODUCTS} 
             renderItem={renderGridItem} 
             numColumns={2} 
         />
