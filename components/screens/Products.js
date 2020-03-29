@@ -7,12 +7,26 @@ import HeaderButton from '../HeaderButton';
 import { PRODUCTS } from '../../data/data';
 
 const products = props => {
-
     const renderGridItem = itemData => {
         return (
             <GridItem item={itemData.item} navigation={props.navigation} />
         );
     };
+
+    const toggleDrawer = () => {};
+
+    props.navigation.setOptions({
+        headerTitle: 'Products In Fridge',
+        headerLeft: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="menu"    
+                    iconName="menu"
+                    onPress={() => props.navigation.toggleDrawer()}
+                />
+            </HeaderButtons>
+        )
+    });
 
     return(
         <FlatList 

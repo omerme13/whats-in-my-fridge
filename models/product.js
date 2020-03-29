@@ -1,11 +1,11 @@
 class Product {
-    constructor(id, name, category, expiryDate, photo, quantity) {
+    constructor(id, name, label, expiryDate, quantity, photo) {
         this.id = id,
         this.name = name;
-        this.category = category;
+        this.label = label;
         this.expiryDate = expiryDate;
-        this.photo = photo;
         this.quantity = quantity;
+        this.photo = photo;
     }
 }
 

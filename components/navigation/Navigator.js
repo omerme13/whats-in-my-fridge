@@ -14,6 +14,7 @@ const navOptions = {
     headerTintColor: 'white',
     headerTitleStyle: {
         letterSpacing: 1,
+        textTransform: 'capitalize',
         fontFamily: 'lato-bold',
         fontWeight: null /* in order to let the font family work */
     }

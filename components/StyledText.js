@@ -17,7 +17,7 @@ const bodyText = props => {
     const style = findStyle(props.type);
 
     return (
-        <Text style={{...style, ...props.style}}>
+        <Text style={{...style, ...props.style}} onPress={props.onPress}>
             {props.children}
         </Text>
     );
