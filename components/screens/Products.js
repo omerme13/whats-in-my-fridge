@@ -1,10 +1,10 @@
 import React from 'react';
 import { FlatList } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
 import GridItem from '../GridItem';
 import HeaderButton from '../HeaderButton';
-import { PRODUCTS } from '../../data/data';
 
 const products = props => {
     const renderGridItem = itemData => {
@@ -12,7 +12,8 @@ const products = props => {
             <GridItem item={itemData.item} navigation={props.navigation} />
         );
     };
-
+    
+    const products = useSelector(state => state.product.productsInFridge);
     const toggleDrawer = () => {};
 
     props.navigation.setOptions({
@@ -31,7 +32,7 @@ const products = props => {
     return(
         <FlatList 
             keyExtractor={item => item.id} 
-            data={PRODUCTS} 
+            data={products} 
             renderItem={renderGridItem} 
             numColumns={2} 
         />

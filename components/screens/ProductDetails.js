@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from 'react-native'
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { useSelector } from 'react-redux';
 
 import StyledText from '../StyledText';
 import HeaderButton from '../HeaderButton';
 import EditableText from '../EditableText';
-import { PRODUCTS } from '../../data/data';
 import { colors } from "../../utils/variables";
 
 const productDetails = props => {
     const [isToBuy, setIsToBuy] = useState(false);
-    
+
     const id = props.route.params.id;
-    const product =  PRODUCTS.find(prod => prod.id === id);
+    const products = useSelector(state => state.product.productsInFridge);
+    const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, photo } = product;
 
     const toggleFavorite = () => setIsToBuy(!isToBuy);

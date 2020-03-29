@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux'
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-// import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Products from './components/screens/Products';
 import ProductsNavigator from './components/navigation/Navigator';
+import productReducer from './store/reducers/product';
 
-// const Drawer = createDrawerNavigator();
+const rootReducer = combineReducers({
+    product: productReducer
+});
+
+const store = createStore(rootReducer);
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -31,8 +35,10 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            <ProductsNavigator />
-        </NavigationContainer>
+        <Provider store={store}>
+            <NavigationContainer>
+                <ProductsNavigator />
+            </NavigationContainer>
+        </Provider>
     );
 }
