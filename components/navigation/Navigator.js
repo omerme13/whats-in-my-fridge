@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Products from '../screens/Products';
 import ProductDetails from '../screens/ProductDetails';
+import ShoppingList from '../screens/ShoppingList';
 import { colors } from '../../utils/variables';
 
 const Stack = createStackNavigator();
@@ -30,6 +31,11 @@ const ProductsNavigator = () => (
         <Stack.Screen 
             name="ProductDetails"
             component={ProductDetails}
+            options={navOptions} 
+        />
+        <Stack.Screen 
+            name="ShoppingList"
+            component={ShoppingList}
             options={navOptions} 
         />
     </Stack.Navigator>

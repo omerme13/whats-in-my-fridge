@@ -7,9 +7,11 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import ProductsNavigator from './components/navigation/Navigator';
 import productReducer from './store/reducers/product';
+import shoppingListReducer from './store/reducers/shoppingList';
 
 const rootReducer = combineReducers({
-    product: productReducer
+    product: productReducer,
+    shoppingList: shoppingListReducer
 });
 
 const store = createStore(rootReducer);

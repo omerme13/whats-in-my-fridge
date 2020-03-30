@@ -7,15 +7,11 @@ import { colors } from '../utils/variables';
 const gridItem = props => {
     const { id, name } = props.item;
 
-    const buttonHandler = (route, id) => {
-        props.navigation.navigate(route, { id })
-    };
-
     return (
         <View style={styles.gridItem}>
             <TouchableNativeFeedback
                 style={{ flex: 1 }}
-                onPress={() => buttonHandler('ProductDetails', id)}
+                onPress={() => props.navigation.navigate('ProductDetails', { id })}
             >
                 <View style={styles.container}>
                     <StyledText style={styles.name}>{name}</StyledText>

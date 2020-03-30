@@ -8,7 +8,7 @@ const headerButton = props => {
             {...props} 
             IconComponent={MaterialIcons} 
             iconSize={23}
-            color="white"
+            color={props.color ? props.color : 'white'}
         />
     ) 
 };
