@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Products from '../screens/Products';
 import ProductDetails from '../screens/ProductDetails';
 import ShoppingList from '../screens/ShoppingList';
+import ProductAddEdit from '../screens/ProductAddEdit';
 import { colors } from '../../utils/variables';
 
 const Stack = createStackNavigator();
@@ -36,6 +37,11 @@ const ProductsNavigator = () => (
         <Stack.Screen 
             name="ShoppingList"
             component={ShoppingList}
+            options={navOptions} 
+        />
+        <Stack.Screen 
+            name="Product"
+            component={ProductAddEdit}
             options={navOptions} 
         />
     </Stack.Navigator>

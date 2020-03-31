@@ -36,14 +36,18 @@ const productDetails = props => {
         setIsToBuy(!isToBuy);
     };
 
+    const editProduct = () => {
+        props.navigation.navigate('Product', { id });
+    };
+
     props.navigation.setOptions({
         headerTitle: name,
         headerRight: navigation => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
                     title="favorite"
-                    iconName="save"
-                    onPress={updateProduct}
+                    iconName="edit"
+                    onPress={editProduct}
                 />
             </HeaderButtons>
         )

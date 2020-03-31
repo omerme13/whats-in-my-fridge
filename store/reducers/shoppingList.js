@@ -21,18 +21,6 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 listItems: listItemsAfterDelete
             }
-
-            
-
-        // case actions.UPDATE_LIST_ITEM:
-        //     const itemIndex = state.listItem.findIndex(item => (
-        //         item.id === action.listItem.id
-        //     ));
-            
-        //     return {
-        //         ...state,
-        //         listItems: state.listItems.splice(itemIndex, 1, action.listItem)
-        //     }
     }
     return state;
 };

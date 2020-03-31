@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableNativeFeedback, StyleSheet} from 'react-native';
 
-import { colors } from '../variables';
+import { colors } from '../utils/variables';
 
 const styledButton = props => {
     const textStyle = {
@@ -32,11 +32,13 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primary,
         paddingVertical: 10,
         paddingHorizontal: 20,
-        borderRadius: 300
+        borderRadius: 300,
+        marginRight: 'auto',
+        marginLeft: 'auto'
     },
     buttonText: {
         fontSize: 16,
-        fontFamily: 'open-sans-bold',
+        fontFamily: 'lato-bold',
         textTransform: 'capitalize',
         textAlign: 'center'
     }
