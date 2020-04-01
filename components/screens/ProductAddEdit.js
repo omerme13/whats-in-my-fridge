@@ -12,6 +12,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
 import Spinner from '../Spinner';
+import StyledText from '../StyledText';
+import DatePicker from '../DatePicker';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
@@ -21,34 +23,34 @@ const FORM_UPDATE = 'FORM_UPDATE';
 
 const productAddEdit = props => {
     const [isLoading, setIsLoading] = useState(false);
+    const [newProduct, setNewProduct] = useState({});
     const id = props.route.params.id;
-    let newProduct;
     const isUpdateState = id;
-
+    
     if (isUpdateState) {
         const details = useSelector(state =>
             state.product.productsInFridge.find(prod => prod.id === id)
         );
-
-        var { name, label, expiryDate, quantity, toBuy, photo } = details;
+            
+        var { name, label, expiryDate, quantity, photo } = details;
+    }
+        
+    const [date, setDate] = useState(isUpdateState ? expiryDate : null);
+    const set = datePickerDate => {
+        setDate(datePickerDate);
     }
 
     const [formState, formDispatch] = useReducer(formReducer, {
         inputValues: {
             name: isUpdateState ? name : '',
             label: isUpdateState ? label : '',
-            expiryDate: isUpdateState ? expiryDate : '',
             quantity: isUpdateState ? quantity : '',
-            toBuy: isUpdateState ? toBuy : '',
             photo: isUpdateState ? photo : ''
         },
         inputValidities: {
             name: isUpdateState ? true : false,
             label: isUpdateState ? true : false,
-            expiryDate: isUpdateState ? true : false,
             quantity: isUpdateState ? true : false,
-            toBuy: isUpdateState ? true : false,
-            photo: isUpdateState ? true : false,
         },
         isFormValid: isUpdateState ? true : false
     });
@@ -63,6 +65,7 @@ const productAddEdit = props => {
                 Alert.alert('Wrong input', 'Please check the form again', [
                     { text: 'Okay' }
                 ]);
+                setIsLoading(false);
 
                 return;
             }
@@ -73,10 +76,9 @@ const productAddEdit = props => {
                 dispatch(createProduct(newProduct));
             }
 
-            props.navigation.goBack();
-            setIsLoading(false);
+            props.navigation.goBack(null);
         },
-        [formState]
+        [formState, newProduct]
     );
 
     const setTextHandler = (inputType, inputValue, isValid) => {
@@ -89,25 +91,17 @@ const productAddEdit = props => {
     };
 
     useEffect(() => {
-        const { name, label, expiryDate, quantity, toBuy, photo } = formState.inputValues;
-
-        newProduct = new Product(
+        const { name, label, quantity, photo } = formState.inputValues;
+        setNewProduct(new Product(
             isUpdateState ? id : new Date().toString(),
             name,
             label,
-            expiryDate,
+            date,
             quantity,
-            toBuy,
             photo
-        );
+        ));
 
-    }, [formState]);
-
-    useEffect(() => {
-        if (error) {
-            Alert.alert('An error occurred', error, [{text: 'OK'}])
-        }
-    }, [error]);
+    }, [formState, date]);
 
     if (isLoading) {
         return <Spinner />;
@@ -159,6 +153,10 @@ const productAddEdit = props => {
                         required
                         min={0.1}
                     />
+                    <StyledText type="title" style={{textAlign: 'left'}}>
+                        Expiry Date
+                    </StyledText>
+                    <DatePicker expiryDate={date} set={set} />
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>

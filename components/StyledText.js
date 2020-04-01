@@ -26,13 +26,13 @@ const bodyText = props => {
 const styles = StyleSheet.create({
     body: {
         fontFamily: 'lato',
-        fontSize: 15,
+        fontSize: 19,
         color: colors.text,
         marginVertical: 5
     },
     title: {
         fontFamily: 'lato-bold',
-        fontSize: 22,
+        fontSize: 23,
         textAlign: 'center',
         textTransform: 'capitalize',
         marginVertical: 10,

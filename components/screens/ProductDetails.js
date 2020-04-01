@@ -11,6 +11,7 @@ import Label from '../Label';
 import ListItem from '../../models/listItem';
 import Product from '../../models/product';
 import { colors } from "../../utils/variables";
+import { convertDate } from "../../utils/convert";
 import { addToShoppingList, deleteFromShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
 
@@ -21,6 +22,7 @@ const productDetails = props => {
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, toBuy, photo } = product;
+    console.log({ detailsProduct: product })
     const [isToBuy, setIsToBuy] = useState(toBuy);
 
     const toggleToBuy = () => {
@@ -40,6 +42,8 @@ const productDetails = props => {
         props.navigation.navigate('Product', { id });
     };
 
+    const formattedExpiryDate = convertDate(expiryDate);
+
     props.navigation.setOptions({
         headerTitle: name,
         headerRight: navigation => (
@@ -53,9 +57,6 @@ const productDetails = props => {
         )
     });
 
-    const [mm, dd, yy] = expiryDate.toLocaleDateString().split('/');
-    const formattedExpiryDate = `${dd}-${mm}-${yy}`;
-
     return (
         <View style={styles.productDetails}>
             <View style={styles.top}>
@@ -68,9 +69,16 @@ const productDetails = props => {
                 <Label>{label}</Label>
             </View>
             <View style={styles.bottom}>              
-                <EditableText type="title" style={styles.name}>{name}</EditableText>
+                <StyledText type="title" style={styles.name}>{name}</StyledText>
                 <StyledText style={styles.quantity}>{quantity} pcs</StyledText>
-                <StyledText style={styles.expiryDate}>use before {formattedExpiryDate}</StyledText>
+                {expiryDate 
+                ? (
+                    <StyledText style={styles.expiryDate}>
+                        Use before <StyledText style={{fontFamily: 'lato-bold'}}>
+                            {formattedExpiryDate}
+                            </StyledText>
+                    </StyledText>
+                ) : null}
             </View>
         </View>
     );
@@ -90,7 +98,6 @@ const styles = StyleSheet.create({
         padding: 15
     },
     bottom: {
-        // backgroundColor: 'blue',
         alignItems: 'center',
         flex: 5,
         width: '80%'
@@ -99,7 +106,7 @@ const styles = StyleSheet.create({
         color: colors.secondary
     },
     quantity: {
-        fontSize: 18,
+        // fontSize: 18,
         color: colors.textLight
     },
     expiryDate: {

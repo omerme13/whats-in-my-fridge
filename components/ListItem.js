@@ -22,7 +22,7 @@ const listItem = props => {
     return (
         <View style={changingStyle}>
             <View style={styles.data}>
-                <StyledText style={styles.title}>{name}</StyledText>
+                <StyledText style={styles.name}>{name}</StyledText>
                 <Label>{label}</Label>
             </View>
             <View style={styles.deleteButton}>
@@ -54,8 +54,7 @@ const styles = StyleSheet.create({
     sum: {
         fontFamily: "lato-bold"
     },
-    title: {
-        fontSize: 18,
+    name: {
         marginRight: 25
     },
     deleteButton: {

@@ -42,7 +42,9 @@ const formInput = props => {
 
     return (
         <View style={styles.formInput}>
-            <StyledText style={styles.label}>{props.label}</StyledText>
+            <StyledText type="title" style={{textAlign: 'left'}}>
+                {props.label}
+            </StyledText>
             <TextInput
                 {...props}
                 value={inputValue.toString()} // in case there is a number(price/quantity) it becomes invalid
@@ -62,17 +64,14 @@ const styles = StyleSheet.create({
     formInput: {
         width: "100%"
     },
-    label: {
-        fontFamily: "lato-bold",
-        marginVertical: 3,
-        textTransform: 'capitalize'
-    },
     input: {
         paddingHorizontal: 2,
         paddingVertical: 5,
         borderBottomColor: "lightgray",
         borderBottomWidth: 1,
-        marginBottom: 25
+        marginBottom: 25,
+        fontFamily: 'lato',
+        fontSize: 19
     },
     error: {
         color: 'orangered',

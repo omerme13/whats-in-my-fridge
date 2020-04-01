@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         padding: 5,
         borderRadius: 3,
-        elevation: 3
+        elevation: 3,
+        fontSize: 15
     }
 });
 
