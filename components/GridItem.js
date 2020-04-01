@@ -1,17 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 import StyledText from './StyledText';
 import { colors } from '../utils/variables';
 
-const gridItem = props => {
-    const { id, name } = props.item;
+const gridItem = ({ item, isDeleteState, addToNames, navigation }) => {
+    const [isChecked, setIsChecked] = useState(false);
+    const { id, name } = item;
+
+    const toggleIsChecked = () => setIsChecked(!isChecked);
+    const handlePress = () => {
+        if (isDeleteState) {
+            toggleIsChecked();
+            addToNames(name);
+        } else {
+            navigation.navigate('ProductDetails', { id });
+        }
+    }
+
+    const iconName = isDeleteState
+        ? (
+            `check-box${isChecked ? '' : '-outline-blank'}`
+        )
+        : null;
+
+    useEffect(() => {
+        if (!isDeleteState) {
+            setIsChecked(false);
+        }
+    }, [isDeleteState]);    
 
     return (
         <View style={styles.gridItem}>
+            <View style={styles.deleteButton}>
+                <MaterialIcons 
+                    name={iconName} 
+                    size={30} 
+                    onPress={toggleIsChecked}
+                />
+            </View>
             <TouchableNativeFeedback
                 style={{ flex: 1 }}
-                onPress={() => props.navigation.navigate('ProductDetails', { id })}
+                onPress={handlePress}
             >
                 <View style={styles.container}>
                     <StyledText style={styles.name}>{name}</StyledText>

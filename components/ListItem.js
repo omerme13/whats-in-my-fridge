@@ -23,7 +23,7 @@ const listItem = props => {
         <View style={changingStyle}>
             <View style={styles.data}>
                 <StyledText style={styles.name}>{name}</StyledText>
-                <Label>{label}</Label>
+                <Label style={{ marginRight: 5 }}>{label}</Label>
             </View>
             <View style={styles.deleteButton}>
                 <MaterialIcons name={`check-box${isChecked ? '' : '-outline-blank'}`} size={23} onPress={checkListItem}/>
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center",
         padding: 15,
+        paddingLeft: 20
     },
     data: {
         flexDirection: "row",

@@ -11,7 +11,7 @@ const label = props => {
 
     return (
         <StyledText 
-            style={styles.label} 
+            style={{...styles.label, ...props.style}} 
             onPress={() => getProductsByLabel(props.children)}
         >
             {props.children}
