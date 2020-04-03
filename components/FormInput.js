@@ -12,7 +12,7 @@ const formInput = props => {
         const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let isInputValid = true;
 
-        if (props.required && text.trim().length === 0) {
+        if (props.required && !text.trim().length) {
             isInputValid = false;
         }
         if (props.email && !emailRegex.test(text.toLowerCase())) {
@@ -33,7 +33,6 @@ const formInput = props => {
 
     const setHandler = text => {
         const isInputValid = validateInput(text);
-
         setIsValid(isInputValid);
         setIsTouched(true);
         setInputValue(text);

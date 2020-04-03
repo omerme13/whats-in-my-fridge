@@ -22,7 +22,6 @@ const productDetails = props => {
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, toBuy, photo } = product;
-    console.log({ detailsProduct: product })
     const [isToBuy, setIsToBuy] = useState(toBuy);
 
     const toggleToBuy = () => {
@@ -66,7 +65,7 @@ const productDetails = props => {
                     color={colors.secondary}
                     onPress={toggleToBuy}
                 />
-                <Label>{label}</Label>
+                <Label show={label ? true : false}>{label}</Label>
             </View>
             <View style={styles.bottom}>              
                 <StyledText type="title" style={styles.name}>{name}</StyledText>

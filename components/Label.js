@@ -10,12 +10,16 @@ const label = props => {
     };
 
     return (
-        <StyledText 
-            style={{...styles.label, ...props.style}} 
-            onPress={() => getProductsByLabel(props.children)}
-        >
-            {props.children}
-        </StyledText>
+        <>
+        {props.show &&
+            <StyledText 
+                style={{...styles.label, ...props.style}} 
+                onPress={() => getProductsByLabel(props.children)}
+            >
+                {props.children}
+            </StyledText>
+        }
+        </>
     )
 };
 

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'lato-bold',
-        fontSize: 23,
+        fontSize: 21,
         textAlign: 'center',
         textTransform: 'capitalize',
         marginVertical: 10,

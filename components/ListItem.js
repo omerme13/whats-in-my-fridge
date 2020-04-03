@@ -23,7 +23,12 @@ const listItem = props => {
         <View style={changingStyle}>
             <View style={styles.data}>
                 <StyledText style={styles.name}>{name}</StyledText>
-                <Label style={{ marginRight: 5 }}>{label}</Label>
+                <Label 
+                    style={{ marginRight: 5 }} 
+                    show={label ? true : false}
+                >
+                        {label}
+                </Label>
             </View>
             <View style={styles.deleteButton}>
                 <MaterialIcons name={`check-box${isChecked ? '' : '-outline-blank'}`} size={23} onPress={checkListItem}/>

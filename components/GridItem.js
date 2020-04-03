@@ -5,15 +5,15 @@ import { MaterialIcons } from "@expo/vector-icons";
 import StyledText from './StyledText';
 import { colors } from '../utils/variables';
 
-const gridItem = ({ item, isDeleteState, addToNames, navigation }) => {
+const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     const { id, name } = item;
-
+    
     const toggleIsChecked = () => setIsChecked(!isChecked);
     const handlePress = () => {
         if (isDeleteState) {
             toggleIsChecked();
-            addToNames(name);
+            addToIds(id);
         } else {
             navigation.navigate('ProductDetails', { id });
         }

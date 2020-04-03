@@ -13,7 +13,6 @@ const reducer = (state = initialState, action) => {
             }
 
         case actions.DELETE_FROM_SHOPPING_LIST:
-            console.log('DELETE_FROM_SHOPPING_LIST')
             const listItemsAfterDelete = {...state.listItems};
             delete listItemsAfterDelete[action.itemId];
 

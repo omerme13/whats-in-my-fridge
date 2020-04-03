@@ -2,16 +2,13 @@ import { PRODUCTS } from '../../data/data';
 import * as actions from '../actions/product';
 
 const initialState = {
-    productsInFridge: PRODUCTS,
-    productsToBuy: PRODUCTS.filter(product => product.toBuy)
+    productsInFridge: PRODUCTS
 };
-
 
 const reducer = (state = initialState, action) => {
 
     switch(action.type) {
         case actions.UPDATE_PRODUCT:
-            console.log({reducerProduct: action.product})
             const updatedProductsInFridge = [...state.productsInFridge];
             const itemIndex = updatedProductsInFridge.findIndex(item => (
                 item.id === action.product.id
@@ -29,6 +26,19 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 productsInFridge: state.productsInFridge.concat(action.product)
+            };
+
+        case actions.DELETE_PRODUCT:
+            const deletedProductsInFridge = [...state.productsInFridge];
+            const deletedItemIndex = deletedProductsInFridge.findIndex(item => (
+                item.id === action.productId
+            ));
+
+            deletedProductsInFridge.splice(deletedItemIndex, 1);
+
+            return {
+                ...state,
+                productsInFridge: deletedProductsInFridge
             };
     }
 

@@ -3,9 +3,8 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux'
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
-import { NavigationContainer } from '@react-navigation/native';
 
-import ProductsNavigator from './components/navigation/Navigator';
+import MainNavigator from './components/navigation/MainNavigator';
 import productReducer from './store/reducers/product';
 import shoppingListReducer from './store/reducers/shoppingList';
 
@@ -38,9 +37,7 @@ export default function App() {
 
     return (
         <Provider store={store}>
-            <NavigationContainer>
-                <ProductsNavigator />
-            </NavigationContainer>
+            <MainNavigator />
         </Provider>
     );
 }

@@ -49,7 +49,7 @@ const productAddEdit = props => {
         },
         inputValidities: {
             name: isUpdateState ? true : false,
-            label: isUpdateState ? true : false,
+            label: true,
             quantity: isUpdateState ? true : false,
         },
         isFormValid: isUpdateState ? true : false

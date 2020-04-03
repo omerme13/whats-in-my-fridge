@@ -6,24 +6,32 @@ import { useSelector, useDispatch } from 'react-redux';
 import GridItem from '../GridItem';
 import HeaderButton from '../HeaderButton';
 import RoundButton from '../RoundButton';
+import { deleteProduct } from '../../store/actions/product';
 
 const products = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
-    const [names, setNames] = useState([]);
+    const [ids, setIds] = useState();
+    const dispatch = useDispatch();
 
-    console.log(names)
+    const addToIds = id => {
+        if (ids.includes(id)) {
+            const idsArr = [...ids];
+            const idIndex = idsArr.indexOf(id);
 
-    const addToNames = name => {
-        if (names.includes(name)) {
-            const namesArr = [...names];
-            const nameIndex = namesArr.indexOf(name);
-
-            namesArr.splice(nameIndex, 1);
-            setNames(namesArr);
+            idsArr.splice(idIndex, 1);
+            setIds(idsArr);
         } else {
-            setNames(names.concat(name));
+            setIds(ids.concat(id));
         }
-    }
+    };
+
+    const removeFromIds = () => {
+        for (const productId of ids) {
+            dispatch(deleteProduct(productId));
+        }
+
+        setIds([]);
+    };
 
     const renderGridItem = itemData => {
         return (
@@ -31,7 +39,7 @@ const products = props => {
                 item={itemData.item} 
                 navigation={props.navigation}
                 isDeleteState={isDeleteState}
-                addToNames={addToNames}
+                addToIds={addToIds}
             />
         );
     };
@@ -40,21 +48,12 @@ const products = props => {
 
     useEffect(() => {
         if (!isDeleteState) {
-            setNames([]);
+            setIds([]);
         }
     }, [isDeleteState]);
 
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',
-        headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                    title="To Buy"    
-                    iconName="shopping-cart"
-                    onPress={() => props.navigation.navigate('ShoppingList')}  
-                />
-            </HeaderButtons>
-        ),
         headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
@@ -89,13 +88,12 @@ const products = props => {
                     <RoundButton 
                         show={isDeleteState} 
                         name="delete" 
-                        onPress={() => {}} 
+                        onPress={removeFromIds} 
                     />
                     <RoundButton 
                         show={isDeleteState} 
-                        name="settings-backup-restore"
+                        name="arrow-back"
                         onPress={() => setIsDeleteState(!isDeleteState)}
-                        style={{ marginLeft: 15 }}
                     />
                 </View>
             </View>
@@ -108,6 +106,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: '5%',
         right: '5%',
+        flexDirection: 'row'
     },
     editContainer: {
         flexDirection: 'row'
