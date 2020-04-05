@@ -4,6 +4,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
 import GridItem from '../GridItem';
+import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import RoundButton from '../RoundButton';
 import { deleteProduct } from '../../store/actions/product';
@@ -25,11 +26,14 @@ const products = props => {
         }
     };
 
+    const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
+
     const removeFromIds = () => {
         for (const productId of ids) {
             dispatch(deleteProduct(productId));
         }
 
+        toggleDeleteState();
         setIds([]);
     };
 
@@ -45,6 +49,21 @@ const products = props => {
     };
 
     const products = useSelector(state => state.product.productsInFridge);
+
+    const content = products.length
+        ? (
+            <FlatList 
+                keyExtractor={item => item.id} 
+                data={products} 
+                renderItem={renderGridItem} 
+                numColumns={2} 
+            />
+        ) : (
+            <EmptyScreenMsg 
+                message="Your fridge is empty, add new products."
+                iconName="fridge"
+            />
+        )
 
     useEffect(() => {
         if (!isDeleteState) {
@@ -67,12 +86,7 @@ const products = props => {
 
     return(
         <View style={{ position: 'relative', flex: 1 }}>
-            <FlatList 
-                keyExtractor={item => item.id} 
-                data={products} 
-                renderItem={renderGridItem} 
-                numColumns={2} 
-            />
+            {content}
             <View style={styles.buttonsContainer}>
                 <RoundButton 
                     show={!isDeleteState} 
@@ -83,7 +97,7 @@ const products = props => {
                     <RoundButton 
                         show={!isDeleteState} 
                         name="edit" 
-                        onPress={() => setIsDeleteState(!isDeleteState)} 
+                        onPress={toggleDeleteState} 
                     />
                     <RoundButton 
                         show={isDeleteState} 
@@ -93,7 +107,7 @@ const products = props => {
                     <RoundButton 
                         show={isDeleteState} 
                         name="arrow-back"
-                        onPress={() => setIsDeleteState(!isDeleteState)}
+                        onPress={toggleDeleteState}
                     />
                 </View>
             </View>

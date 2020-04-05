@@ -4,7 +4,6 @@ import {
     StyleSheet,
     ScrollView,
     Alert,
-    KeyboardAvoidingView
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -121,45 +120,39 @@ const productAddEdit = props => {
     });
 
     return (
-        <KeyboardAvoidingView
-            behavior="padding"
-            keyboardVerticalOffset={100}
-            style={{ flex: 1 }}
-        >
-            <ScrollView>
-                <View style={styles.form}>
-                    <FormInput
-                        label="name"
-                        input={formState.inputValues.name}
-                        set={(inputValue, isValid) =>
-                            setTextHandler("name", inputValue, isValid)
-                        }
-                        required
-                    />
-                    <FormInput
-                        label="label"
-                        input={formState.inputValues.label}
-                        set={(inputValue, isValid) =>
-                            setTextHandler("label", inputValue, isValid)
-                        }
-                    />
-                    <FormInput
-                        label="quantity"
-                        input={formState.inputValues.quantity}
-                        keyboardType="number-pad"
-                        set={(inputValue, isValid) =>
-                            setTextHandler("quantity", inputValue, isValid)
-                        }
-                        required
-                        min={0.1}
-                    />
-                    <StyledText type="title" style={{textAlign: 'left'}}>
-                        Expiry Date
-                    </StyledText>
-                    <DatePicker expiryDate={date} set={set} />
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+        <ScrollView>
+            <View style={styles.form}>
+                <FormInput
+                    label="name"
+                    input={formState.inputValues.name}
+                    set={(inputValue, isValid) =>
+                        setTextHandler("name", inputValue, isValid)
+                    }
+                    required
+                />
+                <FormInput
+                    label="label"
+                    input={formState.inputValues.label}
+                    set={(inputValue, isValid) =>
+                        setTextHandler("label", inputValue, isValid)
+                    }
+                />
+                <FormInput
+                    label="quantity"
+                    input={formState.inputValues.quantity}
+                    keyboardType="number-pad"
+                    set={(inputValue, isValid) =>
+                        setTextHandler("quantity", inputValue, isValid)
+                    }
+                    required
+                    min={0.1}
+                />
+                <StyledText type="title" style={{textAlign: 'left'}}>
+                    Expiry Date
+                </StyledText>
+                <DatePicker expiryDate={date} set={set} />
+            </View>
+        </ScrollView>
     );
 };
 

@@ -2,19 +2,12 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import ShoppingList from "../screens/ShoppingList";
-import ProductsNavigator from "./ProductsNavigator";
-import { colors } from "../../utils/variables";
+import ShoppingListNavigator from "./ShoppingListNavigator";
+import ProductsNavigator from "./FridgeNavigator";
+import { tabOptions } from './options';
 
 const Tab = createBottomTabNavigator();
 
-const tabOptions = {
-    activeTintColor: colors.secondary,
-    labelStyle: {
-        fontSize: 12,
-        fontFamily: 'lato-bold'
-    }
-};
 
 const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
@@ -30,7 +23,7 @@ const screenOptions = ({ route }) => ({
 const TabNavigator = () => (
     <Tab.Navigator tabBarOptions={tabOptions} screenOptions={screenOptions}>
         <Tab.Screen name="My Fridge" component={ProductsNavigator} />
-        <Tab.Screen name="Shopping List" component={ShoppingList} />
+        <Tab.Screen name="Shopping List" component={ShoppingListNavigator} />
     </Tab.Navigator>
 );
 

@@ -6,7 +6,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import StyledText from '../StyledText';
 import HeaderButton from '../HeaderButton';
-import EditableText from '../EditableText';
 import Label from '../Label';
 import ListItem from '../../models/listItem';
 import Product from '../../models/product';
