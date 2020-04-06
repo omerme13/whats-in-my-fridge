@@ -20,12 +20,12 @@ const productDetails = props => {
     const id = props.route.params.id;
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
-    const { name, label, expiryDate, quantity, toBuy, photo } = product;
+    const { name, label, expiryDate, quantity, unit, toBuy, photo } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
 
     const toggleToBuy = () => {
-        const newListItem = new ListItem(name, name, quantity, label);
-        const updatedProduct = new Product(id, name, label, expiryDate, quantity, !isToBuy);
+        const newListItem = new ListItem(name, name, label);
+        const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy);
         
         dispatch(addToShoppingList(newListItem));
         dispatch(updateProduct(updatedProduct));
@@ -68,7 +68,7 @@ const productDetails = props => {
             </View>
             <View style={styles.bottom}>              
                 <StyledText type="title" style={styles.name}>{name}</StyledText>
-                <StyledText style={styles.quantity}>{quantity} pcs</StyledText>
+                <StyledText style={styles.quantity}>{quantity} {unit}</StyledText>
                 {expiryDate 
                 ? (
                     <StyledText style={styles.expiryDate}>

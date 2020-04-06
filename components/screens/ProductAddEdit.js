@@ -4,6 +4,7 @@ import {
     StyleSheet,
     ScrollView,
     Alert,
+    Picker
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -16,7 +17,6 @@ import DatePicker from '../DatePicker';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
-import { colors } from '../../utils/variables';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -31,9 +31,10 @@ const productAddEdit = props => {
             state.product.productsInFridge.find(prod => prod.id === id)
         );
             
-        var { name, label, expiryDate, quantity, photo } = details;
+        var { name, label, expiryDate, quantity, unit, photo } = details;
     }
         
+    const [formUnit, setFormUnit] = useState(isUpdateState ? unit : 'pcs');
     const [date, setDate] = useState(isUpdateState ? expiryDate : null);
     const set = datePickerDate => {
         setDate(datePickerDate);
@@ -61,7 +62,7 @@ const productAddEdit = props => {
             setIsLoading(true);
 
             if (!formState.isFormValid) {
-                Alert.alert('Wrong input', 'Please check the form again', [
+                Alert.alert('Wrong input', 'Please enter valid name and quantity.', [
                     { text: 'Okay' }
                 ]);
                 setIsLoading(false);
@@ -80,6 +81,7 @@ const productAddEdit = props => {
         [formState, newProduct]
     );
 
+    console.log(newProduct)
     const setTextHandler = (inputType, inputValue, isValid) => {
         formDispatch({
             type: FORM_UPDATE,
@@ -97,10 +99,11 @@ const productAddEdit = props => {
             label,
             date,
             quantity,
+            formUnit,
             photo
         ));
 
-    }, [formState, date]);
+    }, [formState, date, formUnit]);
 
     if (isLoading) {
         return <Spinner />;
@@ -128,6 +131,7 @@ const productAddEdit = props => {
                     set={(inputValue, isValid) =>
                         setTextHandler("name", inputValue, isValid)
                     }
+                    maxLength={16}
                     required
                 />
                 <FormInput
@@ -137,16 +141,30 @@ const productAddEdit = props => {
                         setTextHandler("label", inputValue, isValid)
                     }
                 />
-                <FormInput
-                    label="quantity"
-                    input={formState.inputValues.quantity}
-                    keyboardType="number-pad"
-                    set={(inputValue, isValid) =>
-                        setTextHandler("quantity", inputValue, isValid)
-                    }
-                    required
-                    min={0.1}
-                />
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <FormInput
+                        label="quantity"
+                        input={formState.inputValues.quantity}
+                        keyboardType="number-pad"
+                        set={(inputValue, isValid) =>
+                            setTextHandler("quantity", inputValue, isValid)
+                        }
+                        required
+                        min={0.1}
+                        textAlign="center"
+                    />
+                    <Picker
+                        selectedValue={formUnit}
+                        style={styles.picker}
+                        onValueChange={(itemValue, itemIndex) => setFormUnit(itemValue)}
+                    >
+                        <Picker.Item label="pcs" value="pcs" />
+                        <Picker.Item label="Kg" value="Kg" />
+                        <Picker.Item label="Lbs" value="Lbs" />
+                    </Picker>
+                </View>
+
+
                 <StyledText type="title" style={{textAlign: 'left'}}>
                     Expiry Date
                 </StyledText>
@@ -160,6 +178,16 @@ const styles = StyleSheet.create({
     form: {
         flex: 1,
         padding: 25
+    },
+    picker: {
+        height: 50,
+        width: 150,
+        marginTop: 30,
+        marginLeft: 15,
+        fontSize: 20,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'red'
     }
 });
 

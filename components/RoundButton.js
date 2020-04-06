@@ -11,10 +11,10 @@ const roundButton = props => {
                 <View style={{ ...styles.roundButton, ...props.style }}>
                     <MaterialIcons
                         name={props.name}
-                        size={40}
+                        size={props.size || 40}
                         color={colors.secondary}
                         onPress={props.onPress}
-                        />
+                    />
                 </View>
             }
         </>

@@ -28,7 +28,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     };
 
     const iconName = isDeleteState
-        ? `check-box${isChecked ? "" : "-outline-blank"}`
+        ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
         : null;
 
     useEffect(() => {
@@ -44,7 +44,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                 onPress={handlePress}
             >
                 <View style={styles.gridItem}>
-                    <MaterialIcons
+                    <MaterialCommunityIcons
                         name={iconName}
                         size={30}
                         onPress={toggleIsChecked}
@@ -54,24 +54,24 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                     </StyledText>
                     <View style={styles.data}>
                         <View style={styles.dataItemContainer}>
-                            <MaterialCommunityIcons
-                                name="numeric"
-                                size={30}
-                                onPress={toggleIsChecked}
-                            />
                             <StyledText style={styles.dataItem}>
                                 {quantity}
                             </StyledText>
+                            <MaterialCommunityIcons
+                                name="scale"
+                                size={30}
+                                onPress={toggleIsChecked}
+                            />
                         </View>
                         <View style={styles.dataItemContainer}>
+                            <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primary : 'orangered'}}>
+                                {diffInDays}
+                            </StyledText>
                             <MaterialCommunityIcons
                                 name="timer-sand"
                                 size={30}
                                 onPress={toggleIsChecked}
                             />
-                            <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primary : 'orangered'}}>
-                                {diffInDays}
-                            </StyledText>
                         </View>
                     </View>
                     <Label show={label ? true : false}>{label}</Label>
@@ -110,10 +110,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         width: '100%',
         paddingRight: 15,
-        // backgroundColor: 'red'
     },
     dataItem: {
-        marginLeft: 10,
+        marginRight: 10,
         fontFamily: 'lato-bold',
         color: colors.primary
     }

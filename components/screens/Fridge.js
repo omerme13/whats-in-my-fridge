@@ -6,8 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import GridItem from '../GridItem';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
-import RoundButton from '../RoundButton';
 import { deleteProduct } from '../../store/actions/product';
+import RoundButtons from '../MainButtons';
 
 const products = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
@@ -87,44 +87,16 @@ const products = props => {
     return(
         <View style={{ position: 'relative', flex: 1 }}>
             {content}
-            <View style={styles.buttonsContainer}>
-                <RoundButton 
-                    show={!isDeleteState} 
-                    name="add" 
-                    onPress={() => props.navigation.navigate('Product', {id: null})} 
-                />
-                <View style={styles.editContainer}>
-                    <RoundButton 
-                        show={!isDeleteState} 
-                        name="edit" 
-                        onPress={toggleDeleteState} 
-                    />
-                    <RoundButton 
-                        show={isDeleteState} 
-                        name="delete" 
-                        onPress={removeFromIds} 
-                    />
-                    <RoundButton 
-                        show={isDeleteState} 
-                        name="arrow-back"
-                        onPress={toggleDeleteState}
-                    />
-                </View>
-            </View>
+            <RoundButtons
+                navigation={props.navigation}
+                navigateTo="Product"
+                isDeleteState={isDeleteState}
+                toggleDeleteState={toggleDeleteState}
+                removeFromIds={removeFromIds}
+            />
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    buttonsContainer: {
-        position: 'absolute',
-        bottom: '5%',
-        right: '5%',
-        flexDirection: 'row'
-    },
-    editContainer: {
-        flexDirection: 'row'
-    }
-});
 
 export default products;

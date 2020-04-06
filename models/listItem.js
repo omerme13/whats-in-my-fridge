@@ -1,8 +1,7 @@
 class ListItem {
-    constructor(id, name, quantity, label) {
+    constructor(id, name, label) {
         this.id = id,
         this.name = name;
-        this.quantity = quantity;
         this.label = label;
     }
 }
