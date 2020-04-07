@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from 'react-redux';
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ const productDetails = props => {
     const dispatch = useDispatch();
     
     const id = props.route.params.id;
+    // const imageUri = props.route.params.imageUri;
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, unit, toBuy, photo } = product;
@@ -25,7 +26,7 @@ const productDetails = props => {
 
     const toggleToBuy = () => {
         const newListItem = new ListItem(name, name, label);
-        const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy);
+        const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
         
         dispatch(addToShoppingList(newListItem));
         dispatch(updateProduct(updatedProduct));
@@ -41,9 +42,10 @@ const productDetails = props => {
     };
 
     const formattedExpiryDate = convertDate(expiryDate);
+    const headerTitle = name.length > 20 ? name.slice(0,20) + '...' : name;
 
     props.navigation.setOptions({
-        headerTitle: name,
+        headerTitle,
         headerRight: navigation => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
@@ -78,6 +80,12 @@ const productDetails = props => {
                     </StyledText>
                 ) : null}
             </View>
+            <Image
+                source={{
+                    uri: photo,
+                }}
+                style={styles.image}
+            />
         </View>
     );
 };
@@ -91,24 +99,33 @@ const styles = StyleSheet.create({
     top: {
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1,
+        flex: 2,
         width: '80%',
-        padding: 15
+        padding: 15,
+        // backgroundColor: 'red'
     },
     bottom: {
         alignItems: 'center',
+        justifyContent: 'center',
         flex: 5,
-        width: '80%'
+        width: '80%',
+        // backgroundColor: 'green'
+
     },
     name: {
         color: colors.secondary
     },
     quantity: {
-        // fontSize: 18,
         color: colors.textLight
     },
     expiryDate: {
 
+    },
+    image: {
+        left: 0,
+        bottom: 0,
+        width: '100%',
+        flex: 10
     }
 });
 

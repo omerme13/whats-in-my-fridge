@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from "./StyledText";
 import Label from "./Label";
@@ -8,13 +8,16 @@ import { colors } from "../utils/variables";
 
 const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const { id, name, label } = item;
-    const checkListItem = () => setIsChecked(!isChecked);
+    const [isDone, setIsDone] = useState(false);
+    let { id, name, label } = item;
 
     const changingStyle = {
         ...styles.listItemRow,
-        backgroundColor: isChecked ? "lightgray" : colors.primaryLightest
+        backgroundColor: isDone ? "lightgray" : colors.primaryLightest
     };
+
+    const toggleIsChecked = () => setIsChecked(!isChecked);
+    const toggleIsDone = () => setIsDone(!isDone);
 
     const handlePress = () => {
         if (isDeleteState) {
@@ -25,12 +28,38 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
         }
     };
 
+    name = name.length > 20 ? name.slice(0,20) + '...' : name;
+
+    const iconName = isDeleteState
+    ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
+    : null;
+
+    useEffect(() => {
+        if (!isDeleteState) {
+            setIsChecked(false);
+        }
+    }, [isDeleteState]);
+
     return (
         <>
             <TouchableNativeFeedback onPress={handlePress}>
                 <View style={changingStyle}>
                     <View style={styles.data}>
-                        <StyledText style={styles.name}>{name}</StyledText>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            {isDeleteState && 
+                                <MaterialCommunityIcons
+                                    name={iconName}
+                                    size={30}
+                                    onPress={toggleIsChecked}
+                                    style={{ marginRight: 15 }}
+                                />
+                            }
+                            <StyledText 
+                                style={isDone ? styles.nameDone : styles.name}
+                            >
+                                {name}
+                            </StyledText>
+                        </View>
                         <Label
                             style={{ marginRight: 5 }}
                             show={label ? true : false}
@@ -41,10 +70,10 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
                     <View style={styles.deleteButton}>
                         <MaterialIcons
                             name={`check-box${
-                                isChecked ? "" : "-outline-blank"
+                                isDone ? "" : "-outline-blank"
                             }`}
-                            size={23}
-                            onPress={checkListItem}
+                            size={27}
+                            onPress={toggleIsDone}
                         />
                     </View>
                 </View>
@@ -78,6 +107,10 @@ const styles = StyleSheet.create({
     },
     name: {
         marginRight: 25
+    },
+    nameDone: {
+        marginRight: 25,
+        textDecorationLine: 'line-through',
     },
     deleteButton: {
         marginLeft: "auto"

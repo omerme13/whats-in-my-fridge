@@ -18,20 +18,23 @@ const datePicker = props => {
         props.set(currentDate);
     };
     
-    const showDatepicker = () => setShow(true);
+    const showDatePicker = () => setShow(true);
     const formattedExpiryDate = convertDate(date);
 
     return (
         <View>
             <View>
                 <StyledText>
-                    {props.expiryDate ? formattedExpiryDate : 'please choose expiry date'}
+                    {props.expiryDate
+                        ? formattedExpiryDate
+                        : 'please choose expiry date'
+                    }
                 </StyledText>
                 <MaterialIcons
                     name="date-range"
                     size={30}
                     color={colors.secondary}
-                    onPress={showDatepicker}
+                    onPress={showDatePicker}
                 />
             </View>
             {show && (

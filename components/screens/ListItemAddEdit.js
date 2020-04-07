@@ -11,7 +11,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
 import Spinner from '../Spinner';
-import { addToShoppingList, updateListItem } from '../../store/actions/shoppingList';
+import { addToShoppingList } from '../../store/actions/shoppingList';
 import ListItem from '../../models/listItem';
 
 
@@ -99,12 +99,14 @@ const listItemAddEdit = props => {
                         setListItemName(inputValue);
                         setIsNameValid(isValid);
                     }}
+                    maxLength={32}
                     required
                 />
                 <FormInput
                     label="label"
                     input={listItemLabel}
                     set={inputValue => setListItemLabel(inputValue)}
+                    maxLength={16}
                 />
             </View>
         </ScrollView>

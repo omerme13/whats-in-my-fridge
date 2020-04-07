@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { View, StyleSheet, TouchableNativeFeedback, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from "./StyledText";
 import Label from "./Label";
@@ -9,6 +9,7 @@ import { colors } from "../utils/variables";
 const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     const { id, name, label, quantity, expiryDate } = item;
+    const imageUri = 'https://www.freedigitalphotos.net/images/img/homepage/394230.jpg';
 
     let diffInDays;
     if (expiryDate) {
@@ -23,7 +24,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
             toggleIsChecked();
             addToIds(id);
         } else {
-            navigation.navigate("ProductDetails", { id });
+            navigation.navigate("ProductDetails", { id,  imageUri});
         }
     };
 
@@ -44,6 +45,12 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                 onPress={handlePress}
             >
                 <View style={styles.gridItem}>
+                    <Image
+                        source={{
+                            uri: imageUri,
+                        }}
+                        style={styles.image}
+                    />
                     <MaterialCommunityIcons
                         name={iconName}
                         size={30}
@@ -92,6 +99,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingBottom: 10,
         justifyContent: 'center',
+        position: 'relative'
     },
     data: {
         flex: 1,
@@ -114,7 +122,18 @@ const styles = StyleSheet.create({
     dataItem: {
         marginRight: 10,
         fontFamily: 'lato-bold',
-        color: colors.primary
+        color: colors.primaryDark
+    },
+    image: {
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        width: '100%',
+        height: 160,
+        opacity: 0.15,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
+        backgroundColor: colors.primary
     }
 });
 

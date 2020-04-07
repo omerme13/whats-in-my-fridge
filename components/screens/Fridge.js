@@ -7,7 +7,7 @@ import GridItem from '../GridItem';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import { deleteProduct } from '../../store/actions/product';
-import RoundButtons from '../MainButtons';
+import MainButtons from '../MainButtons';
 
 const products = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
@@ -87,7 +87,7 @@ const products = props => {
     return(
         <View style={{ position: 'relative', flex: 1 }}>
             {content}
-            <RoundButtons
+            <MainButtons
                 navigation={props.navigation}
                 navigateTo="Product"
                 isDeleteState={isDeleteState}

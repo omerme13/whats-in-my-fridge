@@ -8,12 +8,14 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import * as FileSystem from 'expo-file-system';
 
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
 import Spinner from '../Spinner';
 import StyledText from '../StyledText';
 import DatePicker from '../DatePicker';
+import ImagePicker from '../ImagePicker';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
@@ -31,13 +33,31 @@ const productAddEdit = props => {
             state.product.productsInFridge.find(prod => prod.id === id)
         );
             
-        var { name, label, expiryDate, quantity, unit, photo } = details;
+        var { name, label, expiryDate, quantity, unit, toBuy, photo } = details;
     }
         
     const [formUnit, setFormUnit] = useState(isUpdateState ? unit : 'pcs');
     const [date, setDate] = useState(isUpdateState ? expiryDate : null);
-    const set = datePickerDate => {
+    const [image, setImage] = useState(isUpdateState ? photo : null);
+
+    const saveDate = datePickerDate => {
         setDate(datePickerDate);
+    }
+
+    const saveImage = async imagePickerImage => {
+        const fileName = imagePickerImage.split('/').pop();
+        const newPath = FileSystem.documentDirectory + fileName;
+
+        try {
+            await FileSystem.moveAsync({
+                from: imagePickerImage,
+                to: newPath
+            });
+        } catch (err) {
+            console.log(err)
+        }
+
+        setImage(newPath);
     }
 
     const [formState, formDispatch] = useReducer(formReducer, {
@@ -45,7 +65,6 @@ const productAddEdit = props => {
             name: isUpdateState ? name : '',
             label: isUpdateState ? label : '',
             quantity: isUpdateState ? quantity : '',
-            photo: isUpdateState ? photo : ''
         },
         inputValidities: {
             name: isUpdateState ? true : false,
@@ -92,7 +111,7 @@ const productAddEdit = props => {
     };
 
     useEffect(() => {
-        const { name, label, quantity, photo } = formState.inputValues;
+        const { name, label, quantity } = formState.inputValues;
         setNewProduct(new Product(
             isUpdateState ? id : new Date().toString(),
             name,
@@ -100,10 +119,11 @@ const productAddEdit = props => {
             date,
             quantity,
             formUnit,
-            photo
+            toBuy,
+            image
         ));
 
-    }, [formState, date, formUnit]);
+    }, [formState, date, formUnit, image]);
 
     if (isLoading) {
         return <Spinner />;
@@ -131,7 +151,7 @@ const productAddEdit = props => {
                     set={(inputValue, isValid) =>
                         setTextHandler("name", inputValue, isValid)
                     }
-                    maxLength={16}
+                    maxLength={32}
                     required
                 />
                 <FormInput
@@ -140,6 +160,7 @@ const productAddEdit = props => {
                     set={(inputValue, isValid) =>
                         setTextHandler("label", inputValue, isValid)
                     }
+                    maxLength={16}
                 />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <FormInput
@@ -163,12 +184,14 @@ const productAddEdit = props => {
                         <Picker.Item label="Lbs" value="Lbs" />
                     </Picker>
                 </View>
-
-
                 <StyledText type="title" style={{textAlign: 'left'}}>
                     Expiry Date
                 </StyledText>
-                <DatePicker expiryDate={date} set={set} />
+                <DatePicker expiryDate={date} set={saveDate} />
+                <StyledText type="title" style={{textAlign: 'left'}}>
+                    Image
+                </StyledText>
+                <ImagePicker image={image} set={saveImage} />
             </View>
         </ScrollView>
     );
