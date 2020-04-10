@@ -8,10 +8,11 @@ import { colors } from "../utils/variables";
 
 const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const { id, name, label, quantity, expiryDate } = item;
+    let { id, name, label, quantity, expiryDate } = item;
     const imageUri = 'https://www.freedigitalphotos.net/images/img/homepage/394230.jpg';
 
     let diffInDays;
+    
     if (expiryDate) {
         const diff = Math.floor(expiryDate.getTime() - new Date().getTime());
         diffInDays = Math.round(diff / 1000 / 60 / 60 / 24);

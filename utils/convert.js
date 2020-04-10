@@ -1,8 +1,16 @@
-export const convertDate = expiryDate => {
-    if (!expiryDate) {
+export const convertDate = date => {
+    if (!date) {
         return null;
     }
 
-    const [mm, dd, yy] = expiryDate.toLocaleDateString().split('/');
+    const [yy, mm, dd] = date.toISOString().split('T')[0].split('-');
     return `${dd}-${mm}-${yy}`;
+};
+
+export const convertToJsDate = date => {
+    return new Date(String(date).replace(/-/g,"/"));
+};
+
+export const convertToSqlDate = date => {
+    return date ? date.toISOString().slice(0, 19).replace('T', ' ') : null;
 };

@@ -19,6 +19,9 @@ import ImagePicker from '../ImagePicker';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
+import { insertProduct, editProduct } from '../../utils/db';
+import { convertToSqlDate } from '../../utils/convert';
+
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -77,7 +80,7 @@ const productAddEdit = props => {
     const dispatch = useDispatch();
 
     const saveChanges = useCallback(
-        () => {
+        async () => {
             setIsLoading(true);
 
             if (!formState.isFormValid) {
@@ -90,9 +93,22 @@ const productAddEdit = props => {
             }
 
             if (isUpdateState) {
+                const { id, name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
+                await editProduct(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
+
                 dispatch(updateProduct(newProduct));
             } else {
-                dispatch(createProduct(newProduct));
+                try {
+                    const { name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
+                    const dbResult = await insertProduct(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
+                    const product = { ...newProduct, id: dbResult.insertId };
+                    
+                    dispatch(createProduct(product));
+                } catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+                setIsLoading(false);
             }
 
             props.navigation.goBack(null);
@@ -100,7 +116,6 @@ const productAddEdit = props => {
         [formState, newProduct]
     );
 
-    console.log(newProduct)
     const setTextHandler = (inputType, inputValue, isValid) => {
         formDispatch({
             type: FORM_UPDATE,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,6 +8,7 @@ import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import { deleteProduct } from '../../store/actions/product';
 import MainButtons from '../MainButtons';
+import { loadProducts } from '../../store/actions/product';
 
 const products = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
@@ -64,6 +65,10 @@ const products = props => {
                 iconName="fridge"
             />
         )
+
+    useEffect(() => {
+        dispatch(loadProducts());
+    }, [dispatch]);
 
     useEffect(() => {
         if (!isDeleteState) {
