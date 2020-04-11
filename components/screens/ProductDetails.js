@@ -13,28 +13,39 @@ import { colors } from "../../utils/variables";
 import { convertDate } from "../../utils/convert";
 import { addToShoppingList, deleteFromShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
+import { updateProductInDB } from '../../utils/db';
+import { insertListItemToDB } from '../../utils/db';
+import { convertToSqlDate } from '../../utils/convert';
 
 const productDetails = props => {
     const dispatch = useDispatch();
     
     const id = props.route.params.id;
-    // const imageUri = props.route.params.imageUri;
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
-    const { name, label, expiryDate, quantity, unit, toBuy, photo } = product;
+    const { name, label, expiryDate, quantity, unit, toBuy } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
+    const photo = props.route.params.photo;
 
-    const toggleToBuy = () => {
-        const newListItem = new ListItem(name, name, label);
-        const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
-        
-        dispatch(addToShoppingList(newListItem));
-        dispatch(updateProduct(updatedProduct));
-        
-        if (isToBuy) {
-            dispatch(deleteFromShoppingList(name));
+    const toggleToBuy = async () => {
+        try {
+            const newListItem = new ListItem(name, name, label);
+            const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
+
+            await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo);
+            const dbResult = await insertListItemToDB(name, label);
+            const listItem = { ...newListItem, id: dbResult.insertId };
+            
+            dispatch(addToShoppingList(listItem));
+            dispatch(updateProduct(updatedProduct));
+            
+            if (isToBuy) {
+                dispatch(deleteFromShoppingList(name));
+            }
+            setIsToBuy(!isToBuy);
+        } catch (err) {
+            throw err;
         }
-        setIsToBuy(!isToBuy);
     };
 
     const editProduct = () => {
@@ -102,7 +113,6 @@ const styles = StyleSheet.create({
         flex: 2,
         width: '80%',
         padding: 15,
-        // backgroundColor: 'red'
     },
     bottom: {
         alignItems: 'center',

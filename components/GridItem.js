@@ -8,8 +8,8 @@ import { colors } from "../utils/variables";
 
 const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
-    let { id, name, label, quantity, expiryDate } = item;
-    const imageUri = 'https://www.freedigitalphotos.net/images/img/homepage/394230.jpg';
+    let { id, name, label, quantity, expiryDate, photo } = item;
+    const defaultPhoto = 'https://images.unsplash.com/photo-1576021182211-9ea8dced3690?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80.jpg';
 
     let diffInDays;
     
@@ -25,7 +25,10 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
             toggleIsChecked();
             addToIds(id);
         } else {
-            navigation.navigate("ProductDetails", { id,  imageUri});
+            navigation.navigate("ProductDetails", {
+                id,
+                photo: photo || defaultPhoto
+            });
         }
     };
 
@@ -48,7 +51,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                 <View style={styles.gridItem}>
                     <Image
                         source={{
-                            uri: imageUri,
+                            uri: photo || defaultPhoto,
                         }}
                         style={styles.image}
                     />
@@ -72,7 +75,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                             />
                         </View>
                         <View style={styles.dataItemContainer}>
-                            <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primary : 'orangered'}}>
+                            <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primaryDark : 'orangered'}}>
                                 {diffInDays}
                             </StyledText>
                             <MaterialCommunityIcons
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         height: 160,
-        opacity: 0.15,
+        opacity: 0.2,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
         backgroundColor: colors.primary

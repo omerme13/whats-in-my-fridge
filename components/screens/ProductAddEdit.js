@@ -19,7 +19,7 @@ import ImagePicker from '../ImagePicker';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
-import { insertProduct, editProduct } from '../../utils/db';
+import { insertProductToDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
 
 
@@ -92,25 +92,23 @@ const productAddEdit = props => {
                 return;
             }
 
-            if (isUpdateState) {
+            try {
                 const { id, name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
-                await editProduct(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
 
-                dispatch(updateProduct(newProduct));
-            } else {
-                try {
-                    const { name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
-                    const dbResult = await insertProduct(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
+                if (isUpdateState) {
+                    await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
+                    dispatch(updateProduct(newProduct));
+                } else {
+                    const dbResult = await insertProductToDB(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
                     const product = { ...newProduct, id: dbResult.insertId };
-                    
                     dispatch(createProduct(product));
-                } catch (err) {
-                    console.log(err);
-                    throw err;
                 }
-                setIsLoading(false);
+            } catch (err) {
+                console.log(err);
+                throw err;
             }
 
+            setIsLoading(false);
             props.navigation.goBack(null);
         },
         [formState, newProduct]

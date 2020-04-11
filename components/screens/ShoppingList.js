@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -8,11 +8,14 @@ import HeaderButton from '../HeaderButton';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import ListItemRow from '../ListItemRow';
 import MainButtons from '../MainButtons';
+import Spinner from '../Spinner';
 import { deleteFromShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
+import { loadShoppingList } from '../../store/actions/shoppingList';
 
 const shoppingList = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
     const dispatch = useDispatch();
 
@@ -61,6 +64,15 @@ const shoppingList = props => {
         setIds([]);
     };
 
+    useEffect(() => {
+        setIsLoading(true);
+
+        (async () => {
+            await dispatch(loadShoppingList());
+            setIsLoading(false);
+        })()
+    }, [dispatch]);
+
     props.navigation.setOptions({
         headerTitle: 'Shopping List',
         headerLeft: () => (
@@ -77,7 +89,7 @@ const shoppingList = props => {
     let content = arrayList.length
         ? (
             <FlatList 
-                keyExtractor={item => item.id} 
+                keyExtractor={item => String(item.id)} 
                 data={arrayList} 
                 renderItem={renderListItemRow} 
             />
@@ -87,6 +99,11 @@ const shoppingList = props => {
                 iconName="cart"
             />
         )
+
+    if (isLoading) {
+        return <Spinner />
+    }
+    console.log(isLoading)
 
     return(
         <>

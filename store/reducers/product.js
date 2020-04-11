@@ -1,8 +1,7 @@
-import { PRODUCTS } from '../../data/data';
 import * as actions from '../actions/product';
 
 const initialState = {
-    productsInFridge: PRODUCTS
+    productsInFridge: []
 };
 
 const reducer = (state = initialState, action) => {

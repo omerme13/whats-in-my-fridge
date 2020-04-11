@@ -20,6 +20,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 listItems: listItemsAfterDelete
             }
+            
+        case actions.LOAD_SHOPPING_LIST:
+            return {
+                listItems: action.listItems
+            }
     }
     return state;
 };

@@ -3,7 +3,7 @@ export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const LOAD_PRODUCTS = 'LOAD_PRODUCTS';
 
-import { fetchProducts } from '../../utils/db';
+import { fetchProductsFromDB } from '../../utils/db';
 import { convertToJsDate } from '../../utils/convert';
 
 export const updateProduct = product => {
@@ -30,7 +30,7 @@ export const deleteProduct = productId => {
 export const loadProducts = () => {
     return async dispatch => {
         try {
-            const dbResult = await fetchProducts();
+            const dbResult = await fetchProductsFromDB();
             
             dispatch({
                 type: LOAD_PRODUCTS,

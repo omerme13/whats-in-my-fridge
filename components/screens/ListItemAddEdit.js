@@ -11,8 +11,9 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
 import Spinner from '../Spinner';
-import { addToShoppingList } from '../../store/actions/shoppingList';
 import ListItem from '../../models/listItem';
+import { addToShoppingList } from '../../store/actions/shoppingList';
+import { insertListItemToDB } from '../../utils/db';
 
 
 const listItemAddEdit = props => {
@@ -38,7 +39,7 @@ const listItemAddEdit = props => {
     const dispatch = useDispatch();
 
     const saveChanges = useCallback(
-        () => {
+        async () => {
             setIsLoading(true);
             
             if (!isFormValid) {
@@ -49,11 +50,15 @@ const listItemAddEdit = props => {
 
                 return;
             }
+            
+            const { name, label } = newListItem;
 
             if (isUpdateState) {
                 dispatch(addToShoppingList(newListItem));
             } else {
-                dispatch(addToShoppingList(newListItem));
+                const dbResult = await insertListItemToDB(String(name), String(label));
+                const listItem = { ...newListItem, id: dbResult.insertId };
+                dispatch(addToShoppingList(listItem));
             }
 
             props.navigation.goBack(null);

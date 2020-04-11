@@ -18,10 +18,11 @@ export const init = () => {
                     photo TEXT
                 );
                 CREATE TABLE IF NOT EXISTS shoppingList (
-                    id INTEGER NOT NULL,
+                    id INTEGER PRIMARY KEY NOT NULL,
                     name TEXT NOT NULL,
-                    label TEXT;
+                    label TEXT
                 );`
+
                 // 'DROP TABLE fridge'
                 ,
                 [],
@@ -34,7 +35,7 @@ export const init = () => {
     return promise;
 };
 
-export const insertProduct = (
+export const insertProductToDB = (
     name,
     label,
     expiryDate,
@@ -59,7 +60,21 @@ export const insertProduct = (
     return promise;
 };
 
-export const editProduct = (
+export const deleteProductFromDB = ids => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(`DELETE FROM fridge WHERE id IN (${ids})`,
+                [],
+                (_, result) => resolve(result),
+                (_, err) => reject(err)
+            );
+        });
+    });
+
+    return promise;
+};
+
+export const updateProductInDB = (
     id,
     name,
     label,
@@ -85,11 +100,41 @@ export const editProduct = (
     return promise;
 };
 
-export const fetchProducts = () => {
+export const fetchProductsFromDB = () => {
     const promise = new Promise((resolve, reject) => {
         db.transaction(tx => {
             tx.executeSql(
                 'SELECT * FROM fridge',
+                [],
+                (_, result) => resolve(result),
+                (_, err) => reject(err)
+            );
+        });
+    });
+
+    return promise;
+};
+
+export const insertListItemToDB = (name, label) => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(`
+                INSERT INTO shoppingList (name, label) VALUES (?,?)`,
+                [name, label],
+                (_, result) => resolve(result),
+                (_, err) => reject(err)
+            );
+        });
+    });
+
+    return promise;
+};
+
+export const fetchShoppingListFromDB = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                'SELECT * FROM shoppingList',
                 [],
                 (_, result) => resolve(result),
                 (_, err) => reject(err)
