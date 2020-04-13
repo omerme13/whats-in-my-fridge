@@ -13,7 +13,7 @@ import FormInput from '../FormInput';
 import Spinner from '../Spinner';
 import ListItem from '../../models/listItem';
 import { addToShoppingList } from '../../store/actions/shoppingList';
-import { insertListItemToDB } from '../../utils/db';
+import { insertListItemToDB, updateListItemInDB } from '../../utils/db';
 
 
 const listItemAddEdit = props => {
@@ -27,7 +27,7 @@ const listItemAddEdit = props => {
             state.shoppingList.listItems[id]
         );
             
-        var { name, label } = details;
+        var { name, label, isDone } = details;
     }
 
     const [listItemName, setListItemName] = useState(isUpdateState ? name : '');
@@ -51,10 +51,11 @@ const listItemAddEdit = props => {
                 return;
             }
             
-            const { name, label } = newListItem;
+            const { name, label, isDone } = newListItem;
 
             if (isUpdateState) {
                 dispatch(addToShoppingList(newListItem));
+                await updateListItemInDB(id, name, label, isDone);
             } else {
                 const dbResult = await insertListItemToDB(String(name), String(label));
                 const listItem = { ...newListItem, id: dbResult.insertId };
@@ -72,7 +73,8 @@ const listItemAddEdit = props => {
         setNewListItem(new ListItem(
             isUpdateState ? id : new Date().toString(),
             listItemName,
-            listItemLabel
+            listItemLabel,
+            isDone
         ));
 
     }, [listItemName, listItemLabel, isNameValid]);

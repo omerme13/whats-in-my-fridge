@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from 'react-native'
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,8 +13,7 @@ import { colors } from "../../utils/variables";
 import { convertDate } from "../../utils/convert";
 import { addToShoppingList, deleteFromShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
-import { updateProductInDB } from '../../utils/db';
-import { insertListItemToDB } from '../../utils/db';
+import { updateProductInDB, insertListItemToDB, deleteListItemsFromDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
 
 const productDetails = props => {
@@ -23,25 +22,34 @@ const productDetails = props => {
     const id = props.route.params.id;
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
-    const { name, label, expiryDate, quantity, unit, toBuy } = product;
+    const { name, label, expiryDate, quantity, unit, toBuy, listItemId } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
     const photo = props.route.params.photo;
 
     const toggleToBuy = async () => {
         try {
-            const newListItem = new ListItem(name, name, label);
             const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
 
-            await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo);
-            const dbResult = await insertListItemToDB(name, label);
-            const listItem = { ...newListItem, id: dbResult.insertId };
-            
-            dispatch(addToShoppingList(listItem));
-            dispatch(updateProduct(updatedProduct));
-            
-            if (isToBuy) {
-                dispatch(deleteFromShoppingList(name));
+            if (!toBuy) {
+                const dbResult = await insertListItemToDB(name, label);
+                const newListItem = new ListItem(dbResult.insertId, name, label);
+                const updatedProductWithListItem = {...updatedProduct, listItemId: dbResult.insertId };
+    
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, dbResult.insertId);
+                
+                dispatch(updateProduct(updatedProductWithListItem));
+                dispatch(addToShoppingList(newListItem));
             }
+            
+            else {
+                const updatedProductWithoutListItem = {...updatedProduct, listItemId: null };
+
+                await deleteListItemsFromDB([listItemId]);
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, null);
+                dispatch(updateProduct(updatedProductWithoutListItem));
+                dispatch(deleteFromShoppingList(listItemId));
+            }
+
             setIsToBuy(!isToBuy);
         } catch (err) {
             throw err;
@@ -54,6 +62,10 @@ const productDetails = props => {
 
     const formattedExpiryDate = convertDate(expiryDate);
     const headerTitle = name.length > 20 ? name.slice(0,20) + '...' : name;
+
+    useEffect(() => {
+        setIsToBuy(toBuy);
+    }, [listItemId])
 
     props.navigation.setOptions({
         headerTitle,

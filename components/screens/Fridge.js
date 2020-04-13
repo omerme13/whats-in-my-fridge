@@ -59,6 +59,7 @@ const products = props => {
     };
 
     const products = useSelector(state => state.product.productsInFridge);
+    // console.log(products)
 
     const content = products.length
         ? (

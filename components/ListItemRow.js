@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useDispatch } from 'react-redux';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from "./StyledText";
 import Label from "./Label";
+import { addToShoppingList } from '../store/actions/shoppingList';
+import { updateListItemInDB } from '../utils/db';
 import { colors } from "../utils/variables";
 
 const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [isDone, setIsDone] = useState(false);
-    let { id, name, label } = item;
+    let { id, name, label, isDone } = item;
+    const [isDoneState, setIsDoneState] = useState(isDone);
+    const dispatch = useDispatch();
 
     const changingStyle = {
         ...styles.listItemRow,
@@ -17,7 +21,20 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
     };
 
     const toggleIsChecked = () => setIsChecked(!isChecked);
-    const toggleIsDone = () => setIsDone(!isDone);
+
+    const toggleIsDone = async () => {
+        try {
+            setIsDoneState(!isDoneState);
+            const updatedListItem = { ...item, isDone: !isDoneState };
+            const { id, name, label, isDone } = updatedListItem;
+    
+            await updateListItemInDB(id, name, label, isDone);
+            dispatch(addToShoppingList(updatedListItem));
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
 
     const handlePress = () => {
         if (isDeleteState) {
@@ -68,9 +85,9 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
                         </Label>
                     </View>
                     <View style={styles.deleteButton}>
-                        <MaterialIcons
-                            name={`check-box${
-                                isDone ? "" : "-outline-blank"
+                        <MaterialCommunityIcons
+                            name={`checkbox-${
+                                isDoneState ? 'marked' : 'blank-outline'
                             }`}
                             size={27}
                             onPress={toggleIsDone}

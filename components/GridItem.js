@@ -59,6 +59,7 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                         name={iconName}
                         size={30}
                         onPress={toggleIsChecked}
+                        style={{ position: 'absolute' ,left: 5, top: 5 }}
                     />
                     <StyledText type="title" style={styles.name}>
                         {name}
@@ -85,7 +86,9 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                             />
                         </View>
                     </View>
-                    <Label show={label ? true : false}>{label}</Label>
+                    <View style={{ flex: 1 }}>
+                        <Label show={label ? true : false}>{label}</Label>
+                    </View>
                 </View>
             </TouchableNativeFeedback>
         </View>
@@ -106,15 +109,18 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     data: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-
+        flex: 3,    
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        // backgroundColor: 'blue'
     },
     name: {
+        flex: 1,
         letterSpacing: 1,
         fontSize: 22,
-        color: colors.secondary
+        color: colors.secondary,
+        // backgroundColor: 'red',
+        paddingTop: 25
     },
     dataItemContainer: {
         flexDirection: 'row',

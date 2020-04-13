@@ -25,6 +25,14 @@ const reducer = (state = initialState, action) => {
             return {
                 listItems: action.listItems
             }
+
+        // case actions.UPDATE_LIST_ITEM:
+        //     const updatedListItems = { ...state.listItems };
+        //     updatedListItems[action.listItem.id] = action.listItem;
+
+        //     return {
+        //         listItems: updatedListItems
+        //     }
     }
     return state;
 };

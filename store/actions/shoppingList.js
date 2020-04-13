@@ -12,12 +12,12 @@ export const addToShoppingList = (listItem) => {
     }
 };
 
-export const updateListItem = (listItem) => {
-    return {
-        type: UPDATE_LIST_ITEM,
-        listItem
-    }
-};
+// export const updateListItem = (listItem) => {
+//     return {
+//         type: UPDATE_LIST_ITEM,
+//         listItem
+//     }
+// };
 
 export const deleteFromShoppingList = (itemId) => {
     return {
@@ -30,9 +30,14 @@ export const loadShoppingList = () => {
     return async dispatch => {
         try {
             const dbResult = await fetchShoppingListFromDB();
+            const listItems = {};
+            for (let item of dbResult.rows._array) {
+                listItems[item.id] = item;
+            }
+
             dispatch({
                 type: LOAD_SHOPPING_LIST,
-                listItems: dbResult.rows._array
+                listItems
             });
         } catch (err) {
             throw err;

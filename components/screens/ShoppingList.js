@@ -12,6 +12,8 @@ import Spinner from '../Spinner';
 import { deleteFromShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
 import { loadShoppingList } from '../../store/actions/shoppingList';
+import { deleteListItemsFromDB, updateProductInDB } from '../../utils/db';
+import { convertToSqlDate } from '../../utils/convert';
 
 const shoppingList = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
@@ -46,18 +48,27 @@ const shoppingList = props => {
 
     const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
 
-    const removeFromIds = () => {
-        for (const listItemId of ids) {
-            dispatch(deleteFromShoppingList(listItemId));
+    const removeFromIds = async () => {
+        try {
+            await deleteListItemsFromDB(ids);
+            
+            for (const listItemId of ids) {
+                dispatch(deleteFromShoppingList(listItemId));
+            }
+        } catch (err) {
+            throw err;
         }
 
         toggleDeleteState();
 
         // removing 'toBuy' from the products we deleted from the list
         for (let product of products) {
-            if (ids.includes(product.name)) {
+            if (ids.includes(product.listItemId)) {
                 product.toBuy = false;
+                product.listItemId = null;
                 dispatch(updateProduct(product));
+                const { id, name, label, expiryDate, quantity, unit, photo } = product;
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, false, photo, null)
             }
         }
         
@@ -103,7 +114,6 @@ const shoppingList = props => {
     if (isLoading) {
         return <Spinner />
     }
-    console.log(isLoading)
 
     return(
         <>
