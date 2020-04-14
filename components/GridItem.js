@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableNativeFeedback, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Asset } from 'expo-asset';
 
 import StyledText from "./StyledText";
 import Label from "./Label";
@@ -9,7 +10,7 @@ import { colors } from "../utils/variables";
 const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
-    const defaultPhoto = 'https://images.unsplash.com/photo-1576021182211-9ea8dced3690?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80.jpg';
+    const defaultPhoto = Asset.fromModule(require('../assets/img/food.jpg')).uri;
 
     let diffInDays;
     
@@ -112,7 +113,6 @@ const styles = StyleSheet.create({
         flex: 3,    
         justifyContent: 'flex-end',
         alignItems: 'center',
-        // backgroundColor: 'blue'
     },
     name: {
         flex: 1,

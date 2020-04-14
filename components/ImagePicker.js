@@ -7,14 +7,49 @@ import StyledText from './StyledText';
 import { colors } from '../utils/variables';
 
 const imagePicker = props => {
+    const saveImage = pickedImage => {
+        if (!pickedImage) { 
+            props.setImage('');
+            return;
+        }
+
+        props.setImage(pickedImage);
+    }
+
+    const imagePickerOptions = {
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.5
+    };
+
     const takeImage = async () => {
-        const pickedImage = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 0.5
-        });
+        try {
+            const pickedImage = await ImagePicker.launchCameraAsync(
+                imagePickerOptions
+            );
+
+            if (!pickedImage.cancelled) {
+                saveImage(pickedImage.uri);
+            }
+        } catch (err) {
+            throw err;
+        }
     
-        props.set(pickedImage.uri)
+    };
+
+    const pickImageFromLibrary = async () => {
+        try {
+            const pickedImage = await ImagePicker.launchImageLibraryAsync({
+                ...imagePickerOptions,
+                mediaTypes: ImagePicker.MediaTypeOptions.Images
+            });
+        
+            if (!pickedImage.cancelled) {
+                saveImage(pickedImage.uri);
+            }
+        } catch (err) {
+            throw err;
+        }
     };
 
     return (
@@ -23,7 +58,6 @@ const imagePicker = props => {
                 ? <Image source={{ uri: props.image}} style={styles.image} />
                 : <StyledText>please choose an image</StyledText>
             }
-            
             <View style={styles.buttons}>
                 <MaterialCommunityIcons
                     name="camera"
@@ -36,18 +70,29 @@ const imagePicker = props => {
                     name="image"
                     size={30}
                     color={colors.secondary}
-                    // onPress={takeImage}
+                    onPress={pickImageFromLibrary}
+                    style={{ marginRight: 25 }}
                 />
+                {props.image 
+                    ? (
+                        <MaterialCommunityIcons
+                            name="delete-outline"
+                            size={30}
+                            color={colors.secondaryDark}
+                            onPress={() => saveImage(null)}
+                        />
+                    ) 
+                    : null
+                }
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    imagePicker: {
-    },
     buttons: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        width: '50%',
     },
     image: {
         width: 120,

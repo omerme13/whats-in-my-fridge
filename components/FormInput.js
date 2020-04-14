@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
         height: 40,
         marginBottom: 20,
         marginTop: 10,
+        // backgroundColor: 'red'
     },
     input: {
         paddingHorizontal: 2,

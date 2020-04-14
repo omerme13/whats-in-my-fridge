@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { View, Button, Platform, Text } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from './StyledText';
 import { colors } from '../utils/variables';
@@ -18,9 +18,14 @@ const datePicker = props => {
         props.set(currentDate);
     };
     
+    const deleteDate = () => {
+        setDate(null);
+        props.set(null);
+    };
+
     const showDatePicker = () => setShow(true);
     const formattedExpiryDate = convertDate(date);
-
+    
     return (
         <View>
             <View>
@@ -30,12 +35,26 @@ const datePicker = props => {
                         : 'please choose expiry date'
                     }
                 </StyledText>
-                <MaterialIcons
-                    name="date-range"
-                    size={30}
-                    color={colors.secondary}
-                    onPress={showDatePicker}
-                />
+                <View style={styles.buttons}>
+                    <MaterialIcons
+                        name="date-range"
+                        size={30}
+                        color={colors.secondary}
+                        onPress={showDatePicker}
+                    />
+                    {props.expiryDate 
+                        ? (
+                            <MaterialCommunityIcons
+                                name="delete-outline"
+                                size={30}
+                                color={colors.secondaryDark}
+                                onPress={deleteDate}
+                                style={{ marginLeft: 25 }}
+                            />
+                        ) 
+                        : null
+                    }
+                </View>
             </View>
             {show && (
                 <DateTimePicker
@@ -46,5 +65,12 @@ const datePicker = props => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    buttons: {
+        flexDirection: 'row',
+        width: '50%',
+    }
+});
 
 export default datePicker;

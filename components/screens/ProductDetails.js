@@ -3,6 +3,7 @@ import { View, StyleSheet, Image } from 'react-native'
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from 'react-redux';
 import { MaterialIcons } from "@expo/vector-icons";
+import { Asset } from 'expo-asset';
 
 import StyledText from '../StyledText';
 import HeaderButton from '../HeaderButton';
@@ -17,25 +18,27 @@ import { updateProductInDB, insertListItemToDB, deleteListItemsFromDB } from '..
 import { convertToSqlDate } from '../../utils/convert';
 
 const productDetails = props => {
-    const dispatch = useDispatch();
-    
     const id = props.route.params.id;
     const products = useSelector(state => state.product.productsInFridge);
     const product =  products.find(prod => prod.id === id);
-    const { name, label, expiryDate, quantity, unit, toBuy, listItemId } = product;
+    const { name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
-    const photo = props.route.params.photo;
+    
+    const defaultPhoto = Asset.fromModule(require('../../assets/img/food.jpg')).uri;
+    const [image, setImage] = useState(photo || defaultPhoto)
+
+    const dispatch = useDispatch();
 
     const toggleToBuy = async () => {
         try {
-            const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
+            const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, image);
 
             if (!toBuy) {
                 const dbResult = await insertListItemToDB(name, label);
                 const newListItem = new ListItem(dbResult.insertId, name, label);
                 const updatedProductWithListItem = {...updatedProduct, listItemId: dbResult.insertId };
     
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, dbResult.insertId);
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, image, dbResult.insertId);
                 
                 dispatch(updateProduct(updatedProductWithListItem));
                 dispatch(addToShoppingList(newListItem));
@@ -45,7 +48,7 @@ const productDetails = props => {
                 const updatedProductWithoutListItem = {...updatedProduct, listItemId: null };
 
                 await deleteListItemsFromDB([listItemId]);
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, null);
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, image, null);
                 dispatch(updateProduct(updatedProductWithoutListItem));
                 dispatch(deleteFromShoppingList(listItemId));
             }
@@ -65,7 +68,11 @@ const productDetails = props => {
 
     useEffect(() => {
         setIsToBuy(toBuy);
-    }, [listItemId])
+    }, [listItemId]);
+
+    useEffect(() => {
+        setImage(photo || defaultPhoto);
+    }, [photo]);
 
     props.navigation.setOptions({
         headerTitle,
@@ -105,7 +112,7 @@ const productDetails = props => {
             </View>
             <Image
                 source={{
-                    uri: photo,
+                    uri: image,
                 }}
                 style={styles.image}
             />

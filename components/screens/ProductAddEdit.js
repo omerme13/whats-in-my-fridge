@@ -7,8 +7,9 @@ import {
     Picker
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import * as FileSystem from 'expo-file-system';
+
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
@@ -42,25 +43,41 @@ const productAddEdit = props => {
     const [formUnit, setFormUnit] = useState(isUpdateState ? unit : 'pcs');
     const [date, setDate] = useState(isUpdateState ? expiryDate : null);
     const [image, setImage] = useState(isUpdateState ? photo : null);
+    const [prevImage, setPrevImage] = useState(null);
 
     const saveDate = datePickerDate => {
         setDate(datePickerDate);
     }
 
-    const saveImage = async imagePickerImage => {
-        const fileName = imagePickerImage.split('/').pop();
-        const newPath = FileSystem.documentDirectory + fileName;
+    const saveImage = imagePickerImage => {
+        setPrevImage(image);
+        setImage(imagePickerImage);
+    }
 
-        try {
-            await FileSystem.moveAsync({
-                from: imagePickerImage,
-                to: newPath
-            });
-        } catch (err) {
-            console.log(err)
+    const updateFileSystem = async pickedImage => {
+        if (!pickedImage) {
+            return;
         }
 
-        setImage(newPath);
+        const fileName = pickedImage.split('/').pop();
+        const newPath = FileSystem.documentDirectory + fileName;
+        
+        try {
+            if (prevImage) {
+                await FileSystem.deleteAsync(prevImage);
+            }
+
+            await FileSystem.moveAsync({
+                from: pickedImage,
+                to: newPath
+            });
+
+            setImage(newPath);
+            return newPath;
+
+        } catch (err) {
+            throw err;
+        }
     }
 
     const [formState, formDispatch] = useReducer(formReducer, {
@@ -94,12 +111,14 @@ const productAddEdit = props => {
 
             try {
                 const { id, name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
-
+                
                 if (isUpdateState) {
-                    await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
-                    dispatch(updateProduct(newProduct));
+                    const newPath = await updateFileSystem(photo);
+                    await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, newPath || photo);
+                    dispatch(updateProduct({ ...newProduct, photo: newPath }));
                 } else {
-                    const dbResult = await insertProductToDB(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, photo);
+                    const newPath = await updateFileSystem(photo);
+                    const dbResult = await insertProductToDB(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, newPath || photo);
                     const product = { ...newProduct, id: dbResult.insertId };
                     dispatch(createProduct(product));
                 }
@@ -109,9 +128,10 @@ const productAddEdit = props => {
             }
 
             setIsLoading(false);
+            
             props.navigation.goBack(null);
         },
-        [formState, newProduct]
+        [formState, newProduct, image]
     );
 
     const setTextHandler = (inputType, inputValue, isValid) => {
@@ -197,14 +217,14 @@ const productAddEdit = props => {
                         <Picker.Item label="Lbs" value="Lbs" />
                     </Picker>
                 </View>
-                <StyledText type="title" style={{textAlign: 'left'}}>
+                <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
                     Expiry Date
                 </StyledText>
                 <DatePicker expiryDate={date} set={saveDate} />
-                <StyledText type="title" style={{textAlign: 'left'}}>
+                <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
                     Image
                 </StyledText>
-                <ImagePicker image={image} set={saveImage} />
+                <ImagePicker image={image} setImage={saveImage} />
             </View>
         </ScrollView>
     );

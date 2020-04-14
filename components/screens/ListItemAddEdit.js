@@ -51,18 +51,22 @@ const listItemAddEdit = props => {
                 return;
             }
             
-            const { name, label, isDone } = newListItem;
-
-            if (isUpdateState) {
-                dispatch(addToShoppingList(newListItem));
-                await updateListItemInDB(id, name, label, isDone);
-            } else {
-                const dbResult = await insertListItemToDB(String(name), String(label));
-                const listItem = { ...newListItem, id: dbResult.insertId };
-                dispatch(addToShoppingList(listItem));
+            try {
+                const { name, label, isDone } = newListItem;
+    
+                if (isUpdateState) {
+                    dispatch(addToShoppingList(newListItem));
+                    await updateListItemInDB(id, name, label, isDone);
+                } else {
+                    const dbResult = await insertListItemToDB(String(name), String(label));
+                    const listItem = { ...newListItem, id: dbResult.insertId };
+                    dispatch(addToShoppingList(listItem));
+                }
+    
+                props.navigation.goBack(null);
+            } catch (err) {
+                throw err;
             }
-
-            props.navigation.goBack(null);
         },
         [newListItem, isNameValid]
     );
