@@ -82,7 +82,7 @@ const products = props => {
             await dispatch(loadProducts());
             setIsLoading(false);
         })()
-    }, [dispatch]);
+    }, [dispatch, products.length]);
 
     useEffect(() => {
         if (!isDeleteState) {
