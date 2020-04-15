@@ -5,8 +5,7 @@ const db = SQLite.openDatabase('whatsInFridge.db');
 export const init = () => {
     const promise = new Promise((resolve, reject) => {
         db.transaction(tx => {
-            tx.executeSql(
-                `
+            tx.executeSql(`
                 CREATE TABLE IF NOT EXISTS fridge (
                     id INTEGER PRIMARY KEY NOT NULL,
                     name TEXT NOT NULL,
@@ -17,18 +16,18 @@ export const init = () => {
                     toBuy BOOLEAN,
                     photo TEXT,
                     listItemId INTEGER
-                );
-                `
-                // `
-                // CREATE TABLE IF NOT EXISTS shoppingList (
-                //     id INTEGER PRIMARY KEY NOT NULL,
-                //     name TEXT NOT NULL,
-                //     label TEXT,
-                //     isDone BOOLEAN
-                // );`
-
-                // 'DROP TABLE fridge'
-                ,
+                );`,
+                [],
+                () => {},
+                (_, err) => reject(err)
+            )
+            tx.executeSql(`
+                CREATE TABLE IF NOT EXISTS shoppingList (
+                    id INTEGER PRIMARY KEY NOT NULL,
+                    name TEXT NOT NULL,
+                    label TEXT,
+                    isDone BOOLEAN
+                );`,
                 [],
                 () => resolve(),
                 (_, err) => reject(err)

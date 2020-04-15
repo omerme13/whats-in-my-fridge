@@ -80,19 +80,22 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
                         <Label
                             style={{ marginRight: 5 }}
                             show={label ? true : false}
+                            onPress={() => navigation.navigate('FilteredShoppingList', { label })}
                         >
                             {label}
                         </Label>
                     </View>
-                    <View style={styles.deleteButton}>
-                        <MaterialCommunityIcons
-                            name={`checkbox-${
-                                isDoneState ? 'marked' : 'blank-outline'
-                            }`}
-                            size={27}
-                            onPress={toggleIsDone}
-                        />
-                    </View>
+                    {!isDeleteState &&
+                        <View style={styles.deleteButton}>
+                            <MaterialCommunityIcons
+                                name={`checkbox-${
+                                    isDone ? 'marked' : 'blank-outline'
+                                }`}
+                                size={27}
+                                onPress={toggleIsDone}
+                            />
+                        </View>
+                    }
                 </View>
             </TouchableNativeFeedback>
         </>

@@ -26,12 +26,11 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
             toggleIsChecked();
             addToIds(id);
         } else {
-            navigation.navigate("ProductDetails", {
-                id,
-                photo: photo || defaultPhoto
-            });
+            navigation.navigate("ProductDetails", { id });
         }
     };
+
+    name = name.length > 20 ? name.slice(0,20) + '...' : name;
 
     const iconName = isDeleteState
         ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
@@ -62,14 +61,36 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                         onPress={toggleIsChecked}
                         style={{ position: 'absolute' ,left: 5, top: 5 }}
                     />
-                    <StyledText type="title" style={styles.name}>
-                        {name}
-                    </StyledText>
+                    <View style={styles.nameContainer}>
+                        <StyledText type="title" style={styles.name}>
+                            {name}
+                        </StyledText>
+                    </View>
                     <View style={styles.data}>
                         <View style={styles.dataItemContainer}>
-                            <StyledText style={styles.dataItem}>
-                                {quantity}
-                            </StyledText>
+                            <View style={isDeleteState ? styles.editQuantity : ''}>
+                                {isDeleteState &&
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <MaterialCommunityIcons 
+                                            name="minus-circle-outline" 
+                                            size={30} 
+                                            color={colors.secondary} 
+                                            onPress={() => {}} 
+                                            style={{ marginRight: 10 }} 
+                                        />
+                                        <MaterialCommunityIcons 
+                                            name="plus-circle-outline" 
+                                            size={30} 
+                                            color={colors.secondary} 
+                                            onPress={() => {}} 
+                                            style={{ marginRight: 25 }} 
+                                        />
+                                    </View>
+                                }
+                                <StyledText style={styles.dataItem}>
+                                    {quantity}
+                                </StyledText>
+                            </View>
                             <MaterialCommunityIcons
                                 name="scale"
                                 size={30}
@@ -87,8 +108,15 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                             />
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}>
-                        <Label show={label ? true : false}>{label}</Label>
+                    <View style={{flex: 1, paddingBottom: 15}}>
+                        <Label 
+                            show={label ? true : false} 
+                            onPress={() => {
+                                navigation.navigate('FilteredFridge', { label })}
+                            }
+                        >
+                            {label}
+                        </Label>
                     </View>
                 </View>
             </TouchableNativeFeedback>
@@ -110,17 +138,20 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     data: {
-        flex: 3,    
+        flex: 4,    
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
     name: {
-        flex: 1,
         letterSpacing: 1,
-        fontSize: 22,
         color: colors.secondary,
-        // backgroundColor: 'red',
-        paddingTop: 25
+        marginVertical: 0,
+    },
+    nameContainer: {
+        flex: 2,
+        justifyContent: 'center',
+        overflow: 'hidden',
+        padding: 15
     },
     dataItemContainer: {
         flexDirection: 'row',
@@ -132,7 +163,7 @@ const styles = StyleSheet.create({
     dataItem: {
         marginRight: 10,
         fontFamily: 'lato-bold',
-        color: colors.primaryDark
+        color: colors.primaryDark,
     },
     image: {
         position: 'absolute',
@@ -143,7 +174,11 @@ const styles = StyleSheet.create({
         opacity: 0.2,
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
-        backgroundColor: colors.primary
+        backgroundColor: colors.primary,
+    },
+    editQuantity: {
+        flexDirection: 'row',
+        alignItems: 'center'
     }
 });
 

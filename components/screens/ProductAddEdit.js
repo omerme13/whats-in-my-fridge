@@ -45,6 +45,7 @@ const productAddEdit = props => {
     const [image, setImage] = useState(isUpdateState ? photo : null);
     const [prevImage, setPrevImage] = useState(null);
 
+    // console.log({image})
     const saveDate = datePickerDate => {
         setDate(datePickerDate);
     }

@@ -5,16 +5,12 @@ import StyledText from './StyledText';
 import { colors } from '../utils/variables';
 
 const label = props => {
-    const getProductsByLabel = labelName => {
-        //TODO
-    };
-
     return (
         <>
         {props.show &&
             <StyledText 
                 style={{...styles.label, ...props.style}} 
-                onPress={() => getProductsByLabel(props.children)}
+                onPress={props.onPress}
             >
                 {props.children}
             </StyledText>

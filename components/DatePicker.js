@@ -58,7 +58,7 @@ const datePicker = props => {
             </View>
             {show && (
                 <DateTimePicker
-                    value={date}
+                    value={date || new Date()}
                     onChange={onChange}
                 />
             )}

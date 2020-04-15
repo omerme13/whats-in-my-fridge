@@ -8,12 +8,7 @@ import { colors } from '../utils/variables';
 
 const imagePicker = props => {
     const saveImage = pickedImage => {
-        if (!pickedImage) { 
-            props.setImage('');
-            return;
-        }
-
-        props.setImage(pickedImage);
+        props.setImage(pickedImage ? pickedImage : '');
     }
 
     const imagePickerOptions = {

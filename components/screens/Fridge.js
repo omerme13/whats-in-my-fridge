@@ -18,6 +18,8 @@ const products = props => {
     const [ids, setIds] = useState();
     const dispatch = useDispatch();
 
+    const products = useSelector(state => state.product.productsInFridge);
+
     const addToIds = id => {
         if (ids.includes(id)) {
             const idsArr = [...ids];
@@ -57,9 +59,6 @@ const products = props => {
             />
         );
     };
-
-    const products = useSelector(state => state.product.productsInFridge);
-    // console.log(products)
 
     const content = products.length
         ? (
