@@ -2,51 +2,79 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
+import * as FileSystem from 'expo-file-system';
 
 import GridItem from '../GridItem';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
-import { deleteProduct } from '../../store/actions/product';
+import { deleteProduct, updateProduct } from '../../store/actions/product';
 import { loadProducts } from '../../store/actions/product';
-import { deleteProductFromDB } from '../../utils/db';
+import { deleteProductFromDB, updateProductInDB } from '../../utils/db';
+import { convertToSqlDate } from '../../utils/convert';
 
-const products = props => {
+const fridge = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [ids, setIds] = useState();
-    const dispatch = useDispatch();
+    const [deleteData, setDeleteData] = useState({});
+    const [quantities, setQuantities] = useState({});
 
+    const dispatch = useDispatch();
     const products = useSelector(state => state.product.productsInFridge);
 
-    const addToIds = id => {
-        if (ids.includes(id)) {
-            const idsArr = [...ids];
-            const idIndex = idsArr.indexOf(id);
-
-            idsArr.splice(idIndex, 1);
-            setIds(idsArr);
+    const addDeletionData = data => {
+        if (deleteData[data.id]) {
+            delete deleteData[data.id];
         } else {
-            setIds(ids.concat(id));
+            const deleteDataObj = {...deleteData};
+            deleteDataObj[data.id] = data.photo;
+
+            setDeleteData(deleteDataObj);
         }
     };
+
+    const addQuantityData = data => {
+        const quantitiesObj = {...quantities};
+
+        quantitiesObj[data.id] = data.tempQuantity;
+        setQuantities(quantitiesObj);
+    }
 
     const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
 
     const removeFromIds = async () => {
         try {
-            await deleteProductFromDB(ids);
+            await deleteProductFromDB(Object.keys(deleteData));
     
-            for (const productId of ids) {
-                dispatch(deleteProduct(productId));
+            for (let id in deleteData) {
+                dispatch(deleteProduct(id));
+
+                if (deleteData[id] === null) {
+                    continue;
+                }
+                await FileSystem.deleteAsync(deleteData[id]);
             }
         } catch (err) {
             throw err;
         }
 
         toggleDeleteState();
-        setIds([]);
+    };
+
+    const updateQuantities = async () => {
+        try {
+            for (let id in quantities) {
+                const updatedProduct = products.find(prod => prod.id == id);
+                const { name, label, expiryDate, unit, toBuy, photo } = updatedProduct;
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantities[id], unit, toBuy, photo);
+                dispatch(updateProduct({...updatedProduct, quantity: quantities[id]}))
+            }
+        } catch (err) {
+            throw err;
+        }
+
+        toggleDeleteState();
     };
 
     const renderGridItem = itemData => {
@@ -55,7 +83,8 @@ const products = props => {
                 item={itemData.item} 
                 navigation={props.navigation}
                 isDeleteState={isDeleteState}
-                addToIds={addToIds}
+                addDeletionData={addDeletionData}
+                addQuantityData={addQuantityData}
             />
         );
     };
@@ -86,7 +115,10 @@ const products = props => {
 
     useEffect(() => {
         if (!isDeleteState) {
-            setIds([]);
+            // setIds([]);
+            // setPhotos([]);
+            setDeleteData({});
+            setQuantities({});
         }
     }, [isDeleteState]);
 
@@ -116,10 +148,11 @@ const products = props => {
                 isDeleteState={isDeleteState}
                 toggleDeleteState={toggleDeleteState}
                 removeFromIds={removeFromIds}
+                updateQuantities={updateQuantities}
+                isFridge
             />
         </View>
     );
 };
 
-
-export default products;
+export default fridge;

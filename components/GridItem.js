@@ -7,11 +7,14 @@ import StyledText from "./StyledText";
 import Label from "./Label";
 import { colors } from "../utils/variables";
 
-const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
+// import * as FileSystem from 'expo-file-system';
+
+const gridItem = ({ item, isDeleteState, addDeletionData, addQuantityData, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
-    const defaultPhoto = Asset.fromModule(require('../assets/img/food.jpg')).uri;
+    const [tempQuantity, setTempQuantity] = useState(quantity);
 
+    const defaultPhoto = Asset.fromModule(require('../assets/img/food.jpg')).uri;
     let diffInDays;
     
     if (expiryDate) {
@@ -21,10 +24,20 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
 
     const toggleIsChecked = () => setIsChecked(!isChecked);
 
+    const handleIncDec = (op) => {
+        if (tempQuantity === 1 && op !== '+') {
+            return;
+        }
+
+        op === '+'
+            ? setTempQuantity(tempQuantity + 1)
+            : setTempQuantity(tempQuantity - 1)
+    }
+
     const handlePress = () => {
         if (isDeleteState) {
             toggleIsChecked();
-            addToIds(id);
+            addDeletionData({ id, photo });
         } else {
             navigation.navigate("ProductDetails", { id });
         }
@@ -39,8 +52,21 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
     useEffect(() => {
         if (!isDeleteState) {
             setIsChecked(false);
+            setTempQuantity(quantity);
         }
     }, [isDeleteState]);
+
+    useEffect(() => {
+        addQuantityData({id, tempQuantity})
+    }, [tempQuantity]);
+
+    // useEffect(() => {
+    //     (async () => {
+    //         const folder = await FileSystem.readDirectoryAsync('file:///data/user/0/host.exp.exponent/files/ExperienceData/%2540anonymous%252Fwhats-in-my-fridge-eaaf6731-cdc1-498d-a41f-06154ab43fba');
+    //         console.log({folder, length: folder.length})
+    //     })();
+        
+    // }, [])
 
     return (
         <View style={{ flex: 1, overflow: "hidden", borderRadius: 5 }}>
@@ -65,32 +91,31 @@ const gridItem = ({ item, isDeleteState, addToIds, navigation }) => {
                         <StyledText type="title" style={styles.name}>
                             {name}
                         </StyledText>
+                        {isDeleteState &&
+                            <View style={{ ...styles.dataItemContainer, justifyContent: 'center' }}>
+                                <MaterialCommunityIcons 
+                                    name="minus-circle-outline" 
+                                    size={30} 
+                                    color={colors.secondary}
+                                    onPress={() => handleIncDec('-')}
+                                    style={{ marginRight: 5 }}
+                                />
+                                <StyledText>{tempQuantity}</StyledText>
+                                <MaterialCommunityIcons 
+                                    name="plus-circle-outline" 
+                                    size={30} 
+                                    color={colors.secondary} 
+                                    onPress={() => handleIncDec('+')}
+                                    style={{ marginLeft: 5 }}
+                                />
+                            </View>
+                        }
                     </View>
                     <View style={styles.data}>
                         <View style={styles.dataItemContainer}>
-                            <View style={isDeleteState ? styles.editQuantity : ''}>
-                                {isDeleteState &&
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <MaterialCommunityIcons 
-                                            name="minus-circle-outline" 
-                                            size={30} 
-                                            color={colors.secondary} 
-                                            onPress={() => {}} 
-                                            style={{ marginRight: 10 }} 
-                                        />
-                                        <MaterialCommunityIcons 
-                                            name="plus-circle-outline" 
-                                            size={30} 
-                                            color={colors.secondary} 
-                                            onPress={() => {}} 
-                                            style={{ marginRight: 25 }} 
-                                        />
-                                    </View>
-                                }
                                 <StyledText style={styles.dataItem}>
                                     {quantity}
                                 </StyledText>
-                            </View>
                             <MaterialCommunityIcons
                                 name="scale"
                                 size={30}
@@ -158,7 +183,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         width: '100%',
-        paddingRight: 15,
+        paddingHorizontal: 15,
     },
     dataItem: {
         marginRight: 10,

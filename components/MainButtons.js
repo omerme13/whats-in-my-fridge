@@ -20,7 +20,12 @@ const mainButtons = props => {
                 <RoundButton 
                     show={props.isDeleteState} 
                     name="delete" 
-                    onPress={props.removeFromIds} 
+                    onPress={props.removeFromIds}
+                />
+                <RoundButton 
+                    show={props.isDeleteState && props.isFridge} 
+                    name="save"
+                    onPress={props.updateQuantities}
                 />
                 <RoundButton 
                     show={props.isDeleteState} 
