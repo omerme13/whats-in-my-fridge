@@ -3,15 +3,13 @@ import { FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-
 import HeaderButton from '../HeaderButton';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import ListItemRow from '../ListItemRow';
 import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
-import { deleteFromShoppingList } from '../../store/actions/shoppingList';
+import { deleteFromShoppingList, loadShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
-import { loadShoppingList } from '../../store/actions/shoppingList';
 import { deleteListItemsFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
 
@@ -48,7 +46,7 @@ const shoppingList = props => {
 
     const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
 
-    const removeFromIds = async () => {
+    const deleteItems = async () => {
         try {
             await deleteListItemsFromDB(ids);
             
@@ -123,7 +121,7 @@ const shoppingList = props => {
                 navigateTo="ListItem"
                 isDeleteState={isDeleteState}
                 toggleDeleteState={toggleDeleteState}
-                removeFromIds={removeFromIds}
+                deleteItems={deleteItems}
             />
         </>
     );

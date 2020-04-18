@@ -37,7 +37,7 @@ const productAddEdit = props => {
             state.product.productsInFridge.find(prod => prod.id === id)
         );
             
-        var { name, label, expiryDate, quantity, unit, toBuy, photo } = details;
+        var { name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = details;
     }
         
     const [formUnit, setFormUnit] = useState(isUpdateState ? unit : 'pcs');
@@ -111,11 +111,11 @@ const productAddEdit = props => {
             }
 
             try {
-                const { id, name, label, expiryDate, quantity, unit, toBuy, photo } = newProduct;
+                const { id, name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = newProduct;
                 
                 if (isUpdateState) {
                     const newPath = await updateFileSystem(photo);
-                    await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, newPath || photo);
+                    await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, newPath || photo, listItemId);
                     dispatch(updateProduct({ ...newProduct, photo: newPath }));
                 } else {
                     const newPath = await updateFileSystem(photo);
@@ -154,7 +154,8 @@ const productAddEdit = props => {
             quantity,
             formUnit,
             toBuy,
-            image
+            image,
+            listItemId
         ));
 
     }, [formState, date, formUnit, image]);

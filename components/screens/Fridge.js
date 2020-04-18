@@ -9,13 +9,13 @@ import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
-import { deleteProduct, updateProduct } from '../../store/actions/product';
-import { loadProducts } from '../../store/actions/product';
+import { deleteProduct, updateProduct, loadProducts } from '../../store/actions/product';
 import { deleteProductFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
 
 const fridge = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
+    const [isEditState, setIsEditState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [deleteData, setDeleteData] = useState({});
     const [quantities, setQuantities] = useState({});
@@ -42,8 +42,9 @@ const fridge = props => {
     }
 
     const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
+    const toggleEditState = () => setIsEditState(!isEditState);
 
-    const removeFromIds = async () => {
+    const deleteItems = async () => {
         try {
             await deleteProductFromDB(Object.keys(deleteData));
     
@@ -66,15 +67,15 @@ const fridge = props => {
         try {
             for (let id in quantities) {
                 const updatedProduct = products.find(prod => prod.id == id);
-                const { name, label, expiryDate, unit, toBuy, photo } = updatedProduct;
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantities[id], unit, toBuy, photo);
+                const { name, label, expiryDate, unit, toBuy, photo, listItemId } = updatedProduct;
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantities[id], unit, toBuy, photo, listItemId);
                 dispatch(updateProduct({...updatedProduct, quantity: quantities[id]}))
             }
         } catch (err) {
             throw err;
         }
 
-        toggleDeleteState();
+        toggleEditState();
     };
 
     const renderGridItem = itemData => {
@@ -83,6 +84,7 @@ const fridge = props => {
                 item={itemData.item} 
                 navigation={props.navigation}
                 isDeleteState={isDeleteState}
+                isEditState={isEditState}
                 addDeletionData={addDeletionData}
                 addQuantityData={addQuantityData}
             />
@@ -115,12 +117,15 @@ const fridge = props => {
 
     useEffect(() => {
         if (!isDeleteState) {
-            // setIds([]);
-            // setPhotos([]);
             setDeleteData({});
-            setQuantities({});
         }
     }, [isDeleteState]);
+
+    useEffect(() => {
+        if (!isEditState) {
+            setQuantities({});
+        }
+    }, [isEditState]);
 
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',
@@ -147,7 +152,9 @@ const fridge = props => {
                 navigateTo="Product"
                 isDeleteState={isDeleteState}
                 toggleDeleteState={toggleDeleteState}
-                removeFromIds={removeFromIds}
+                isEditState={isEditState}
+                toggleEditState={toggleEditState}
+                deleteItems={deleteItems}
                 updateQuantities={updateQuantities}
                 isFridge
             />

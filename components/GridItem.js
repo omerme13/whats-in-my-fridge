@@ -9,7 +9,7 @@ import { colors } from "../utils/variables";
 
 // import * as FileSystem from 'expo-file-system';
 
-const gridItem = ({ item, isDeleteState, addDeletionData, addQuantityData, navigation }) => {
+const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
     const [tempQuantity, setTempQuantity] = useState(quantity);
@@ -52,9 +52,11 @@ const gridItem = ({ item, isDeleteState, addDeletionData, addQuantityData, navig
     useEffect(() => {
         if (!isDeleteState) {
             setIsChecked(false);
+        }
+        if (!isEditState) {
             setTempQuantity(quantity);
         }
-    }, [isDeleteState]);
+    }, [isDeleteState, isEditState]);
 
     useEffect(() => {
         addQuantityData({id, tempQuantity})
@@ -91,7 +93,7 @@ const gridItem = ({ item, isDeleteState, addDeletionData, addQuantityData, navig
                         <StyledText type="title" style={styles.name}>
                             {name}
                         </StyledText>
-                        {isDeleteState &&
+                        {isEditState &&
                             <View style={{ ...styles.dataItemContainer, justifyContent: 'center' }}>
                                 <MaterialCommunityIcons 
                                     name="minus-circle-outline" 
