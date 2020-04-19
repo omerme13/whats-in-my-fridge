@@ -9,9 +9,13 @@ import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
+import SideModal from '../SideModal';
+import SortOptions from '../SortOptions';
+
 import { deleteProduct, updateProduct, loadProducts } from '../../store/actions/product';
 import { deleteProductFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
+import { sortObjects } from '../../utils/sort';
 
 const fridge = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
@@ -19,9 +23,20 @@ const fridge = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [deleteData, setDeleteData] = useState({});
     const [quantities, setQuantities] = useState({});
+    const [sortBy, setSortBy] = useState(null);
+    const [direction, setDirection] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const dispatch = useDispatch();
     const products = useSelector(state => state.product.productsInFridge);
+
+    const setSortOption = option => {
+        option === sortBy
+            ? setDirection(direction * -1)
+            : setSortBy(option);
+    };
+
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const addDeletionData = data => {
         if (deleteData[data.id]) {
@@ -127,6 +142,14 @@ const fridge = props => {
         }
     }, [isEditState]);
 
+    useEffect(() => {
+        sortObjects(products, sortBy, direction);
+        if (sortBy) {
+            toggleModal();
+        }
+
+    }, [sortBy, direction])
+
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',
         headerLeft: () => (
@@ -137,7 +160,16 @@ const fridge = props => {
                     onPress={() => {}}
                 />
             </HeaderButtons>
-        )
+        ),
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="sort"    
+                    iconName="sort"
+                    onPress={toggleModal}
+                />
+            </HeaderButtons>
+        ),
     });
 
     if (isLoading) {
@@ -158,6 +190,15 @@ const fridge = props => {
                 updateQuantities={updateQuantities}
                 isFridge
             />
+            <SideModal
+                toggleModal={toggleModal}
+                isModalOpen={isModalOpen} 
+            >
+                <SortOptions 
+                    values={['name', 'label', 'quantity' ,'expiry Date']}
+                    setSort={setSortOption}
+                />
+            </SideModal>
         </View>
     );
 };

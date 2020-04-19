@@ -59,7 +59,9 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
     }, [isDeleteState, isEditState]);
 
     useEffect(() => {
-        addQuantityData({id, tempQuantity})
+        if (addQuantityData) { // excludes filteredFridge
+            addQuantityData({id, tempQuantity})
+        }
     }, [tempQuantity]);
 
     // useEffect(() => {
