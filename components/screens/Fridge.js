@@ -102,6 +102,7 @@ const fridge = props => {
                 isEditState={isEditState}
                 addDeletionData={addDeletionData}
                 addQuantityData={addQuantityData}
+                toggleDeleteState={toggleDeleteState}
             />
         );
     };
@@ -148,7 +149,7 @@ const fridge = props => {
             toggleModal();
         }
 
-    }, [sortBy, direction])
+    }, [sortBy, direction]);
 
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',

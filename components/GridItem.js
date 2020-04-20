@@ -9,7 +9,7 @@ import { colors } from "../utils/variables";
 
 // import * as FileSystem from 'expo-file-system';
 
-const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation }) => {
+const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation, toggleDeleteState }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
     const [tempQuantity, setTempQuantity] = useState(quantity);
@@ -42,6 +42,14 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
             navigation.navigate("ProductDetails", { id });
         }
     };
+
+    const handleLongPress = () => {
+        if (!isDeleteState) {
+            toggleDeleteState();
+            toggleIsChecked();
+            addDeletionData({ id, photo });   
+        }
+    }
 
     name = name.length > 20 ? name.slice(0,20) + '...' : name;
 
@@ -77,6 +85,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
             <TouchableNativeFeedback
                 useForeground
                 onPress={handlePress}
+                onLongPress={handleLongPress}
             >
                 <View style={styles.gridItem}>
                     <Image

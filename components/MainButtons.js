@@ -18,14 +18,14 @@ const mainButtons = props => {
                     onPress={props.toggleEditState} 
                 />
                 <RoundButton 
-                    show={!props.isDeleteState && !props.isEditState} 
+                    show={props.isDeleteState} 
                     name="delete" 
-                    onPress={props.toggleDeleteState}
+                    onPress={props.deleteItems}
                 />
                 <RoundButton 
-                    show={props.isDeleteState || props.isEditState} 
+                    show={props.isEditState} 
                     name="save"
-                    onPress={props.isDeleteState ? props.deleteItems : props.updateQuantities}
+                    onPress={props.updateQuantities}
                 />
                 <RoundButton 
                     show={props.isDeleteState || props.isEditState} 

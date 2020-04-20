@@ -9,7 +9,7 @@ import { addToShoppingList } from '../store/actions/shoppingList';
 import { updateListItemInDB } from '../utils/db';
 import { colors } from "../utils/variables";
 
-const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
+const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteState }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, isDone } = item;
     const [isDoneState, setIsDoneState] = useState(isDone);
@@ -45,6 +45,14 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
         }
     };
 
+    const handleLongPress = () => {
+        if (!isDeleteState) {
+            toggleDeleteState();
+            toggleIsChecked();
+            addToIds(id);
+        }
+    };
+
     name = name.length > 20 ? name.slice(0,20) + '...' : name;
 
     const iconName = isDeleteState
@@ -59,7 +67,7 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation }) => {
 
     return (
         <>
-            <TouchableNativeFeedback onPress={handlePress}>
+            <TouchableNativeFeedback onPress={handlePress} onLongPress={handleLongPress}>
                 <View style={changingStyle}>
                     <View style={styles.data}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>

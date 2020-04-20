@@ -8,20 +8,35 @@ import EmptyScreenMsg from '../EmptyScreenMsg';
 import ListItemRow from '../ListItemRow';
 import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
+import SideModal from '../SideModal';
+import SortOptions from '../SortOptions';
 import { deleteFromShoppingList, loadShoppingList } from '../../store/actions/shoppingList';
 import { updateProduct } from '../../store/actions/product';
 import { deleteListItemsFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
+import { sortObjects } from '../../utils/sort';
 
 const shoppingList = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
-    const dispatch = useDispatch();
+    const [sortBy, setSortBy] = useState(null);
+    const [direction, setDirection] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const dispatch = useDispatch(); 
 
     const list = useSelector(state => state.shoppingList.listItems);
     const products = useSelector(state => state.product.productsInFridge);
     const arrayList = Object.values(list);
+
+    // console.log(arrayList)
+
+    const setSortOption = option => {
+        option === sortBy
+            ? setDirection(direction * -1)
+            : setSortBy(option);
+    };
 
     const renderListItemRow = itemData => (
         <ListItemRow 
@@ -29,6 +44,7 @@ const shoppingList = props => {
             navigation={props.navigation}
             isDeleteState={isDeleteState}
             addToIds={addToIds}
+            toggleDeleteState={toggleDeleteState}
         />
     );
 
@@ -45,6 +61,7 @@ const shoppingList = props => {
     };
 
     const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
+    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     const deleteItems = async () => {
         try {
@@ -82,6 +99,14 @@ const shoppingList = props => {
         })()
     }, [dispatch]);
 
+    useEffect(() => {
+        sortObjects(arrayList, sortBy, direction);
+        if (sortBy) {
+            toggleModal();
+        }
+
+    }, [sortBy, direction]);
+
     props.navigation.setOptions({
         headerTitle: 'Shopping List',
         headerLeft: () => (
@@ -90,6 +115,15 @@ const shoppingList = props => {
                     title="menu"    
                     iconName="menu"
                     onPress={() => {}}
+                />
+            </HeaderButtons>
+        ),
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="sort"    
+                    iconName="sort"
+                    onPress={toggleModal}
                 />
             </HeaderButtons>
         )
@@ -123,6 +157,15 @@ const shoppingList = props => {
                 toggleDeleteState={toggleDeleteState}
                 deleteItems={deleteItems}
             />
+            <SideModal
+                toggleModal={toggleModal}
+                isModalOpen={isModalOpen} 
+            >
+                <SortOptions 
+                    values={['name', 'label']}
+                    setSort={setSortOption}
+                />
+            </SideModal>
         </>
     );
 }

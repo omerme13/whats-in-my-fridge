@@ -10,7 +10,6 @@ const sortOptions = props => {
             {props.values.map(value => (
                 <StyledText
                     key={value}
-                    type="title"
                     onPress={() => props.setSort(value.replace(/\s/g, ''))}
                     style={styles.sortOption}
                 >
@@ -25,7 +24,8 @@ const styles = StyleSheet.create({
     sortOption: {
         color: colors.primaryDark,
         textAlign: 'left',
-        paddingLeft: 30
+        paddingLeft: 30,
+        textTransform: 'capitalize'
     }
 })
 
