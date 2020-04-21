@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useReducer, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -12,7 +12,7 @@ import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
 import Spinner from '../Spinner';
 import ListItem from '../../models/listItem';
-import { addToShoppingList } from '../../store/actions/shoppingList';
+import { addToShoppingList, updateListItem } from '../../store/actions/shoppingList';
 import { insertListItemToDB, updateListItemInDB } from '../../utils/db';
 
 
@@ -24,7 +24,7 @@ const listItemAddEdit = props => {
     
     if (isUpdateState) {
         const details = useSelector(state =>
-            state.shoppingList.listItems[id]
+            state.shoppingList.listItems[id - 1]
         );
             
         var { name, label, isDone } = details;
@@ -55,7 +55,7 @@ const listItemAddEdit = props => {
                 const { name, label, isDone } = newListItem;
     
                 if (isUpdateState) {
-                    dispatch(addToShoppingList(newListItem));
+                    dispatch(updateListItem(newListItem));
                     await updateListItemInDB(id, name, label, isDone);
                 } else {
                     const dbResult = await insertListItemToDB(String(name), String(label));

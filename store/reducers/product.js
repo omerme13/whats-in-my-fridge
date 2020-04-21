@@ -40,11 +40,11 @@ const reducer = (state = initialState, action) => {
                 productsInFridge: deletedProductsInFridge
             };
 
-            case actions.LOAD_PRODUCTS:
+        case actions.LOAD_PRODUCTS:
 
-                return {
-                    productsInFridge: action.products
-                }
+            return {
+                productsInFridge: action.products
+            }
     }
 
     return state;

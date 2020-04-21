@@ -8,6 +8,7 @@ import ReduxThunk from 'redux-thunk';
 import MainNavigator from './components/navigation/MainNavigator';
 import productReducer from './store/reducers/product';
 import shoppingListReducer from './store/reducers/shoppingList';
+import settingsReducer from './store/reducers/settings';
 import { init } from './utils/db';
 
 init()
@@ -16,7 +17,8 @@ init()
 
 const rootReducer = combineReducers({
     product: productReducer,
-    shoppingList: shoppingListReducer
+    shoppingList: shoppingListReducer,
+    settings: settingsReducer
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

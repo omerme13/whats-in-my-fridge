@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
@@ -11,6 +11,7 @@ import Spinner from '../Spinner';
 import SideModal from '../SideModal';
 import SortOptions from '../SortOptions';
 import { deleteFromShoppingList, loadShoppingList } from '../../store/actions/shoppingList';
+import { addPreference } from '../../store/actions/settings';
 import { updateProduct } from '../../store/actions/product';
 import { deleteListItemsFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
@@ -20,22 +21,34 @@ const shoppingList = props => {
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
-    const [sortBy, setSortBy] = useState(null);
-    const [direction, setDirection] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const dispatch = useDispatch(); 
 
-    const list = useSelector(state => state.shoppingList.listItems);
     const products = useSelector(state => state.product.productsInFridge);
-    const arrayList = Object.values(list);
+    const sortPref = useSelector(state => state.settings.sortPref);
+    const list = useSelector(state => state.shoppingList.listItems);
+    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
+    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
 
-    // console.log(arrayList)
+    if (list.length) {
+        sortObjects(list, sortBy, direction);
+    }
 
     const setSortOption = option => {
-        option === sortBy
-            ? setDirection(direction * -1)
-            : setSortBy(option);
+        if (option === sortBy) {
+            setDirection(direction * -1);
+            addPreference({
+                sortBy: option,
+                direction: direction * -1
+            });
+        } else {
+            setSortBy(option);
+            addPreference({
+                sortBy: option,
+                direction
+            });
+        }
     };
 
     const renderListItemRow = itemData => (
@@ -86,13 +99,12 @@ const shoppingList = props => {
                 await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, false, photo, null)
             }
         }
-        
+
         setIds([]);
     };
 
     useEffect(() => {
         setIsLoading(true);
-
         (async () => {
             await dispatch(loadShoppingList());
             setIsLoading(false);
@@ -100,8 +112,8 @@ const shoppingList = props => {
     }, [dispatch]);
 
     useEffect(() => {
-        sortObjects(arrayList, sortBy, direction);
-        if (sortBy) {
+        if (list.length) {
+            sortObjects(list, sortBy, direction);
             toggleModal();
         }
 
@@ -129,13 +141,20 @@ const shoppingList = props => {
         )
     });
 
-    let content = arrayList.length
+    let content = list.length
         ? (
-            <FlatList 
-                keyExtractor={item => String(item.id)} 
-                data={arrayList} 
-                renderItem={renderListItemRow} 
-            />
+            <View style={{flex: 1, justifyContent: 'space-around'}}>
+                <FlatList 
+                    keyExtractor={item => String(item.id)} 
+                    data={list.filter(item => !item.isDone)} 
+                    renderItem={renderListItemRow} 
+                />
+                <FlatList 
+                    keyExtractor={item => String(item.id)} 
+                    data={list.filter(item => item.isDone)} 
+                    renderItem={renderListItemRow} 
+                />
+            </View>
         ) : (
             <EmptyScreenMsg 
                 message="Your list is empty, add new products."

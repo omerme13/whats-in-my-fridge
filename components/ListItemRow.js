@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TouchableNativeFeedback } from "react-native";
+import { View, StyleSheet, TouchableNativeFeedback, LayoutAnimation, UIManager } from "react-native";
 import { useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from "./StyledText";
 import Label from "./Label";
-import { addToShoppingList } from '../store/actions/shoppingList';
+import { updateListItem } from '../store/actions/shoppingList';
 import { updateListItemInDB } from '../utils/db';
 import { colors } from "../utils/variables";
 
@@ -20,6 +20,22 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
         backgroundColor: isDone ? "lightgray" : colors.primaryLightest
     };
 
+    UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+
+    const setAnimation = () => {
+        LayoutAnimation.configureNext({
+            duration: 100,
+            update: {
+                type: LayoutAnimation.Types.easeIn
+            },
+            create: {
+                type: LayoutAnimation.Types.easeIn,
+                property: LayoutAnimation.Properties.opacity,
+            }
+        });
+    };
+
     const toggleIsChecked = () => setIsChecked(!isChecked);
 
     const toggleIsDone = async () => {
@@ -29,7 +45,8 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
             const { id, name, label, isDone } = updatedListItem;
     
             await updateListItemInDB(id, name, label, isDone);
-            dispatch(addToShoppingList(updatedListItem));
+            dispatch(updateListItem(updatedListItem));
+            setAnimation();
         } catch (err) {
             console.log(err);
             throw err;
