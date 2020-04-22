@@ -8,6 +8,8 @@ import Label from "./Label";
 import { updateListItem } from '../store/actions/shoppingList';
 import { updateListItemInDB } from '../utils/db';
 import { colors } from "../utils/variables";
+import { shortenString } from "../utils/convert";
+
 
 const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteState }) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -70,7 +72,8 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
         }
     };
 
-    name = name.length > 20 ? name.slice(0,20) + '...' : name;
+    name = shortenString(name,label ? 16 : 25);
+    label = shortenString(label, 10);
 
     const iconName = isDeleteState
     ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
@@ -111,7 +114,7 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
                         </Label>
                     </View>
                     {!isDeleteState &&
-                        <View style={styles.deleteButton}>
+                        <View style={styles.doneButton}>
                             <MaterialCommunityIcons
                                 name={`checkbox-${
                                     isDone ? 'marked' : 'blank-outline'
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
         marginRight: 25,
         textDecorationLine: 'line-through',
     },
-    deleteButton: {
+    doneButton: {
         marginLeft: "auto"
     }
 });

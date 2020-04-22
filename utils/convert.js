@@ -14,3 +14,7 @@ export const convertToJsDate = date => {
 export const convertToSqlDate = date => {
     return date ? date.toISOString().slice(0, 19).replace('T', ' ') : null;
 };
+
+export const shortenString = (str, chars) => {
+    return str.length > chars ? str.slice(0,chars) + '...' : str;
+}

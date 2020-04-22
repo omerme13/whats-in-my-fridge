@@ -24,7 +24,7 @@ const listItemAddEdit = props => {
     
     if (isUpdateState) {
         const details = useSelector(state =>
-            state.shoppingList.listItems[id - 1]
+            state.shoppingList.listItems.find(item => item.id === id)
         );
             
         var { name, label, isDone } = details;
@@ -117,7 +117,7 @@ const listItemAddEdit = props => {
                     label="label"
                     input={listItemLabel}
                     set={inputValue => setListItemLabel(inputValue)}
-                    maxLength={16}
+                    maxLength={32}
                 />
             </View>
         </ScrollView>

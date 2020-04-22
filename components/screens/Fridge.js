@@ -26,7 +26,7 @@ const fridge = props => {
     const [sortBy, setSortBy] = useState(null);
     const [direction, setDirection] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    
     const dispatch = useDispatch();
     const products = useSelector(state => state.product.productsInFridge);
 
@@ -113,7 +113,7 @@ const fridge = props => {
                 keyExtractor={item => item.id} 
                 data={products} 
                 renderItem={renderGridItem} 
-                numColumns={2} 
+                numColumns={2}
             />
         ) : (
             <EmptyScreenMsg 
@@ -176,7 +176,7 @@ const fridge = props => {
     if (isLoading) {
         return <Spinner />
     }
-    
+
     return(
         <View style={{ position: 'relative', flex: 1 }}>
             {content}

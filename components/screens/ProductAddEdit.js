@@ -195,7 +195,7 @@ const productAddEdit = props => {
                     set={(inputValue, isValid) =>
                         setTextHandler("label", inputValue, isValid)
                     }
-                    maxLength={16}
+                    maxLength={32}
                 />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <FormInput
@@ -217,6 +217,7 @@ const productAddEdit = props => {
                         <Picker.Item label="pcs" value="pcs" />
                         <Picker.Item label="Kg" value="Kg" />
                         <Picker.Item label="Lbs" value="Lbs" />
+                        <Picker.Item label="Litre" value="Litre" />
                     </Picker>
                 </View>
                 <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>

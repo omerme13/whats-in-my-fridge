@@ -141,17 +141,23 @@ const shoppingList = props => {
         )
     });
 
+    const done = [];
+    const notDone = [];
+
+    for (let item of list) {
+        if (item.isDone) {
+            done.push(item);
+        } else {
+            notDone.push(item);
+        }
+    }
+
     let content = list.length
         ? (
-            <View style={{flex: 1, justifyContent: 'space-around'}}>
+            <View style={{flex: 1, justifyContent: 'space-between'}}>
                 <FlatList 
                     keyExtractor={item => String(item.id)} 
-                    data={list.filter(item => !item.isDone)} 
-                    renderItem={renderListItemRow} 
-                />
-                <FlatList 
-                    keyExtractor={item => String(item.id)} 
-                    data={list.filter(item => item.isDone)} 
+                    data={[...notDone, ...done]} 
                     renderItem={renderListItemRow} 
                 />
             </View>

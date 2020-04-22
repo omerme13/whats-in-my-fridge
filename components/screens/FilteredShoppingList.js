@@ -3,9 +3,11 @@ import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import ListItemRow from '../ListItemRow';
+import { shortenString } from '../../utils/convert';
+
 
 const filteredShoppingList = props => {
-    const label = props.route.params.label;
+    let label = props.route.params.label;
     const list = useSelector(state => state.shoppingList.listItems);
     const arrayList = Object.values(list);
 

@@ -6,6 +6,7 @@ import { Asset } from 'expo-asset';
 import StyledText from "./StyledText";
 import Label from "./Label";
 import { colors } from "../utils/variables";
+import { shortenString } from "../utils/convert";
 
 // import * as FileSystem from 'expo-file-system';
 
@@ -51,7 +52,8 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
         }
     }
 
-    name = name.length > 20 ? name.slice(0,20) + '...' : name;
+    name = shortenString(name, 20);
+    label = shortenString(label, 20);
 
     const iconName = isDeleteState
         ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
