@@ -11,7 +11,7 @@ import MainButtons from '../MainButtons';
 import Spinner from '../Spinner';
 import SideModal from '../SideModal';
 import SortOptions from '../SortOptions';
-
+import { addPreference } from '../../store/actions/settings';
 import { deleteProduct, updateProduct, loadProducts } from '../../store/actions/product';
 import { deleteProductFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
@@ -23,20 +23,39 @@ const fridge = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [deleteData, setDeleteData] = useState({});
     const [quantities, setQuantities] = useState({});
-    const [sortBy, setSortBy] = useState(null);
-    const [direction, setDirection] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
+
     const dispatch = useDispatch();
+
     const products = useSelector(state => state.product.productsInFridge);
+    const sortPref = useSelector(state => state.settings.sortFridgePref);
+    
+    const [sortBy, setSortBy] = useState(sortPref.sortBy || '');
+    const [direction, setDirection] = useState(sortPref.direction || 1);
+
+    if (products.length) {
+        sortObjects(products, sortBy, direction);
+    }
 
     const setSortOption = option => {
-        option === sortBy
-            ? setDirection(direction * -1)
-            : setSortBy(option);
+        if (option === sortBy) {
+            setDirection(direction * -1);
+            addPreference('sortFridgePref', {
+                sortBy: option,
+                direction: direction * -1
+            });
+        } else {
+            setSortBy(option);
+            addPreference('sortFridgePref', {
+                sortBy: option,
+                direction
+            });
+        }
     };
 
     const toggleModal = () => setIsModalOpen(!isModalOpen);
+    const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
+    const toggleEditState = () => setIsEditState(!isEditState);
 
     const addDeletionData = data => {
         if (deleteData[data.id]) {
@@ -55,9 +74,6 @@ const fridge = props => {
         quantitiesObj[data.id] = data.tempQuantity;
         setQuantities(quantitiesObj);
     }
-
-    const toggleDeleteState = () => setIsDeleteState(!isDeleteState);
-    const toggleEditState = () => setIsEditState(!isEditState);
 
     const deleteItems = async () => {
         try {
@@ -144,8 +160,8 @@ const fridge = props => {
     }, [isEditState]);
 
     useEffect(() => {
-        sortObjects(products, sortBy, direction);
-        if (sortBy) {
+        if (products.length) {
+            sortObjects(products, sortBy, direction);
             toggleModal();
         }
 
@@ -158,7 +174,7 @@ const fridge = props => {
                 <Item
                     title="menu"    
                     iconName="menu"
-                    onPress={() => {}}
+                    onPress={() => props.navigation.toggleDrawer()}
                 />
             </HeaderButtons>
         ),

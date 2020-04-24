@@ -18,6 +18,7 @@ import { convertToSqlDate } from '../../utils/convert';
 import { sortObjects } from '../../utils/sort';
 
 const shoppingList = props => {
+    console.log("LIST");
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
@@ -26,11 +27,12 @@ const shoppingList = props => {
     const dispatch = useDispatch(); 
 
     const products = useSelector(state => state.product.productsInFridge);
-    const sortPref = useSelector(state => state.settings.sortPref);
     const list = useSelector(state => state.shoppingList.listItems);
-    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
-    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
+    const sortPref = useSelector(state => state.settings.sortListPref);
 
+    const [sortBy, setSortBy] = useState(sortPref.sortBy || '');
+    const [direction, setDirection] = useState(sortPref.direction || 1);
+    
     if (list.length) {
         sortObjects(list, sortBy, direction);
     }
@@ -38,13 +40,13 @@ const shoppingList = props => {
     const setSortOption = option => {
         if (option === sortBy) {
             setDirection(direction * -1);
-            addPreference({
+            addPreference('sortListPref', {
                 sortBy: option,
                 direction: direction * -1
             });
         } else {
             setSortBy(option);
-            addPreference({
+            addPreference('sortListPref', {
                 sortBy: option,
                 direction
             });
@@ -126,7 +128,7 @@ const shoppingList = props => {
                 <Item
                     title="menu"    
                     iconName="menu"
-                    onPress={() => {}}
+                    onPress={() => props.navigation.toggleDrawer()}
                 />
             </HeaderButtons>
         ),

@@ -1,7 +1,8 @@
 import * as actions from "../actions/settings";
 
 const initialState = {
-    sortPref: {}
+    sortFridgePref : {},
+    sortListPref: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -9,14 +10,14 @@ const reducer = (state = initialState, action) => {
         case actions.ADD_PREFERENCE:
             return {
                 ...state,
-                sortPref: action.pref
+                [action.name]: action.pref
             };
 
         case actions.LOAD_SETTINGS:
-            console.log(action.settings)
             return action.settings;
     }
 
+    // console.log(state) ;
     return state;
 };
 

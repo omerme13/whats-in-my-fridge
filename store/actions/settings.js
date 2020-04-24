@@ -3,26 +3,27 @@ import { AsyncStorage } from 'react-native';
 export const ADD_PREFERENCE = 'ADD_PREFERENCE';
 export const LOAD_SETTINGS = 'LOAD_SETTINGS';
 
-export const addPreference = pref => {
-    AsyncStorage.setItem('sortPref', JSON.stringify(pref));
+export const addPreference = (name, pref) => {
+    AsyncStorage.setItem(name, JSON.stringify(pref));
 
     return {
         type: ADD_PREFERENCE,
+        name,
         pref
     };
-
-      
-}
+};
 
 export const loadSettings = () => {
     return async dispatch => {
         try {
-            const sortPref = JSON.parse(await AsyncStorage.getItem('sortPref'));
+            const sortFridgePref = JSON.parse(await AsyncStorage.getItem('sortFridgePref'));
+            const sortListPref = JSON.parse(await AsyncStorage.getItem('sortListPref'));
           
             dispatch({
                 type: LOAD_SETTINGS,
                 settings: {
-                    sortPref
+                    sortFridgePref,
+                    sortListPref
                 }
             })
         } catch (err) {

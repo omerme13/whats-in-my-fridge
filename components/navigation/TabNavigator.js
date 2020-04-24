@@ -8,7 +8,6 @@ import { tabOptions } from './options';
 
 const Tab = createBottomTabNavigator();
 
-
 const screenOptions = ({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
         let iconName = route.name === 'My Fridge' ? 'fridge' : 'cart';
@@ -20,11 +19,13 @@ const screenOptions = ({ route }) => ({
     }
 });
 
-const TabNavigator = () => (
-    <Tab.Navigator tabBarOptions={tabOptions} screenOptions={screenOptions}>
-        <Tab.Screen name="My Fridge" component={ProductsNavigator} />
-        <Tab.Screen name="Shopping List" component={ShoppingListNavigator} />
-    </Tab.Navigator>
-);
+const TabNavigator = () => {
+    return (
+        <Tab.Navigator tabBarOptions={tabOptions} screenOptions={screenOptions}>
+            <Tab.Screen name="My Fridge" component={ProductsNavigator} />
+            <Tab.Screen name="Shopping List" component={ShoppingListNavigator} />
+        </Tab.Navigator>
+    )
+}
 
 export default TabNavigator;
