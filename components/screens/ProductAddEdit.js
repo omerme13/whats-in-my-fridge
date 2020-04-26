@@ -1,14 +1,7 @@
 import React, { useEffect, useCallback, useReducer, useState } from 'react';
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-    Alert,
-    Picker
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Picker, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
-
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../HeaderButton';
@@ -17,12 +10,12 @@ import Spinner from '../Spinner';
 import StyledText from '../StyledText';
 import DatePicker from '../DatePicker';
 import ImagePicker from '../ImagePicker';
+import AutocompleteFormInput from '../AutocompleteFormInput';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
 import { insertProductToDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
-
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -32,23 +25,25 @@ const productAddEdit = props => {
     const id = props.route.params.id;
     const isUpdateState = id;
     
+    const products = useSelector(state => state.product.productsInFridge);
+    
     if (isUpdateState) {
-        const details = useSelector(state =>
-            state.product.productsInFridge.find(prod => prod.id === id)
-        );
-            
-        var { name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = details;
+        const details = products.find(prod => prod.id === id);
+
+        var { 
+            name,
+            label,
+            expiryDate,
+            quantity,
+            unit,
+            toBuy,
+            photo,
+            listItemId
+         } = details;
     }
         
-    const [formUnit, setFormUnit] = useState(isUpdateState ? unit : 'pcs');
-    const [date, setDate] = useState(isUpdateState ? expiryDate : null);
     const [image, setImage] = useState(isUpdateState ? photo : null);
     const [prevImage, setPrevImage] = useState(null);
-
-    // console.log({image})
-    const saveDate = datePickerDate => {
-        setDate(datePickerDate);
-    }
 
     const saveImage = imagePickerImage => {
         setPrevImage(image);
@@ -86,11 +81,15 @@ const productAddEdit = props => {
             name: isUpdateState ? name : '',
             label: isUpdateState ? label : '',
             quantity: isUpdateState ? quantity : '',
+            unit: isUpdateState ? unit : 'pcs',
+            expiryDate: isUpdateState ? expiryDate : null
         },
         inputValidities: {
             name: isUpdateState ? true : false,
             label: true,
             quantity: isUpdateState ? true : false,
+            unit: true,
+            expiryDate: true
         },
         isFormValid: isUpdateState ? true : false
     });
@@ -145,20 +144,20 @@ const productAddEdit = props => {
     };
 
     useEffect(() => {
-        const { name, label, quantity } = formState.inputValues;
+        const { name, label, quantity, unit, expiryDate } = formState.inputValues;
         setNewProduct(new Product(
             isUpdateState ? id : new Date().toString(),
             name,
             label,
-            date,
+            expiryDate,
             quantity,
-            formUnit,
+            unit,
             toBuy,
             image,
             listItemId
         ));
 
-    }, [formState, date, formUnit, image]);
+    }, [formState, image]);
 
     if (isLoading) {
         return <Spinner />;
@@ -170,16 +169,25 @@ const productAddEdit = props => {
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
                     title="save"
-                    iconName="save"
+                    iconName="done"
                     onPress={() => saveChanges(newProduct)}
                 />
             </HeaderButtons>
         )
     });
 
+    
+
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.form}>
+                <AutocompleteFormInput 
+                    data={products.map(prod => prod.label)}
+                    label="label"
+                    input={formState.inputValues.label}
+                    set={value => setTextHandler('label', value, true)}
+                    maxLength={32}
+                />
                 <FormInput
                     label="name"
                     input={formState.inputValues.name}
@@ -188,14 +196,6 @@ const productAddEdit = props => {
                     }
                     maxLength={32}
                     required
-                />
-                <FormInput
-                    label="label"
-                    input={formState.inputValues.label}
-                    set={(inputValue, isValid) =>
-                        setTextHandler("label", inputValue, isValid)
-                    }
-                    maxLength={32}
                 />
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <FormInput
@@ -210,9 +210,9 @@ const productAddEdit = props => {
                         textAlign="center"
                     />
                     <Picker
-                        selectedValue={formUnit}
+                        selectedValue={formState.inputValues.unit}
                         style={styles.picker}
-                        onValueChange={(itemValue, itemIndex) => setFormUnit(itemValue)}
+                        onValueChange={value => setTextHandler('unit', value, true)}
                     >
                         <Picker.Item label="pcs" value="pcs" />
                         <Picker.Item label="Kg" value="Kg" />
@@ -223,7 +223,10 @@ const productAddEdit = props => {
                 <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
                     Expiry Date
                 </StyledText>
-                <DatePicker expiryDate={date} set={saveDate} />
+                <DatePicker
+                    expiryDate={formState.inputValues.expiryDate}
+                    set={value => setTextHandler('expiryDate', value, true)} 
+                />
                 <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
                     Image
                 </StyledText>

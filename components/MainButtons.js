@@ -42,7 +42,7 @@ const mainButtons = props => {
                     />
                     <RoundButton 
                         show={props.isEditState} 
-                        name="save"
+                        name="done"
                         onPress={props.updateQuantities}
                     />
                     <RoundButton 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -12,13 +12,9 @@ const formInput = props => {
     const [isValid, setIsValid] = useState(false);
 
     const validateInput = text => {
-        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let isInputValid = true;
 
         if (props.required && !text.trim().length) {
-            isInputValid = false;
-        }
-        if (props.email && !emailRegex.test(text.toLowerCase())) {
             isInputValid = false;
         }
         if (props.min != null && +text < props.min) {
@@ -73,6 +69,11 @@ const formInput = props => {
         props.set(+inputValue + op, true);  // incremented/decremented 1 because the last operation doesn't happen
     }
     
+    // for autocompleteFormInput
+    const {input} = props;
+    useEffect(() => {
+        setInputValue(input)
+    }, [input])
 
     return (
         <View style={{ width: isNumberInput ? '50%' : '100%' }}>

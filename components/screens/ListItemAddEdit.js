@@ -1,15 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-    Alert,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../HeaderButton';
 import FormInput from '../FormInput';
+import AutocompleteFormInput from '../AutocompleteFormInput';
 import Spinner from '../Spinner';
 import ListItem from '../../models/listItem';
 import { addToShoppingList, updateListItem } from '../../store/actions/shoppingList';
@@ -22,11 +18,10 @@ const listItemAddEdit = props => {
     const id = props.route.params.id;
     const isUpdateState = id;
     
+    const list = useSelector(state => state.shoppingList.listItems);
+
     if (isUpdateState) {
-        const details = useSelector(state =>
-            state.shoppingList.listItems.find(item => item.id === id)
-        );
-            
+        const details = list.find(item => item.id === id);
         var { name, label, isDone } = details;
     }
 
@@ -34,7 +29,6 @@ const listItemAddEdit = props => {
     const [listItemLabel, setListItemLabel] = useState(isUpdateState ? label : '');
     const [isNameValid, setIsNameValid] = useState(isUpdateState ? true : false);
     const [isFormValid, setIsFormValid] = useState(isUpdateState ? true : false);
-
 
     const dispatch = useDispatch();
 
@@ -103,6 +97,13 @@ const listItemAddEdit = props => {
     return (
         <ScrollView>
             <View style={styles.form}>
+                <AutocompleteFormInput
+                    label="label"
+                    input={listItemLabel}
+                    set={inputValue => setListItemLabel(inputValue)}
+                    maxLength={32}
+                    data={list.map(item => item.label)}
+                />
                 <FormInput
                     label="name"
                     input={listItemName}
@@ -112,12 +113,6 @@ const listItemAddEdit = props => {
                     }}
                     maxLength={32}
                     required
-                />
-                <FormInput
-                    label="label"
-                    input={listItemLabel}
-                    set={inputValue => setListItemLabel(inputValue)}
-                    maxLength={32}
                 />
             </View>
         </ScrollView>
