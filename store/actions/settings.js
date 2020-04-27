@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 export const ADD_PREFERENCE = 'ADD_PREFERENCE';
+export const CHANGE_FRIDGE_COLUMNS = 'CHANGE_FRIDGE_COLUMNS';
 export const LOAD_SETTINGS = 'LOAD_SETTINGS';
 
 export const addPreference = (name, pref) => {
@@ -10,6 +11,14 @@ export const addPreference = (name, pref) => {
         type: ADD_PREFERENCE,
         name,
         pref
+    };
+};
+
+export const changeFridgeColumns = isOneColumn => {
+
+    return {
+        type: CHANGE_FRIDGE_COLUMNS,
+        isOneColumn
     };
 };
 

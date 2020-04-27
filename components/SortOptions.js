@@ -13,7 +13,7 @@ const sortOptions = props => {
                     onPress={() => props.setSort(value.replace(/\s/g, ''))}
                     style={styles.sortOption}
                 >
-                    {value}
+                    {value === 'id' ? 'Recently added' : value}
                 </StyledText>
             ))}
         </View>
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
     sortOption: {
         color: colors.primaryDark,
         textAlign: 'left',
-        paddingLeft: 30,
+        paddingLeft: 25,
+        paddingVertical: 5,
         textTransform: 'capitalize'
     }
 })

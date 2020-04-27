@@ -27,9 +27,10 @@ const fridge = props => {
 
     const dispatch = useDispatch();
 
+    const isOneColumn = useSelector(state => state.settings.isOneColumn);
     const products = useSelector(state => state.product.productsInFridge);
     const sortPref = useSelector(state => state.settings.sortFridgePref);
-    
+
     const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
     const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
 
@@ -58,14 +59,18 @@ const fridge = props => {
     const toggleEditState = () => setIsEditState(!isEditState);
 
     const addDeletionData = data => {
-        if (deleteData[data.id]) {
-            delete deleteData[data.id];
-        } else {
-            const deleteDataObj = {...deleteData};
-            deleteDataObj[data.id] = data.photo;
-
-            setDeleteData(deleteDataObj);
+        if (!data.photo) {
+            data.photo = 'image'
         }
+
+        const deleteDataObj = {...deleteData};
+
+        if (deleteData[data.id]) {
+            delete deleteDataObj[data.id];
+        } else {
+            deleteDataObj[data.id] = data.photo;
+        }
+        setDeleteData(deleteDataObj);
     };
 
     const addQuantityData = data => {
@@ -82,11 +87,13 @@ const fridge = props => {
             for (let id in deleteData) {
                 dispatch(deleteProduct(id));
 
-                if (deleteData[id] === null) {
+                if (deleteData[id] === 'image') {
                     continue;
                 }
                 await FileSystem.deleteAsync(deleteData[id]);
             }
+
+            await dispatch(loadProducts());
         } catch (err) {
             throw err;
         }
@@ -125,11 +132,12 @@ const fridge = props => {
 
     const content = products.length
         ? (
-            <FlatList 
-                keyExtractor={item => item.id} 
+            <FlatList
+                key={isOneColumn ? '1' : '0'}
+                keyExtractor={item => String(item.id)} 
                 data={products} 
                 renderItem={renderGridItem} 
-                numColumns={2}
+                numColumns={isOneColumn ? 1 : 2}
             />
         ) : (
             <EmptyScreenMsg 
@@ -145,7 +153,7 @@ const fridge = props => {
             await dispatch(loadProducts());
             setIsLoading(false);
         })()
-    }, [dispatch, products.length]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (!isDeleteState) {
@@ -166,6 +174,8 @@ const fridge = props => {
         }
 
     }, [sortBy, direction]);
+
+ 
 
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',
@@ -212,7 +222,7 @@ const fridge = props => {
                 isModalOpen={isModalOpen} 
             >
                 <SortOptions 
-                    values={['name', 'label', 'quantity' ,'expiry Date']}
+                    values={['name', 'label', 'quantity' ,'expiry Date', 'id']}
                     setSort={setSortOption}
                 />
             </SideModal>

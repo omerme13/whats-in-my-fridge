@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useReducer, useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert, Picker, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Picker } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -119,7 +119,7 @@ const productAddEdit = props => {
                 } else {
                     const newPath = await updateFileSystem(photo);
                     const dbResult = await insertProductToDB(name, label, convertToSqlDate(expiryDate), quantity, unit, toBuy, newPath || photo);
-                    const product = { ...newProduct, id: dbResult.insertId };
+                    const product = { ...newProduct, photo: newPath, id: dbResult.insertId };
                     dispatch(createProduct(product));
                 }
             } catch (err) {
@@ -127,9 +127,8 @@ const productAddEdit = props => {
                 throw err;
             }
 
-            setIsLoading(false);
-            
             props.navigation.goBack(null);
+            setIsLoading(false);
         },
         [formState, newProduct, image]
     );
@@ -175,8 +174,6 @@ const productAddEdit = props => {
             </HeaderButtons>
         )
     });
-
-    
 
     return (
         <ScrollView keyboardShouldPersistTaps="handled">

@@ -189,7 +189,7 @@ const shoppingList = props => {
                 isModalOpen={isModalOpen} 
             >
                 <SortOptions 
-                    values={['name', 'label']}
+                    values={['name', 'label', 'id']}
                     setSort={setSortOption}
                 />
             </SideModal>
