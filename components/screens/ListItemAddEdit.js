@@ -87,7 +87,7 @@ const listItemAddEdit = props => {
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
                     title="save"
-                    iconName="save"
+                    iconName="done"
                     onPress={() => saveChanges(newListItem)}
                 />
             </HeaderButtons>

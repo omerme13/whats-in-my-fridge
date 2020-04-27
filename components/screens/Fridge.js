@@ -30,8 +30,8 @@ const fridge = props => {
     const products = useSelector(state => state.product.productsInFridge);
     const sortPref = useSelector(state => state.settings.sortFridgePref);
     
-    const [sortBy, setSortBy] = useState(sortPref.sortBy || '');
-    const [direction, setDirection] = useState(sortPref.direction || 1);
+    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
+    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
 
     if (products.length) {
         sortObjects(products, sortBy, direction);

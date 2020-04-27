@@ -8,6 +8,7 @@ import { Asset } from 'expo-asset';
 import StyledText from '../StyledText';
 import HeaderButton from '../HeaderButton';
 import Label from '../Label';
+import Feedback from '../Feedback';
 import ListItem from '../../models/listItem';
 import Product from '../../models/product';
 import { colors } from "../../utils/variables";
@@ -23,14 +24,24 @@ const productDetails = props => {
     const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
+    const [showFeedback, setShowFeedBack] = useState(false);
     
     const defaultPhoto = Asset.fromModule(require('../../assets/img/food.jpg')).uri;
     const [image, setImage] = useState(photo || defaultPhoto)
 
     const dispatch = useDispatch();
 
+    const activateFeedback = () => {
+        setShowFeedBack(true);
+
+        setTimeout(() => {
+            setShowFeedBack(false)
+        }, 4000)
+    }
+
     const toggleToBuy = async () => {
         try {
+            activateFeedback()
             const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, image);
 
             if (!toBuy) {
@@ -89,6 +100,10 @@ const productDetails = props => {
 
     return (
         <View style={styles.productDetails}>
+            <Feedback
+                show={showFeedback}
+                message={`${isToBuy ? 'added to' : 'removed from'} shopping list`}
+            />
             <View style={styles.top}>
                 <MaterialIcons
                     name={`${isToBuy ? 'remove' : 'add'}-shopping-cart`}

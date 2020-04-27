@@ -8,8 +8,6 @@ import Label from "./Label";
 import { colors } from "../utils/variables";
 import { shortenString } from "../utils/convert";
 
-// import * as FileSystem from 'expo-file-system';
-
 const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation, toggleDeleteState }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
@@ -74,14 +72,6 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
         }
     }, [tempQuantity]);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         const folder = await FileSystem.readDirectoryAsync('file:///data/user/0/host.exp.exponent/files/ExperienceData/%2540anonymous%252Fwhats-in-my-fridge-eaaf6731-cdc1-498d-a41f-06154ab43fba');
-    //         console.log({folder, length: folder.length})
-    //     })();
-        
-    // }, [])
-
     return (
         <View style={{ flex: 1, overflow: "hidden", borderRadius: 5 }}>
             <TouchableNativeFeedback
@@ -128,9 +118,9 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                     </View>
                     <View style={styles.data}>
                         <View style={styles.dataItemContainer}>
-                                <StyledText style={styles.dataItem}>
-                                    {quantity}
-                                </StyledText>
+                            <StyledText style={styles.dataItem}>
+                                {quantity}
+                            </StyledText>
                             <MaterialCommunityIcons
                                 name="scale"
                                 size={30}
@@ -141,11 +131,13 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                             <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primaryDark : 'orangered'}}>
                                 {diffInDays}
                             </StyledText>
-                            <MaterialCommunityIcons
-                                name="timer-sand"
-                                size={30}
-                                onPress={toggleIsChecked}
-                            />
+                            {expiryDate &&
+                                <MaterialCommunityIcons
+                                    name="timer-sand"
+                                    size={30}
+                                    onPress={toggleIsChecked}
+                                />
+                            }
                         </View>
                     </View>
                     <View style={{flex: 1, paddingBottom: 15}}>

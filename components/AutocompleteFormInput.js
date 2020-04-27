@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, View, Keyboard } from "react-native";
 
 import StyledText from "./StyledText";
 import FormInput from "./FormInput";
+import { colors } from '../utils/variables';
 
 const autocompleteFormInput = props => {
     const [defValue, setDefValue] = useState(props.input);
@@ -44,7 +45,6 @@ const autocompleteFormInput = props => {
                     {Array.from(new Set(props.data)).map(renderItem)}
                 </View>
             }
-            
         </View>
     );
 };
@@ -52,9 +52,11 @@ const autocompleteFormInput = props => {
 const styles = StyleSheet.create({
     options: {
         borderRadius: 5,
-        borderColor: "lightgray",
+        borderColor: colors.primaryDark,
+        backgroundColor: colors.primaryLightest,
         borderWidth: 1,
-        paddingLeft: 10
+        paddingHorizontal: 10,
+        marginTop: -30
     }
 });
 
