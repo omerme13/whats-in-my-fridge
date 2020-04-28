@@ -9,21 +9,14 @@ const settings = props => {
     const [oneFridgeColumn, setOneFridgeColumn] = useState(false);
 
     return (
-        <SafeAreaView style={styles.settings}>
-            <View style={{ flex: 1 }}>
-                <StyledText type="title">
-                    Settings
-                </StyledText>
-            </View>
-            <View style={{ flex: 4 }}>
-                <SettingSwitch
-                    name="Fridge items in one column"
-                    value={oneFridgeColumn}
-                    setValue={setOneFridgeColumn}
-                    dispatchFunc={changeFridgeColumns}
-                />
-            </View>
-        </SafeAreaView>
+        <View style={styles.settings}>
+            <SettingSwitch
+                name="Fridge items in one column"
+                value={oneFridgeColumn}
+                setValue={setOneFridgeColumn}
+                dispatchFunc={changeFridgeColumns}
+            />
+        </View>
     )
 };
 

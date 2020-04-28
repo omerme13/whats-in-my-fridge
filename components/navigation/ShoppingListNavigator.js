@@ -4,16 +4,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ShoppingList from '../screens/ShoppingList';
 import ListItemAddEdit from '../screens/ListItemAddEdit';
 import FilteredShoppingList from '../screens/FilteredShoppingList';
-import { navOptions } from './options';
+import { navOptions, addMenuButton } from './options';
 
 const Stack = createStackNavigator();
 
-const ShoppingListNavigator = () => (
+const ShoppingListNavigator = props => (
     <Stack.Navigator>
         <Stack.Screen 
             name="Shopping List"
             component={ShoppingList}
-            options={navOptions} 
+            options={{ ...navOptions, ...addMenuButton(props) }} 
         />
         <Stack.Screen 
             name="ListItem"

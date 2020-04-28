@@ -1,4 +1,8 @@
+import React from 'react';
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+
 import { colors } from '../../utils/variables';
+import HeaderButton from "../HeaderButton";
 
 export const navOptions = {
     headerStyle: {
@@ -12,6 +16,18 @@ export const navOptions = {
         fontWeight: null /* in order to let the font family work */
     }
 };
+
+export const addMenuButton = props => ({
+    headerLeft: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+            <Item
+                title="menu"    
+                iconName="menu"
+                onPress={() => props.navigation.toggleDrawer()}
+            />
+        </HeaderButtons>
+    )
+});
 
 export const tabOptions = {
     activeTintColor: colors.secondary,

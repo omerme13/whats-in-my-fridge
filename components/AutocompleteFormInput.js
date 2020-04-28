@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.primaryLightest,
         borderWidth: 1,
         paddingHorizontal: 10,
-        marginTop: -30
+        marginTop: -27
     }
 });
 

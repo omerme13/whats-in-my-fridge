@@ -1,11 +1,10 @@
 import React from 'react';
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Text, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TabNavigator from './TabNavigator';
-import Settings from '../screens/Settings';
-import About from '../screens/About';
+import SettingsNavigator from './SettingsNavigator';
+import AboutNavigator from './AboutNavigator';
 import { colors } from '../../utils/variables';
 
 const Drawer = createDrawerNavigator();
@@ -13,15 +12,6 @@ const Drawer = createDrawerNavigator();
 const renderIcon = name => (
     <MaterialCommunityIcons name={name} size={23} color={colors.primary} />
 );
-
-const Dummy = props => {
-    return (
-        <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-        </TouchableOpacity>
-    )
-};
 
 const DrawerNavigator = () => {
     return (
@@ -33,12 +23,12 @@ const DrawerNavigator = () => {
             />
             <Drawer.Screen
                 name="Settings"
-                component={Settings}
+                component={SettingsNavigator}
                 options={{drawerIcon: () => renderIcon('settings')}}
             />
             <Drawer.Screen
                 name="About"
-                component={About}
+                component={AboutNavigator}
                 options={{drawerIcon: () => renderIcon('information-outline')}}
             />
         </Drawer.Navigator>

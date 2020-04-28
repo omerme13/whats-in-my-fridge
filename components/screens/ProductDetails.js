@@ -41,10 +41,10 @@ const productDetails = props => {
 
     const toggleToBuy = async () => {
         try {
-            activateFeedback()
             const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, image);
-
+            
             if (!toBuy) {
+                activateFeedback();
                 const dbResult = await insertListItemToDB(name, label);
                 const newListItem = new ListItem(dbResult.insertId, name, label);
                 const updatedProductWithListItem = {...updatedProduct, listItemId: dbResult.insertId };
@@ -88,13 +88,22 @@ const productDetails = props => {
     props.navigation.setOptions({
         headerTitle,
         headerRight: navigation => (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                    title="favorite"
-                    iconName="edit"
-                    onPress={editProduct}
-                />
-            </HeaderButtons>
+            <View style={{ flexDirection: 'row'}}>
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="toggle to buy"
+                        iconName={`${isToBuy ? 'remove' : 'add'}-shopping-cart`}
+                        onPress={toggleToBuy}
+                    />
+                </HeaderButtons>
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="favorite"
+                        iconName="edit"
+                        onPress={editProduct}
+                    />
+                </HeaderButtons>
+            </View>
         )
     });
 
@@ -102,15 +111,9 @@ const productDetails = props => {
         <View style={styles.productDetails}>
             <Feedback
                 show={showFeedback}
-                message={`${isToBuy ? 'added to' : 'removed from'} shopping list`}
+                message="added to shopping list"
             />
             <View style={styles.top}>
-                <MaterialIcons
-                    name={`${isToBuy ? 'remove' : 'add'}-shopping-cart`}
-                    size={23}
-                    color={colors.secondary}
-                    onPress={toggleToBuy}
-                />
                 <Label show={label ? true : false}>{label}</Label>
             </View>
             <View style={styles.bottom}>              

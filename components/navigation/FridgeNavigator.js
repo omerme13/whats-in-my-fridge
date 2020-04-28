@@ -5,16 +5,16 @@ import Fridge from '../screens/Fridge';
 import ProductDetails from '../screens/ProductDetails';
 import ProductAddEdit from '../screens/ProductAddEdit';
 import FilteredFridge from '../screens/FilteredFridge';
-import { navOptions } from './options';
+import { navOptions, addMenuButton } from './options';
 
 const Stack = createStackNavigator();
 
-const FridgeNavigator = () => (
+const FridgeNavigator = props => (
     <Stack.Navigator>
         <Stack.Screen 
             name="Fridge"
             component={Fridge}
-            options={navOptions} 
+            options={{...navOptions, ...addMenuButton(props)}} 
         />
         <Stack.Screen 
             name="ProductDetails"

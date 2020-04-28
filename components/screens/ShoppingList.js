@@ -123,15 +123,6 @@ const shoppingList = props => {
 
     props.navigation.setOptions({
         headerTitle: 'Shopping List',
-        headerLeft: () => (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                    title="menu"    
-                    iconName="menu"
-                    onPress={() => props.navigation.toggleDrawer()}
-                />
-            </HeaderButtons>
-        ),
         headerRight: () => (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
