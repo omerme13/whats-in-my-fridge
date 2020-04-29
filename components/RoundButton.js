@@ -11,8 +11,8 @@ const roundButton = props => {
                 <View style={{ ...styles.roundButton, ...props.style }}>
                     <MaterialIcons
                         name={props.name}
-                        size={props.size || 40}
-                        color={colors.secondary}
+                        size={props.size || 30}
+                        color="whitesmoke"
                         onPress={props.onPress}
                     />
                 </View>
@@ -23,9 +23,9 @@ const roundButton = props => {
 
 const styles = StyleSheet.create({
     roundButton: {
-        backgroundColor: colors.primary,
-        width: 60,
-        height: 60,
+        backgroundColor: colors.secondary,
+        width: 55,
+        height: 55,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 200,

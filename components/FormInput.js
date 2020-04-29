@@ -5,7 +5,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import StyledText from "./StyledText";
 import { colors } from '../utils/variables';
 
-
 const formInput = props => {
     const [inputValue, setInputValue] = useState(props.input);
     const [isTouched, setIsTouched] = useState(false);
@@ -77,7 +76,7 @@ const formInput = props => {
 
     return (
         <View style={{ width: isNumberInput ? '50%' : '100%' }}>
-            <StyledText type="title" style={{textAlign: 'left'}}>
+            <StyledText type="title" style={styles.label}>
                 {props.label}
             </StyledText>
             <View style={isNumberInput ? styles.formInputContainerNum : ''}>
@@ -127,20 +126,24 @@ const styles = StyleSheet.create({
         height: 40,
         marginBottom: 20,
         marginTop: 10,
-        // backgroundColor: 'red'
     },
     input: {
         paddingHorizontal: 2,
         paddingVertical: 5,
-        borderBottomColor: "lightgray",
+        borderBottomColor: colors.textLight,
         borderBottomWidth: 1,
         marginBottom: 25,
         fontFamily: 'lato',
-        fontSize: 19
+        fontSize: 19,
+        color: colors.primaryDarkest,
     },
     error: {
         color: 'orangered',
         marginTop: -20
+    },
+    label: {
+        textAlign: 'left',
+        color: colors.primaryDarker
     }
 });
 

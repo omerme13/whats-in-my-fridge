@@ -18,7 +18,7 @@ import { convertToSqlDate } from '../../utils/convert';
 import { sortObjects } from '../../utils/sort';
 
 const shoppingList = props => {
-    console.log("LIST");
+    // console.log("LIST");
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
@@ -120,6 +120,13 @@ const shoppingList = props => {
         }
 
     }, [sortBy, direction]);
+
+    useEffect(() => {
+        if (!ids.length && isDeleteState) {
+            setIsDeleteState(false);   
+        }
+
+    }, [ids.length]);
 
     props.navigation.setOptions({
         headerTitle: 'Shopping List',

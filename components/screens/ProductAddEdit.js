@@ -16,6 +16,7 @@ import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';
 import { insertProductToDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
+import { colors } from '../../utils/variables';
 
 const FORM_UPDATE = 'FORM_UPDATE';
 
@@ -217,14 +218,14 @@ const productAddEdit = props => {
                         <Picker.Item label="Litre" value="Litre" />
                     </Picker>
                 </View>
-                <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
+                <StyledText type="title" style={{textAlign: 'left', marginTop: 15, color: colors.primaryDarker }}>
                     Expiry Date
                 </StyledText>
                 <DatePicker
                     expiryDate={formState.inputValues.expiryDate}
                     set={value => setTextHandler('expiryDate', value, true)} 
                 />
-                <StyledText type="title" style={{textAlign: 'left', marginTop: 15}}>
+                <StyledText type="title" style={{textAlign: 'left', marginTop: 15, color: colors.primaryDarker }}>
                     Image
                 </StyledText>
                 <ImagePicker image={image} setImage={saveImage} />

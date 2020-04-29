@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from 'react-native-animatable';
 
 import RoundButton from './RoundButton';
+import { colors } from '../utils/variables';
 
 const mainButtons = props => {
     const [areButtonsVisible, setAreButtonsVisible] = useState(true);
+    
     const toggleMainButtons = () => setAreButtonsVisible(!areButtonsVisible);
+
+    const { isDeleteState } = props;
+    useEffect(() => {
+        if (isDeleteState && !areButtonsVisible) {
+            toggleMainButtons();
+        } 
+    }, [isDeleteState]);
 
     return (
         <View style={{...styles.mainButtons, ...props.style}}>
@@ -59,8 +68,8 @@ const mainButtons = props => {
 const styles = StyleSheet.create({
     mainButtons: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
+        bottom: 10,
+        right: 6,
         flexDirection: 'row',
     },
     editContainer: {
@@ -71,7 +80,8 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 10,
         zIndex: 5,
-        width: 30
+        width: 30,
+        color: '#333'
     }
 });
 

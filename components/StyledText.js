@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     body: {
         fontFamily: 'lato',
         fontSize: 19,
-        color: colors.text,
-        marginVertical: 5
+        color: colors.primaryDarkest,
+        marginVertical: 5,
     },
     title: {
         fontFamily: 'lato-bold',
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textTransform: 'capitalize',
         marginVertical: 10,
-        color: colors.text
+        color: colors.primaryDarkest,
     }
 })
 

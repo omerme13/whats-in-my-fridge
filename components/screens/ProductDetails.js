@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from 'react-native'
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from 'react-redux';
-import { MaterialIcons } from "@expo/vector-icons";
 import { Asset } from 'expo-asset';
 
 import StyledText from '../StyledText';
@@ -122,7 +121,7 @@ const productDetails = props => {
                 {expiryDate 
                 ? (
                     <StyledText style={styles.expiryDate}>
-                        Use before <StyledText style={{fontFamily: 'lato-bold'}}>
+                        Use before <StyledText style={{...styles.expiryDate, fontFamily: 'lato-bold'}}>
                             {formattedExpiryDate}
                             </StyledText>
                     </StyledText>
@@ -156,17 +155,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 5,
         width: '80%',
-        // backgroundColor: 'green'
-
     },
     name: {
-        color: colors.secondary
+        color: colors.primaryDark
     },
     quantity: {
-        color: colors.textLight
+        color: colors.primaryLight
     },
     expiryDate: {
-
+        color: colors.primaryDark
     },
     image: {
         left: 0,

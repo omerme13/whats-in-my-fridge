@@ -4,7 +4,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
 
-import GridItem from '../GridItem';
+import FridgeItem from '../FridgeItem';
 import EmptyScreenMsg from '../EmptyScreenMsg';
 import HeaderButton from '../HeaderButton';
 import MainButtons from '../MainButtons';
@@ -31,7 +31,7 @@ const fridge = props => {
     const products = useSelector(state => state.product.productsInFridge);
     const sortPref = useSelector(state => state.settings.sortFridgePref);
 
-    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
+    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : 'id');
     const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
 
     if (products.length) {
@@ -116,9 +116,9 @@ const fridge = props => {
         toggleEditState();
     };
 
-    const renderGridItem = itemData => {
+    const renderFridgeItem = itemData => {
         return (
-            <GridItem 
+            <FridgeItem 
                 item={itemData.item} 
                 navigation={props.navigation}
                 isDeleteState={isDeleteState}
@@ -136,7 +136,7 @@ const fridge = props => {
                 key={isOneColumn ? '1' : '0'}
                 keyExtractor={item => String(item.id)} 
                 data={products} 
-                renderItem={renderGridItem} 
+                renderItem={renderFridgeItem} 
                 numColumns={isOneColumn ? 1 : 2}
             />
         ) : (
@@ -174,6 +174,13 @@ const fridge = props => {
         }
 
     }, [sortBy, direction]);
+
+    useEffect(() => {
+        if (!Object.keys(deleteData).length && isDeleteState) {
+            setIsDeleteState(false);   
+        }
+
+    }, [deleteData]);
 
  
 

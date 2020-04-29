@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 
-import StyledText from '../StyledText';
 import SettingSwitch from '../SettingsSwitch';
 import { changeFridgeColumns } from '../../store/actions/settings';
 

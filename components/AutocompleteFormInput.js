@@ -51,10 +51,11 @@ const autocompleteFormInput = props => {
 
 const styles = StyleSheet.create({
     options: {
-        borderRadius: 5,
+        elevation: 1,
+        borderBottomRightRadius: 5,
+        borderBottomLeftRadius: 5,
         borderColor: colors.primaryDark,
         backgroundColor: colors.primaryLightest,
-        borderWidth: 1,
         paddingHorizontal: 10,
         marginTop: -27
     }

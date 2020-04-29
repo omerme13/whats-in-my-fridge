@@ -8,7 +8,7 @@ import Label from "./Label";
 import { colors } from "../utils/variables";
 import { shortenString } from "../utils/convert";
 
-const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation, toggleDeleteState }) => {
+const fridgeItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation, toggleDeleteState }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
     const [tempQuantity, setTempQuantity] = useState(quantity);
@@ -79,7 +79,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                 onPress={handlePress}
                 onLongPress={handleLongPress}
             >
-                <View style={styles.gridItem}>
+                <View style={styles.fridgeItem}>
                     <Image
                         source={{
                             uri: photo || defaultPhoto,
@@ -90,7 +90,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                         name={iconName}
                         size={30}
                         onPress={toggleIsChecked}
-                        style={{ position: 'absolute' ,left: 5, top: 5 }}
+                        style={{ ...styles.checkButton, color: isChecked ? colors.primary : colors.primaryDarkest }}
                     />
                     <View style={styles.nameContainer}>
                         <StyledText type="title" style={styles.name}>
@@ -125,6 +125,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                                 name="scale"
                                 size={30}
                                 onPress={toggleIsChecked}
+                                color={colors.primaryDarkest}
                             />
                         </View>
                         <View style={styles.dataItemContainer}>
@@ -136,6 +137,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
                                     name="timer-sand"
                                     size={30}
                                     onPress={toggleIsChecked}
+                                    color={colors.primaryDarkest}
                                 />
                             }
                         </View>
@@ -157,7 +159,7 @@ const gridItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuanti
 };
 
 const styles = StyleSheet.create({
-    gridItem: {
+    fridgeItem: {
         flex: 1,
         margin: 15,
         height: 250,
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     },
     name: {
         letterSpacing: 1,
-        color: colors.secondary,
+        color: colors.primaryDark,
         marginVertical: 0,
     },
     nameContainer: {
@@ -211,7 +213,12 @@ const styles = StyleSheet.create({
     editQuantity: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    checkButton: {
+        position: 'absolute',
+        left: 5,
+        top: 5
     }
 });
 
-export default gridItem;
+export default fridgeItem;

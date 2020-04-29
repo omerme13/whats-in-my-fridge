@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import GridItem from '../GridItem';
+import FridgeItem from '../FridgeItem';
 import { shortenString } from '../../utils/convert';
 
 const filteredFridge = props => {
@@ -18,9 +18,9 @@ const filteredFridge = props => {
         headerTitle: label + ' Products'
     });
 
-    const renderGridItem = itemData => {
+    const renderFridgeItem = itemData => {
         return (
-            <GridItem 
+            <FridgeItem 
                 item={itemData.item} 
                 navigation={props.navigation}
             />
@@ -31,7 +31,7 @@ const filteredFridge = props => {
         <FlatList 
             keyExtractor={item => item.id} 
             data={filteredProducts} 
-            renderItem={renderGridItem} 
+            renderItem={renderFridgeItem} 
             numColumns={2} 
         />
     )

@@ -96,7 +96,7 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
                                     name={iconName}
                                     size={30}
                                     onPress={toggleIsChecked}
-                                    style={{ marginRight: 15 }}
+                                    style={{ marginRight: 15, color: isChecked ? colors.primary : colors.primaryDarkest }}
                                 />
                             }
                             <StyledText 
@@ -121,6 +121,7 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
                                 }`}
                                 size={27}
                                 onPress={toggleIsDone}
+                                color={colors.primaryDarkest}
                             />
                         </View>
                     }
@@ -146,15 +147,11 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 15
     },
-    quantity: {
-        color: colors.textLight,
-        fontSize: 16
-    },
     sum: {
         fontFamily: "lato-bold"
     },
     name: {
-        marginRight: 25
+        marginRight: 25,
     },
     nameDone: {
         marginRight: 25,
