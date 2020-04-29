@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import StyledText from './StyledText';
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 const feedback = props => {
     return (
         <>

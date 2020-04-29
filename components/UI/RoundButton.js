@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native'
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const roundButton = props => {
     return (

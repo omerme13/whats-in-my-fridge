@@ -5,12 +5,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
 
 import FridgeItem from '../FridgeItem';
-import EmptyScreenMsg from '../EmptyScreenMsg';
-import HeaderButton from '../HeaderButton';
-import MainButtons from '../MainButtons';
-import Spinner from '../Spinner';
-import SideModal from '../SideModal';
-import SortOptions from '../SortOptions';
+import EmptyScreenMsg from '../UI/EmptyScreenMsg';
+import HeaderButton from '../UI/HeaderButton';
+import MainButtons from '../UI/MainButtons';
+import Spinner from '../UI/Spinner';
+import SideModal from '../UI/SideModal';
+import SortOptions from '../UI/SortOptions';
 import { addPreference } from '../../store/actions/settings';
 import { deleteProduct, updateProduct, loadProducts } from '../../store/actions/product';
 import { deleteProductFromDB, updateProductInDB } from '../../utils/db';

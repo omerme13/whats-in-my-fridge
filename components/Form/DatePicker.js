@@ -3,9 +3,9 @@ import { View, StyleSheet, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import StyledText from './StyledText';
-import { colors } from '../utils/variables';
-import { convertDate } from '../utils/convert';
+import StyledText from '../UI/StyledText';
+import { colors } from '../../utils/variables';
+import { convertDate } from '../../utils/convert';
 
 const datePicker = props => {
     const [date, setDate] = useState(props.expiryDate || new Date());

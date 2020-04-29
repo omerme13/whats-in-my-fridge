@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { TouchableOpacity, StyleSheet, View, Keyboard } from "react-native";
 
-import StyledText from "./StyledText";
+import StyledText from "../UI/StyledText";
 import FormInput from "./FormInput";
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const autocompleteFormInput = props => {
     const [defValue, setDefValue] = useState(props.input);

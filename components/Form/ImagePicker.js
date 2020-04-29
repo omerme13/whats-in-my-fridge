@@ -3,8 +3,8 @@ import { View, Image, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import StyledText from './StyledText';
-import { colors } from '../utils/variables';
+import StyledText from '../UI/StyledText';
+import { colors } from '../../utils/variables';
 
 const imagePicker = props => {
     const saveImage = pickedImage => {

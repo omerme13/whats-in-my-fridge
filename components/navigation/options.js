@@ -2,7 +2,7 @@ import React from 'react';
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import { colors } from '../../utils/variables';
-import HeaderButton from "../HeaderButton";
+import HeaderButton from "../UI/HeaderButton";
 
 export const navOptions = {
     headerStyle: {

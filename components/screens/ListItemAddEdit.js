@@ -3,10 +3,10 @@ import { View, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-import HeaderButton from '../HeaderButton';
-import FormInput from '../FormInput';
-import AutocompleteFormInput from '../AutocompleteFormInput';
-import Spinner from '../Spinner';
+import HeaderButton from '../UI/HeaderButton';
+import FormInput from '../Form/FormInput';
+import AutocompleteFormInput from '../Form/AutocompleteFormInput';
+import Spinner from '../UI/Spinner';
 import ListItem from '../../models/listItem';
 import { addToShoppingList, updateListItem } from '../../store/actions/shoppingList';
 import { insertListItemToDB, updateListItemInDB } from '../../utils/db';

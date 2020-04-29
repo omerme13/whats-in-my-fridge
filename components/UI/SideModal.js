@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableNativeFeedback, TouchableWithoutFeedback, Modal, StyleSheet } from 'react-native'
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const sideModal = props => {
     return (

@@ -4,10 +4,10 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from 'react-redux';
 import { Asset } from 'expo-asset';
 
-import StyledText from '../StyledText';
-import HeaderButton from '../HeaderButton';
-import Label from '../Label';
-import Feedback from '../Feedback';
+import StyledText from '../UI/StyledText';
+import HeaderButton from '../UI/HeaderButton';
+import Label from '../UI/Label';
+import Feedback from '../UI/Feedback';
 import ListItem from '../../models/listItem';
 import Product from '../../models/product';
 import { colors } from "../../utils/variables";
@@ -113,7 +113,12 @@ const productDetails = props => {
                 message="added to shopping list"
             />
             <View style={styles.top}>
-                <Label show={label ? true : false}>{label}</Label>
+                <Label 
+                    show={label ? true : false}
+                    onPress={() => props.navigation.navigate('FilteredFridge', { label })}
+                >
+                    {label}
+                </Label>
             </View>
             <View style={styles.bottom}>              
                 <StyledText type="title" style={styles.name}>{name}</StyledText>

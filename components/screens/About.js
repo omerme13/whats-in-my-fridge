@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import StyledText from '../StyledText';
+import StyledText from '../UI/StyledText';
 
 const about = props => {
     return (

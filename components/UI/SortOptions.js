@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import StyledText from './StyledText';
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const sortOptions = props => {
     return (

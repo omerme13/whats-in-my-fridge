@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from 'react-native-animatable';
 
 import RoundButton from './RoundButton';
-import { colors } from '../utils/variables';
 
 const mainButtons = props => {
     const [areButtonsVisible, setAreButtonsVisible] = useState(true);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Switch } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-import StyledText from './StyledText';
+import StyledText from './UI/StyledText';
 
 import { colors } from '../utils/variables';
 

@@ -3,8 +3,8 @@ import { View, StyleSheet, TouchableNativeFeedback, Image } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Asset } from 'expo-asset';
 
-import StyledText from "./StyledText";
-import Label from "./Label";
+import StyledText from "./UI/StyledText";
+import Label from "./UI/Label";
 import { colors } from "../utils/variables";
 import { shortenString } from "../utils/convert";
 

@@ -3,13 +3,13 @@ import { FlatList, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
-import HeaderButton from '../HeaderButton';
-import EmptyScreenMsg from '../EmptyScreenMsg';
 import ListItemRow from '../ListItemRow';
-import MainButtons from '../MainButtons';
-import Spinner from '../Spinner';
-import SideModal from '../SideModal';
-import SortOptions from '../SortOptions';
+import HeaderButton from '../UI/HeaderButton';
+import EmptyScreenMsg from '../UI/EmptyScreenMsg';
+import MainButtons from '../UI/MainButtons';
+import Spinner from '../UI/Spinner';
+import SideModal from '../UI/SideModal';
+import SortOptions from '../UI/SortOptions';
 import { deleteFromShoppingList, loadShoppingList } from '../../store/actions/shoppingList';
 import { addPreference } from '../../store/actions/settings';
 import { updateProduct } from '../../store/actions/product';
@@ -18,7 +18,6 @@ import { convertToSqlDate } from '../../utils/convert';
 import { sortObjects } from '../../utils/sort';
 
 const shoppingList = props => {
-    // console.log("LIST");
     const [isDeleteState, setIsDeleteState] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [ids, setIds] = useState([]);
@@ -30,7 +29,7 @@ const shoppingList = props => {
     const list = useSelector(state => state.shoppingList.listItems);
     const sortPref = useSelector(state => state.settings.sortListPref);
 
-    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : '');
+    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : 'id');
     const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
     
     if (list.length) {

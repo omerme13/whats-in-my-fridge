@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native';
 
-import Spinner from '../Spinner';
+import Spinner from '../UI/Spinner';
 import DrawerNavigator from './DrawerNavigator';
 import { loadSettings } from '../../store/actions/settings';
 

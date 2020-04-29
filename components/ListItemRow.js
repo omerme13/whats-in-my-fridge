@@ -3,8 +3,8 @@ import { View, StyleSheet, TouchableNativeFeedback, LayoutAnimation, UIManager }
 import { useDispatch } from 'react-redux';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import StyledText from "./StyledText";
-import Label from "./Label";
+import StyledText from "./UI/StyledText";
+import Label from "./UI/Label";
 import { updateListItem } from '../store/actions/shoppingList';
 import { updateListItemInDB } from '../utils/db';
 import { colors } from "../utils/variables";

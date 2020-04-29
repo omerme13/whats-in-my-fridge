@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const findStyle = type => {
     switch(type) {

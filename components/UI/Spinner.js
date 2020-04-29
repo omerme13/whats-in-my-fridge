@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-import { colors } from '../utils/variables';
+import { colors } from '../../utils/variables';
 
 const spinner = props => (
     <View style={styles.centered}>

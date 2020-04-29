@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput } from 'react-native';
 
-import StyledText from './StyledText';
-import { colors } from '../utils/variables';
+import StyledText from '../UI/StyledText';
+import { colors } from '../../utils/variables';
 
 const editableText = props => {
     const [isEditing, setIsEditing] = useState(false);

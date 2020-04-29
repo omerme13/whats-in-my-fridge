@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import StyledText from "./StyledText";
-import { colors } from '../utils/variables';
+import StyledText from "../UI/StyledText";
+import { colors } from '../../utils/variables';
 
 const formInput = props => {
     const [inputValue, setInputValue] = useState(props.input);
