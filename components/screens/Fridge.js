@@ -105,8 +105,27 @@ const fridge = props => {
         try {
             for (let id in quantities) {
                 const updatedProduct = products.find(prod => prod.id == id);
-                const { name, label, expiryDate, unit, toBuy, photo, listItemId } = updatedProduct;
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantities[id], unit, toBuy, photo, listItemId);
+                const { 
+                    name,
+                    label,
+                    expiryDate,
+                    unit,
+                    toBuy,
+                    photo,
+                    listItemId
+                } = updatedProduct;
+                
+                await updateProductInDB(
+                    id,
+                    name,
+                    label,
+                    convertToSqlDate(expiryDate),
+                    quantities[id],
+                    unit,
+                    toBuy,
+                    photo,
+                    listItemId
+                );
                 dispatch(updateProduct({...updatedProduct, quantity: quantities[id]}))
             }
         } catch (err) {
@@ -222,6 +241,7 @@ const fridge = props => {
                 <SortOptions 
                     values={['name', 'label', 'quantity' ,'expiry Date', 'id']}
                     setSort={setSortOption}
+                    sortData={{sortBy, direction}}
                 />
             </SideModal>
         </View>

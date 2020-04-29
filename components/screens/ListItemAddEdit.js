@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../UI/HeaderButton';
-import FormInput from '../Form/FormInput';
-import AutocompleteFormInput from '../Form/AutocompleteFormInput';
+import FormInput from '../form/FormInput';
+import AutocompleteFormInput from '../form/AutocompleteFormInput';
 import Spinner from '../UI/Spinner';
 import ListItem from '../../models/listItem';
 import { addToShoppingList, updateListItem } from '../../store/actions/shoppingList';

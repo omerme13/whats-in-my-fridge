@@ -5,12 +5,12 @@ import * as FileSystem from 'expo-file-system';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../UI/HeaderButton';
-import FormInput from '../Form/FormInput';
+import FormInput from '../form/FormInput';
 import Spinner from '../UI/Spinner';
 import StyledText from '../UI/StyledText';
-import DatePicker from '../Form/DatePicker';
-import ImagePicker from '../Form/ImagePicker';
-import AutocompleteFormInput from '../Form/AutocompleteFormInput';
+import DatePicker from '../form/DatePicker';
+import ImagePicker from '../form/ImagePicker';
+import AutocompleteFormInput from '../form/AutocompleteFormInput';
 import Product from '../../models/product';
 import { createProduct, updateProduct } from '../../store/actions/product';
 import { formReducer } from '../../utils/validation';

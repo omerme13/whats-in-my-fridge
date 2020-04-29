@@ -23,6 +23,7 @@ const filteredFridge = props => {
             <FridgeItem 
                 item={itemData.item} 
                 navigation={props.navigation}
+                filtered
             />
         );
     };

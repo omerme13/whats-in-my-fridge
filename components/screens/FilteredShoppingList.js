@@ -19,6 +19,7 @@ const filteredShoppingList = props => {
         <ListItemRow 
             item={itemData.item}
             navigation={props.navigation}
+            filtered
         />
     );
 

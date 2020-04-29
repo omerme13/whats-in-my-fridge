@@ -8,7 +8,16 @@ import Label from "./UI/Label";
 import { colors } from "../utils/variables";
 import { shortenString } from "../utils/convert";
 
-const fridgeItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuantityData, navigation, toggleDeleteState }) => {
+const fridgeItem = ({ 
+    item,
+    isDeleteState,
+    isEditState,
+    addDeletionData,
+    addQuantityData,
+    navigation,
+    toggleDeleteState,
+    filtered
+}) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, photo } = item;
     const [tempQuantity, setTempQuantity] = useState(quantity);
@@ -43,6 +52,10 @@ const fridgeItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuan
     };
 
     const handleLongPress = () => {
+        if (filtered) {
+            return;
+        }
+
         if (!isDeleteState) {
             toggleDeleteState();
             toggleIsChecked();
@@ -90,7 +103,10 @@ const fridgeItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuan
                         name={iconName}
                         size={30}
                         onPress={toggleIsChecked}
-                        style={{ ...styles.checkButton, color: isChecked ? colors.primary : colors.primaryDarkest }}
+                        style={{
+                            ...styles.checkButton,
+                            color: isChecked ? colors.primary : colors.primaryDarkest
+                        }}
                     />
                     <View style={styles.nameContainer}>
                         <StyledText type="title" style={styles.name}>
@@ -129,7 +145,12 @@ const fridgeItem = ({ item, isDeleteState, isEditState, addDeletionData, addQuan
                             />
                         </View>
                         <View style={styles.dataItemContainer}>
-                            <StyledText style={{...styles.dataItem, color: diffInDays > 0 ? colors.primaryDark : 'orangered'}}>
+                            <StyledText
+                                style={{
+                                    ...styles.dataItem,
+                                    color: diffInDays > 0 ? colors.primaryDark : 'orangered'
+                                }}
+                            >
                                 {diffInDays}
                             </StyledText>
                             {expiryDate &&

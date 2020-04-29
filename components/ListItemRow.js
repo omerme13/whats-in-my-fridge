@@ -11,7 +11,14 @@ import { colors } from "../utils/variables";
 import { shortenString } from "../utils/convert";
 
 
-const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteState }) => {
+const listItemRow = ({
+    item,
+    isDeleteState,
+    addToIds,
+    navigation,
+    toggleDeleteState,
+    filtered
+}) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, isDone } = item;
     const [isDoneState, setIsDoneState] = useState(isDone);
@@ -65,6 +72,10 @@ const listItemRow = ({ item, isDeleteState, addToIds, navigation, toggleDeleteSt
     };
 
     const handleLongPress = () => {
+        if (filtered) {
+            return;
+        }
+        
         if (!isDeleteState) {
             toggleDeleteState();
             toggleIsChecked();

@@ -5,6 +5,9 @@ import StyledText from './StyledText';
 import { colors } from '../../utils/variables';
 
 const sortOptions = props => {
+    const { direction, sortBy } = props.sortData;
+    const arrow = direction === 1 ? ' ↑' : ' ↓';
+    
     return (
         <View>
             {props.values.map(value => (
@@ -13,7 +16,8 @@ const sortOptions = props => {
                     onPress={() => props.setSort(value.replace(/\s/g, ''))}
                     style={styles.sortOption}
                 >
-                    {value === 'id' ? 'Recently added' : value}
+                    {value === 'id' ? 'Date Created' : value}
+                    {value === sortBy ? arrow : null}
                 </StyledText>
             ))}
         </View>

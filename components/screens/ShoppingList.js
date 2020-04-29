@@ -96,8 +96,28 @@ const shoppingList = props => {
                 product.toBuy = false;
                 product.listItemId = null;
                 dispatch(updateProduct(product));
-                const { id, name, label, expiryDate, quantity, unit, photo } = product;
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, false, photo, null)
+                
+                const {
+                    id,
+                    name,
+                    label,
+                    expiryDate,
+                    quantity,
+                    unit,
+                    photo
+                } = product;
+
+                await updateProductInDB(
+                    id,
+                    name,
+                    label,
+                    convertToSqlDate(expiryDate),
+                    quantity,
+                    unit,
+                    false,
+                    photo,
+                    null
+                );
             }
         }
 
@@ -188,6 +208,7 @@ const shoppingList = props => {
                 <SortOptions 
                     values={['name', 'label', 'id']}
                     setSort={setSortOption}
+                    sortData={{sortBy, direction}}
                 />
             </SideModal>
         </>
