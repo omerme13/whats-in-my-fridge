@@ -15,6 +15,7 @@ export const addPreference = (name, pref) => {
 };
 
 export const changeFridgeColumns = isOneColumn => {
+    AsyncStorage.setItem('isOneColumn', JSON.stringify(isOneColumn));
 
     return {
         type: CHANGE_FRIDGE_COLUMNS,
@@ -27,12 +28,14 @@ export const loadSettings = () => {
         try {
             const sortFridgePref = JSON.parse(await AsyncStorage.getItem('sortFridgePref'));
             const sortListPref = JSON.parse(await AsyncStorage.getItem('sortListPref'));
+            const isOneColumn = JSON.parse(await AsyncStorage.getItem('isOneColumn'));
           
             dispatch({
                 type: LOAD_SETTINGS,
                 settings: {
                     sortFridgePref,
-                    sortListPref
+                    sortListPref,
+                    isOneColumn
                 }
             })
         } catch (err) {

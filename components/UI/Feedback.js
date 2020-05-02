@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 import StyledText from './StyledText';
 import { colors } from '../../utils/variables';
+
 const feedback = props => {
     return (
         <>
@@ -15,6 +16,7 @@ const feedback = props => {
                     iterationCount={2}
                     iterationDelay={750}
                     duration={250}
+                    onAnimationEnd={props.onEnd}
                 >
                     <StyledText>{props.message}</StyledText>
                 </Animatable.View>

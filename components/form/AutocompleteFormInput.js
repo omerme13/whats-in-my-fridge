@@ -13,12 +13,7 @@ const autocompleteFormInput = props => {
         setDefValue(text);
         props.set(text);
 
-        if (isPressed) {
-            setIsShown(false);
-            Keyboard.dismiss();
-        } else {
-            setIsShown(text ? true : false);
-        }
+        isPressed ? Keyboard.dismiss() : setIsShown(text ? true : false);
     };
 
     const renderItem = item => (

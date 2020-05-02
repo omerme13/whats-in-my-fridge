@@ -26,29 +26,20 @@ const productDetails = props => {
     const [showFeedback, setShowFeedBack] = useState(false);
     
     const defaultPhoto = Asset.fromModule(require('../../assets/img/food.jpg')).uri;
-    const [image, setImage] = useState(photo || defaultPhoto)
 
     const dispatch = useDispatch();
 
-    const activateFeedback = () => {
-        setShowFeedBack(true);
-
-        setTimeout(() => {
-            setShowFeedBack(false)
-        }, 4000)
-    }
-
     const toggleToBuy = async () => {
         try {
-            const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, image);
+            const updatedProduct = new Product(id, name, label, expiryDate, quantity, unit, !isToBuy, photo);
             
             if (!toBuy) {
-                activateFeedback();
+                setShowFeedBack(true);
                 const dbResult = await insertListItemToDB(name, label);
                 const newListItem = new ListItem(dbResult.insertId, name, label);
                 const updatedProductWithListItem = {...updatedProduct, listItemId: dbResult.insertId };
     
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, image, dbResult.insertId);
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, dbResult.insertId);
                 
                 dispatch(updateProduct(updatedProductWithListItem));
                 dispatch(addToShoppingList(newListItem));
@@ -58,7 +49,7 @@ const productDetails = props => {
                 const updatedProductWithoutListItem = {...updatedProduct, listItemId: null };
 
                 await deleteListItemsFromDB([listItemId]);
-                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, image, null);
+                await updateProductInDB(id, name, label, convertToSqlDate(expiryDate), quantity, unit, !isToBuy, photo, null);
                 dispatch(updateProduct(updatedProductWithoutListItem));
                 dispatch(deleteFromShoppingList(listItemId));
             }
@@ -74,25 +65,21 @@ const productDetails = props => {
     };
 
     const formattedExpiryDate = convertDate(expiryDate);
-    const headerTitle = name.length > 20 ? name.slice(0,20) + '...' : name;
 
     useEffect(() => {
         setIsToBuy(toBuy);
     }, [listItemId]);
 
-    useEffect(() => {
-        setImage(photo || defaultPhoto);
-    }, [photo]);
-
     props.navigation.setOptions({
-        headerTitle,
+        headerTitle: 'Product',
         headerRight: navigation => (
-            <View style={{ flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
                     <Item
                         title="toggle to buy"
                         iconName={`${isToBuy ? 'remove' : 'add'}-shopping-cart`}
                         onPress={toggleToBuy}
+                        style={{marginRight: -15}}
                     />
                 </HeaderButtons>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
@@ -111,6 +98,7 @@ const productDetails = props => {
             <Feedback
                 show={showFeedback}
                 message="added to shopping list"
+                onEnd={() => setShowFeedBack(false)}
             />
             <View style={styles.top}>
                 <Label 
@@ -134,7 +122,7 @@ const productDetails = props => {
             </View>
             <Image
                 source={{
-                    uri: image,
+                    uri: photo || defaultPhoto,
                 }}
                 style={styles.image}
             />

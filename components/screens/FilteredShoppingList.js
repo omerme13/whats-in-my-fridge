@@ -3,8 +3,6 @@ import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import ListItemRow from '../ListItemRow';
-import { shortenString } from '../../utils/convert';
-
 
 const filteredShoppingList = props => {
     let label = props.route.params.label;
@@ -24,7 +22,7 @@ const filteredShoppingList = props => {
     );
 
     props.navigation.setOptions({
-        headerTitle: label + ' Shopping List'
+        headerTitle: label
     });
 
     return(

@@ -12,10 +12,10 @@ const filteredFridge = props => {
         prod.label.toLowerCase() === label.toLowerCase()
     ));
 
-    label = shortenString(label, 12);
+    label = shortenString(label, 16);
 
     props.navigation.setOptions({
-        headerTitle: label + ' Products'
+        headerTitle: label
     });
 
     const renderFridgeItem = itemData => {

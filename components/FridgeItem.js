@@ -63,8 +63,8 @@ const fridgeItem = ({
         }
     }
 
-    name = shortenString(name, 20);
-    label = shortenString(label, 20);
+    name = shortenString(name,isEditState ? 16 : 20);
+    label = shortenString(label, 14);
 
     const iconName = isDeleteState
         ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
@@ -86,7 +86,7 @@ const fridgeItem = ({
     }, [tempQuantity]);
 
     return (
-        <View style={{ flex: 1, overflow: "hidden", borderRadius: 5 }}>
+        <View style={{ flex: 0.5, overflow: "hidden", borderRadius: 5 }}>
             <TouchableNativeFeedback
                 useForeground
                 onPress={handlePress}
@@ -181,7 +181,6 @@ const fridgeItem = ({
 
 const styles = StyleSheet.create({
     fridgeItem: {
-        flex: 1,
         margin: 15,
         height: 250,
         borderRadius: 5,
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingBottom: 10,
         justifyContent: 'center',
-        position: 'relative'
+        position: 'relative',
     },
     data: {
         flex: 4,    

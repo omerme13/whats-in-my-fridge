@@ -95,14 +95,14 @@ const listItemAddEdit = props => {
     });
 
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.form}>
                 <AutocompleteFormInput
+                    data={list.map(item => item.label)}
                     label="label"
                     input={listItemLabel}
                     set={inputValue => setListItemLabel(inputValue)}
                     maxLength={32}
-                    data={list.map(item => item.label)}
                 />
                 <FormInput
                     label="name"

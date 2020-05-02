@@ -1,32 +1,48 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import SettingSwitch from '../SettingsSwitch';
+import StyledText from '../UI/StyledText';
 import { changeFridgeColumns } from '../../store/actions/settings';
+import { colors } from '../../utils/variables';
 
 const settings = props => {
-    const [oneFridgeColumn, setOneFridgeColumn] = useState(false);
+    const isOneColumn = useSelector(state => state.settings.isOneColumn);
+    const [oneFridgeColumn, setOneFridgeColumn] = useState(isOneColumn);
 
     return (
-        <View style={styles.settings}>
-            <SettingSwitch
-                name="Fridge items in one column"
-                value={oneFridgeColumn}
-                setValue={setOneFridgeColumn}
-                dispatchFunc={changeFridgeColumns}
-            />
-        </View>
+        <ScrollView>
+            <View style={styles.settings}>
+                <View style={styles.settingItem}>
+                    <StyledText type="title" style={{textAlign: 'left'}}>fridge</StyledText>
+                    <SettingSwitch
+                        name="Items in one column"
+                        value={oneFridgeColumn}
+                        setValue={setOneFridgeColumn}
+                        dispatchFunc={changeFridgeColumns}
+                    />
+                </View>
+            </View>
+        </ScrollView>
     )
 };
 
 const styles = StyleSheet.create({
     settings: {
         flex: 1,
-        padding: 15,
-        justifyContent: 'space-around',
-        width: '80%',
+        width: '90%',
         marginLeft: 'auto',
         marginRight: 'auto',
+        alignItems: 'flex-start',
+        // backgroundColor: colors.primaryLightest
+    },
+    settingItem: {
+        width: '100%',
+        borderBottomColor: 'lightgray',
+        borderBottomWidth: 1,
+        marginTop: 10,
+        paddingHorizontal: 10,
     }
 });
 
