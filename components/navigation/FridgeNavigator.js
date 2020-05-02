@@ -10,30 +10,16 @@ import { navOptions, addMenuButton } from './options';
 const Stack = createStackNavigator();
 
 const FridgeNavigator = props => (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={navOptions}>
         <Stack.Screen 
             name="Fridge"
             component={Fridge}
-            options={{...navOptions, ...addMenuButton(props)}} 
+            options={addMenuButton(props)} // add menu button in addition to the default options
         />
-        <Stack.Screen 
-            name="ProductDetails"
-            component={ProductDetails}
-            options={navOptions} 
-        />
-        <Stack.Screen 
-            name="Product"
-            component={ProductAddEdit}
-            options={navOptions} 
-        />
-        <Stack.Screen 
-            name="FilteredFridge"
-            component={FilteredFridge}
-            options={navOptions} 
-        />
+        <Stack.Screen name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen name="Product" component={ProductAddEdit} />
+        <Stack.Screen name="FilteredFridge" component={FilteredFridge} />
     </Stack.Navigator>
 );
 
 export default FridgeNavigator;
-
-

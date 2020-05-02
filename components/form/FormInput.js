@@ -36,9 +36,7 @@ const formInput = props => {
             return '';
         }
         
-        return number % 1 === 0
-        ? number
-        : (+number).toFixed(1);
+        return number % 1 === 0 ? number : (+number).toFixed(1);
     };
 
     const setHandler = text => {
@@ -92,7 +90,7 @@ const formInput = props => {
                 <TextInput
                     {...props}
                     value={inputValue.toString()} // in case there is a number(price/quantity) it becomes invalid
-                    style={{...styles.input, marginBottom: isNumberInput ? 0 : 25}}
+                    style={{...styles.input, marginBottom: isNumberInput ? -3 : 25}}
                     onChangeText={text => setHandler(text)}
                 />
                 {isNumberInput && 

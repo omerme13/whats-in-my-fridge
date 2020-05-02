@@ -23,7 +23,6 @@ const reducer = (state = initialState, action) => {
             return action.settings;
     }
 
-    // console.log({state})
     return state;
 };
 
