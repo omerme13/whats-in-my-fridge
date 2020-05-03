@@ -11,7 +11,7 @@ const autocompleteFormInput = props => {
 
     const setHandler = (text, isPressed) => {
         setDefValue(text);
-        props.set(text);
+        props.set(text.trim());
 
         isPressed ? Keyboard.dismiss() : setIsShown(text ? true : false);
     };

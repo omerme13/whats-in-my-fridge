@@ -1,13 +1,9 @@
 {
   "expo": {
-    "name": "whats-in-my-fridge",
+    "name": "What's in my fridge",
     "slug": "whats-in-my-fridge",
     "privacy": "public",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["android"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,9 +17,6 @@
     },
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    }
+    ]
   }
 }

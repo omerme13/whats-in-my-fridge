@@ -67,7 +67,7 @@ const fridgeItem = ({
     label = shortenString(label, 14);
 
     const iconName = isDeleteState
-        ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
+        ? `check${!isChecked ? "box-blank-circle-outline" : "-circle"}`
         : null;
 
     useEffect(() => {
@@ -105,7 +105,7 @@ const fridgeItem = ({
                         onPress={toggleIsChecked}
                         style={{
                             ...styles.checkButton,
-                            color: isChecked ? colors.primary : colors.primaryDarkest
+                            color: isChecked ? colors.secondary : colors.primaryDarkest
                         }}
                     />
                     <View style={styles.nameContainer}>
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         color: colors.primaryDark,
         marginVertical: 0,
+        textTransform: 'none'
     },
     nameContainer: {
         flex: 2,
@@ -236,8 +237,9 @@ const styles = StyleSheet.create({
     },
     checkButton: {
         position: 'absolute',
-        left: 5,
-        top: 5
+        left: 2,
+        top: 2,
+        zIndex: 1
     }
 });
 

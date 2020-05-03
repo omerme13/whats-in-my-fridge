@@ -207,7 +207,7 @@ const productAddEdit = props => {
                         min={0.1}
                         maxLength={8}
                         textAlign="center"
-                        placeholder="---"
+                        placeholder="0"
                     />
                     <Picker
                         selectedValue={formState.inputValues.unit}
@@ -215,6 +215,7 @@ const productAddEdit = props => {
                         onValueChange={value => setTextHandler('unit', value, true)}
                     >
                         <Picker.Item label="pcs" value="pcs" />
+                        <Picker.Item label="packages" value="packages" />
                         <Picker.Item label="Kg" value="Kg" />
                         <Picker.Item label="Lbs" value="Lbs" />
                         <Picker.Item label="Litre" value="Litre" />

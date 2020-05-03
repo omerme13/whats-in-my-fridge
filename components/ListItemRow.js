@@ -87,8 +87,8 @@ const listItemRow = ({
     label = shortenString(label, 10);
 
     const iconName = isDeleteState
-    ? `check${!isChecked ? "box-blank" : ""}-circle-outline`
-    : null;
+        ? `check${!isChecked ? "box-blank-circle-outline" : "-circle"}`
+        : null;
 
     useEffect(() => {
         if (!isDeleteState) {
@@ -107,7 +107,7 @@ const listItemRow = ({
                                     name={iconName}
                                     size={30}
                                     onPress={toggleIsChecked}
-                                    style={{ marginRight: 15, color: isChecked ? colors.primary : colors.primaryDarkest }}
+                                    style={{ marginRight: 15, color: isChecked ? colors.secondary : colors.primaryDarkest }}
                                 />
                             }
                             <StyledText 

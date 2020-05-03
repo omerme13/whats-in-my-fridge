@@ -20,7 +20,6 @@ const editableText = props => {
                 onChangeText={handleTextChange}
                 style={{
                     fontSize: 22, 
-                    textTransform: 'capitalize', 
                     color: colors.textLight
                 }}
             >

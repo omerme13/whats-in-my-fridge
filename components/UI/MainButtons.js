@@ -67,7 +67,7 @@ const mainButtons = props => {
 const styles = StyleSheet.create({
     mainButtons: {
         position: 'absolute',
-        bottom: 10,
+        bottom: 15,
         right: 6,
         flexDirection: 'row',
     },

@@ -150,7 +150,8 @@ const styles = StyleSheet.create({
         width: '80%',
     },
     name: {
-        color: colors.primaryDark
+        color: colors.primaryDark,
+        textTransform: 'none'
     },
     quantity: {
         color: colors.primaryLight
