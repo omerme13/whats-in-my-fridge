@@ -1,9 +1,9 @@
 import * as actions from "../actions/settings";
 
 const initialState = {
-    sortFridgePref : {},
-    sortListPref: {},
-    isOneColumn: false
+    sortFridgePref : { sortBy: 'id', direction: 1 },
+    sortListPref: { sortBy: 'id', direction: 1 },
+    viewPref: 'regular'
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,10 +13,10 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 [action.name]: action.pref
             };
-        case actions.CHANGE_FRIDGE_COLUMNS:
+        case actions.CHANGE_FRIDGE_VIEW:
             return {
                 ...state,
-                isOneColumn: action.isOneColumn
+                viewPref: action.view
             };
     
         case actions.LOAD_SETTINGS:

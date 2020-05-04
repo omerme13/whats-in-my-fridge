@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import SettingSwitch from '../SettingsSwitch';
 import StyledText from '../UI/StyledText';
 import { changeFridgeColumns } from '../../store/actions/settings';
-import { colors } from '../../utils/variables';
 
 const settings = props => {
     const isOneColumn = useSelector(state => state.settings.isOneColumn);

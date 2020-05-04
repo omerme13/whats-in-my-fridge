@@ -79,7 +79,7 @@ const productDetails = props => {
                         title="toggle to buy"
                         iconName={`${isToBuy ? 'remove' : 'add'}-shopping-cart`}
                         onPress={toggleToBuy}
-                        style={{marginRight: -15}}
+                        style={{marginRight: -10}}
                     />
                 </HeaderButtons>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>

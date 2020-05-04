@@ -16,7 +16,8 @@ const fridgeItem = ({
     addQuantityData,
     navigation,
     toggleDeleteState,
-    filtered
+    filtered,
+    minimal
 }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, unit, photo } = item;
@@ -62,8 +63,12 @@ const fridgeItem = ({
         }
     }
 
-    name = shortenString(name,isEditState ? 16 : 20);
-    label = shortenString(label, 14);
+    const displayedName = shortenString(name,
+        minimal
+            ? isEditState ? 8 : 14
+            : isEditState ? 16 : 20
+    );
+    const displayedLabel = shortenString(label, minimal ? 7 : 14);
 
     const iconName = isDeleteState
         ? `check${!isChecked ? "box-blank-circle-outline" : "-circle"}`
@@ -79,7 +84,7 @@ const fridgeItem = ({
     }, [isDeleteState, isEditState]);
 
     useEffect(() => {
-        if (addQuantityData) { // excludes filteredFridge
+        if (!filtered) { // excludes filteredFridge
             addQuantityData({id, tempQuantity})
         }
 
@@ -96,13 +101,15 @@ const fridgeItem = ({
                 onPress={handlePress}
                 onLongPress={handleLongPress}
             >
-                <View style={styles.fridgeItem}>
-                    <Image
-                        source={{
-                            uri: photo || defaultPhoto,
-                        }}
-                        style={styles.image}
-                    />
+                <View style={minimal ? styles.fridgeItemMin : styles.fridgeItem}>
+                    {!minimal &&
+                        <Image
+                            source={{
+                                uri: photo || defaultPhoto,
+                            }}
+                            style={styles.image}
+                        />
+                    }
                     <MaterialCommunityIcons
                         name={iconName}
                         size={30}
@@ -112,9 +119,12 @@ const fridgeItem = ({
                             color: isChecked ? colors.secondary : colors.primaryDarkest
                         }}
                     />
-                    <View style={styles.nameContainer}>
-                        <StyledText type="title" style={styles.name}>
-                            {name}
+                    <View style={minimal ? styles.nameContainerMin : styles.nameContainer}>
+                        <StyledText 
+                            type={minimal ? '' : 'title'}
+                            style={minimal ? styles.nameMin : styles.name}
+                        >
+                            {displayedName}
                         </StyledText>
                         {isEditState &&
                             <View style={{ ...styles.dataItemContainer, justifyContent: 'center' }}>
@@ -136,46 +146,61 @@ const fridgeItem = ({
                             </View>
                         }
                     </View>
-                    <View style={styles.data}>
-                        <View style={styles.dataItemContainer}>
-                            <StyledText style={styles.dataItem}>
+                    <View style={minimal ? styles.dataMin : styles.data}>
+                        <View 
+                            style={minimal ? styles.dataItemContainerMin : styles.dataItemContainer}
+                        >
+                            <StyledText style={minimal ? styles.dataItemMin : styles.dataItem}>
                                 {quantity}
                             </StyledText>
-                            <MaterialCommunityIcons
-                                name="scale"
-                                size={30}
-                                onPress={toggleIsChecked}
-                                color={colors.primaryDark}
-                            />
-                        </View>
-                        <View style={styles.dataItemContainer}>
-                            <StyledText
-                                style={{
-                                    ...styles.dataItem,
-                                    color: diffInDays > 0 ? colors.primaryDarkest : 'orangered'
-                                }}
-                            >
-                                {diffInDays}
-                            </StyledText>
-                            {expiryDate &&
+                            {!minimal &&
                                 <MaterialCommunityIcons
-                                    name="timer-sand"
+                                    name="scale"
                                     size={30}
                                     onPress={toggleIsChecked}
                                     color={colors.primaryDark}
                                 />
                             }
                         </View>
+                        {!minimal &&
+                            <View style={styles.dataItemContainer}>
+                                <StyledText
+                                    style={{
+                                        ...styles.dataItem,
+                                        color: diffInDays > 0 ? colors.primaryDarkest : 'orangered'
+                                    }}
+                                >
+                                    {diffInDays}
+                                </StyledText>
+                                {expiryDate &&
+                                    <MaterialCommunityIcons
+                                        name="timer-sand"
+                                        size={30}
+                                        onPress={toggleIsChecked}
+                                        color={colors.primaryDark}
+                                    />
+                                }
+                            </View>
+                        }
                     </View>
-                    <View style={{flex: 1, paddingBottom: 15}}>
+                    <View style={minimal ? styles.labelContainerMin : styles.labelContainer}>
                         <Label 
                             show={label ? true : false} 
                             onPress={() => {
                                 navigation.navigate('FilteredFridge', { label })
                             }}
+                            style={minimal ? styles.labelMin : ''}
                         >
-                            {label}
+                            {displayedLabel}
                         </Label>
+                        {minimal &&
+                            <Image
+                                source={{
+                                    uri: photo || defaultPhoto,
+                                }}
+                                style={styles.imageMin}
+                            />
+                        }
                     </View>
                 </View>
             </TouchableNativeFeedback>
@@ -195,10 +220,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         position: 'relative',
     },
+    fridgeItemMin: {
+        height: 75,
+        width: '90%',
+        overflow: "hidden",
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        marginVertical: 10,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: 15,
+        elevation: 1,
+        borderRadius: 5,
+        backgroundColor: colors.primaryLightest,
+        position: 'relative',
+    },
     data: {
-        flex: 4,    
+        flex: 4,
         justifyContent: 'flex-end',
         alignItems: 'center',
+    },
+    dataMin: {
+        flex: 1,
+        flexDirection: 'row',
     },
     name: {
         letterSpacing: 1,
@@ -206,11 +251,19 @@ const styles = StyleSheet.create({
         marginVertical: 0,
         textTransform: 'none'
     },
+    nameMin: {
+        color: colors.primaryDark,
+        textAlign: 'left'
+    },
     nameContainer: {
         flex: 2,
         justifyContent: 'center',
         overflow: 'hidden',
         padding: 15
+    },
+    nameContainerMin: {
+        flex: 2,
+        alignItems: 'flex-start',
     },
     dataItemContainer: {
         flexDirection: 'row',
@@ -219,10 +272,21 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 15,
     },
+    dataItemContainerMin: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        width: '100%',
+        paddingLeft: 5,
+    },
     dataItem: {
         marginRight: 10,
         fontFamily: 'lato-bold',
         color: colors.primaryDarkest,
+    },
+    dataItemMin: {
+        color: colors.primaryDarkest,
+        fontSize: 16
     },
     image: {
         position: 'absolute',
@@ -235,6 +299,11 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         backgroundColor: colors.primary,
     },
+    imageMin: {
+        width: 55,
+        height: 55,
+        borderRadius: 50
+    },
     editQuantity: {
         flexDirection: 'row',
         alignItems: 'center'
@@ -244,6 +313,21 @@ const styles = StyleSheet.create({
         left: 2,
         top: 2,
         zIndex: 1
+    },
+    labelMin: {
+        marginLeft: 'auto',
+        marginRight: 10,
+    },
+    labelContainer: {
+        flex: 1,
+        paddingBottom: 15,
+    },
+    labelContainerMin: {
+        flex: 3,
+        paddingBottom: 0,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
     }
 });
 

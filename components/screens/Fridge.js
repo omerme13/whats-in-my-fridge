@@ -11,7 +11,7 @@ import MainButtons from '../UI/MainButtons';
 import Spinner from '../UI/Spinner';
 import SideModal from '../UI/SideModal';
 import SortOptions from '../UI/SortOptions';
-import { addPreference } from '../../store/actions/settings';
+import { addPreference, changeFridgeView } from '../../store/actions/settings';
 import { deleteProduct, updateProduct, loadProducts } from '../../store/actions/product';
 import { deleteProductFromDB, updateProductInDB } from '../../utils/db';
 import { convertToSqlDate } from '../../utils/convert';
@@ -24,15 +24,17 @@ const fridge = props => {
     const [deleteData, setDeleteData] = useState({});
     const [quantities, setQuantities] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    
     const dispatch = useDispatch();
-
-    const isOneColumn = useSelector(state => state.settings.isOneColumn);
+    
+    const viewPref = useSelector(state => state.settings.viewPref);
     const products = useSelector(state => state.product.productsInFridge);
     const sortPref = useSelector(state => state.settings.sortFridgePref);
-
-    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : 'id');
-    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
+    
+    const [view, setView] = useState(viewPref);
+    const viewList = ['regular', 'regular-wide', 'minimal'];
+    const [sortBy, setSortBy] = useState(sortPref.sortBy);
+    const [direction, setDirection] = useState(sortPref.direction);
 
     if (products.length) {
         sortObjects(products, sortBy, direction);
@@ -145,6 +147,7 @@ const fridge = props => {
                 addDeletionData={addDeletionData}
                 addQuantityData={addQuantityData}
                 toggleDeleteState={toggleDeleteState}
+                minimal={view === 'minimal'}
             />
         );
     };
@@ -152,11 +155,11 @@ const fridge = props => {
     const content = products.length
         ? (
             <FlatList
-                key={isOneColumn ? '1' : '0'}
+                key={viewPref === 'regular' ? '1' : '0'}
                 keyExtractor={item => String(item.id)} 
                 data={products} 
                 renderItem={renderFridgeItem} 
-                numColumns={isOneColumn ? 1 : 2}
+                numColumns={viewPref === 'regular' ? 2 : 1}
             />
         ) : (
             <EmptyScreenMsg 
@@ -165,6 +168,27 @@ const fridge = props => {
             />
         )
 
+    const getIconAndChangeView = view => {
+        switch(view) {
+            case 'regular':
+                dispatch(changeFridgeView('regular'));
+                return 'view-grid';
+            case 'regular-wide':
+                dispatch(changeFridgeView('regular-wide'));
+                return 'view-stream';
+            case 'minimal':
+                dispatch(changeFridgeView('minimal'));
+                return 'view-headline';
+            default: return 'view-grid';
+        }
+    } 
+
+    const viewHandler = () => {
+        setView(viewList[(viewList.indexOf(view) + 1) % viewList.length]);
+    };
+
+    const viewIconName = getIconAndChangeView(view);
+    
     useEffect(() => {
         setIsLoading(true);
 
@@ -201,18 +225,25 @@ const fridge = props => {
 
     }, [deleteData]);
 
- 
-
     props.navigation.setOptions({
-        headerTitle: 'Products In Fridge',
+        headerTitle: 'Fridge',
         headerRight: () => (
             <View style={{ flexDirection: 'row' }}>
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="view"    
+                        iconName={viewIconName}
+                        onPress={viewHandler}
+                        style={{marginRight: -10}}
+                        community
+                    />
+                </HeaderButtons>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
                     <Item
                         title="sort"    
                         iconName="sort"
                         onPress={toggleModal}
-                        style={{marginRight: -15}}
+                        style={{marginRight: -10}}
                     />
                 </HeaderButtons>
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
@@ -220,8 +251,6 @@ const fridge = props => {
                         title="search"    
                         iconName="search"
                         onPress={() => props.navigation.navigate('FilteredFridge')}
-                        
-
                     />
                 </HeaderButtons>
             </View>

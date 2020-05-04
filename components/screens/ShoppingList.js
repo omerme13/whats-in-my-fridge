@@ -29,8 +29,8 @@ const shoppingList = props => {
     const list = useSelector(state => state.shoppingList.listItems);
     const sortPref = useSelector(state => state.settings.sortListPref);
 
-    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : 'id');
-    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
+    const [sortBy, setSortBy] = useState(sortPref.sortBy);
+    const [direction, setDirection] = useState(sortPref.direction);
     
     if (list.length) {
         sortObjects(list, sortBy, direction);

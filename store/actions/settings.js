@@ -1,7 +1,7 @@
 import { AsyncStorage } from 'react-native';
 
 export const ADD_PREFERENCE = 'ADD_PREFERENCE';
-export const CHANGE_FRIDGE_COLUMNS = 'CHANGE_FRIDGE_COLUMNS';
+export const CHANGE_FRIDGE_VIEW = 'CHANGE_FRIDGE_VIEW';
 export const LOAD_SETTINGS = 'LOAD_SETTINGS';
 
 export const addPreference = (name, pref) => {
@@ -14,12 +14,12 @@ export const addPreference = (name, pref) => {
     };
 };
 
-export const changeFridgeColumns = isOneColumn => {
-    AsyncStorage.setItem('isOneColumn', JSON.stringify(isOneColumn));
+export const changeFridgeView = view => {
+    AsyncStorage.setItem('viewPref', view);
 
     return {
-        type: CHANGE_FRIDGE_COLUMNS,
-        isOneColumn
+        type: CHANGE_FRIDGE_VIEW,
+        view
     };
 };
 
@@ -28,14 +28,14 @@ export const loadSettings = () => {
         try {
             const sortFridgePref = JSON.parse(await AsyncStorage.getItem('sortFridgePref'));
             const sortListPref = JSON.parse(await AsyncStorage.getItem('sortListPref'));
-            const isOneColumn = JSON.parse(await AsyncStorage.getItem('isOneColumn'));
+            const viewPref = await AsyncStorage.getItem('viewPref');
           
             dispatch({
                 type: LOAD_SETTINGS,
                 settings: {
                     sortFridgePref,
                     sortListPref,
-                    isOneColumn
+                    viewPref
                 }
             })
         } catch (err) {
