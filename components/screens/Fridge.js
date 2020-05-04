@@ -206,13 +206,25 @@ const fridge = props => {
     props.navigation.setOptions({
         headerTitle: 'Products In Fridge',
         headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                    title="sort"    
-                    iconName="sort"
-                    onPress={toggleModal}
-                />
-            </HeaderButtons>
+            <View style={{ flexDirection: 'row' }}>
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="sort"    
+                        iconName="sort"
+                        onPress={toggleModal}
+                        style={{marginRight: -15}}
+                    />
+                </HeaderButtons>
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="search"    
+                        iconName="search"
+                        onPress={() => props.navigation.navigate('FilteredFridge')}
+                        
+
+                    />
+                </HeaderButtons>
+            </View>
         )
     });
 

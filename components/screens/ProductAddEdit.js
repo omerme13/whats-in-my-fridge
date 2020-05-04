@@ -208,6 +208,7 @@ const productAddEdit = props => {
                         maxLength={8}
                         textAlign="center"
                         placeholder="0"
+                        unit={unit}
                     />
                     <Picker
                         selectedValue={formState.inputValues.unit}

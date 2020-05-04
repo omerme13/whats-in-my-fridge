@@ -6,7 +6,7 @@ import { Asset } from 'expo-asset';
 import StyledText from "./UI/StyledText";
 import Label from "./UI/Label";
 import { colors } from "../utils/variables";
-import { shortenString } from "../utils/convert";
+import { shortenString, getIncDecResult } from "../utils/convert";
 
 const fridgeItem = ({ 
     item,
@@ -19,7 +19,7 @@ const fridgeItem = ({
     filtered
 }) => {
     const [isChecked, setIsChecked] = useState(false);
-    let { id, name, label, quantity, expiryDate, photo } = item;
+    let { id, name, label, quantity, expiryDate, unit, photo } = item;
     const [tempQuantity, setTempQuantity] = useState(quantity);
 
     const defaultPhoto = Asset.fromModule(require('../assets/img/food.jpg')).uri;
@@ -32,15 +32,14 @@ const fridgeItem = ({
 
     const toggleIsChecked = () => setIsChecked(!isChecked);
 
-    const handleIncDec = (op) => {
-        if (tempQuantity === 1 && op !== '+') {
+    const handleIncDec = operator => {
+        const result = getIncDecResult(tempQuantity, operator, unit);
+        if (!result) {
             return;
         }
 
-        op === '+'
-            ? setTempQuantity(tempQuantity + 1)
-            : setTempQuantity(tempQuantity - 1)
-    }
+        setTempQuantity(result);
+    };
 
     const handlePress = () => {
         if (isDeleteState) {
@@ -52,7 +51,7 @@ const fridgeItem = ({
     };
 
     const handleLongPress = () => {
-        if (filtered) {
+        if (filtered || isEditState) {
             return;
         }
 
@@ -83,7 +82,12 @@ const fridgeItem = ({
         if (addQuantityData) { // excludes filteredFridge
             addQuantityData({id, tempQuantity})
         }
+
     }, [tempQuantity]);
+
+    useEffect(() => {
+        setTempQuantity(quantity);
+    }, [quantity])
 
     return (
         <View style={{ flex: 0.5, overflow: "hidden", borderRadius: 5 }}>
@@ -141,14 +145,14 @@ const fridgeItem = ({
                                 name="scale"
                                 size={30}
                                 onPress={toggleIsChecked}
-                                color={colors.primaryDarkest}
+                                color={colors.primaryDark}
                             />
                         </View>
                         <View style={styles.dataItemContainer}>
                             <StyledText
                                 style={{
                                     ...styles.dataItem,
-                                    color: diffInDays > 0 ? colors.primaryDark : 'orangered'
+                                    color: diffInDays > 0 ? colors.primaryDarkest : 'orangered'
                                 }}
                             >
                                 {diffInDays}
@@ -158,7 +162,7 @@ const fridgeItem = ({
                                     name="timer-sand"
                                     size={30}
                                     onPress={toggleIsChecked}
-                                    color={colors.primaryDarkest}
+                                    color={colors.primaryDark}
                                 />
                             }
                         </View>
@@ -167,8 +171,8 @@ const fridgeItem = ({
                         <Label 
                             show={label ? true : false} 
                             onPress={() => {
-                                navigation.navigate('FilteredFridge', { label })}
-                            }
+                                navigation.navigate('FilteredFridge', { label })
+                            }}
                         >
                             {label}
                         </Label>
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
     dataItem: {
         marginRight: 10,
         fontFamily: 'lato-bold',
-        color: colors.primaryDark,
+        color: colors.primaryDarkest,
     },
     image: {
         position: 'absolute',

@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import StyledText from "../UI/StyledText";
 import { colors } from '../../utils/variables';
+import { roundDecimal, getIncDecResult } from '../../utils/convert';
 
 const formInput = props => {
     const [inputValue, setInputValue] = useState(props.input);
@@ -31,14 +32,6 @@ const formInput = props => {
 
     const isNumberInput = props.keyboardType === 'number-pad';
 
-    const roundDecimal = number => {
-        if (isNaN(number)) {
-            return '';
-        }
-        
-        return number % 1 === 0 ? number : (+number).toFixed(1);
-    };
-
     const setHandler = text => {
         if (isNumberInput) {
             text = roundDecimal(text);
@@ -53,17 +46,15 @@ const formInput = props => {
 
 
     const changeByOne = operator => {
-        if (inputValue <= 1 && operator === '-') {
+        const result = getIncDecResult(inputValue, operator, props.unit);
+        if (!result) {
             return;
         }
 
-        setInputValue(roundDecimal(inputValue));
-        const op = operator === '+' ? 1 : -1;
-
+        setInputValue(result);
         setIsValid(true);
         setIsTouched(true);
-        setInputValue(+inputValue + op);
-        props.set(+inputValue + op, true);  // incremented/decremented 1 because the last operation doesn't happen
+        props.set(result, true);  // incremented/decremented 1 because the last operation doesn't happen
     }
     
     // for autocompleteFormInput
