@@ -40,18 +40,18 @@ const filteredFridge = props => {
                 item={itemData.item} 
                 navigation={props.navigation}
                 filtered
-                minimal={viewPref === 'minimal'}
+                minimal={viewPref === 'minimal' || filterBy !== ''}
             />
         );
     };
 
     return (
         <FlatList
-            key={viewPref === 'regular' ? '1' : '0'}
+            key={viewPref === 'regular' && !filterBy ? '1' : '0'}
             keyExtractor={item => String(item.id)} 
             data={filteredProducts} 
             renderItem={renderFridgeItem} 
-            numColumns={viewPref === 'regular' ? 2 : 1}
+            numColumns={viewPref === 'regular' && !filterBy ? 2 : 1}
         />
     )
 };

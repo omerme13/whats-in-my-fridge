@@ -20,7 +20,7 @@ const reducer = (state = initialState, action) => {
             };
     
         case actions.LOAD_SETTINGS:
-            return action.settings;
+            return action.settings || state;
     }
 
     return state;

@@ -30,11 +30,10 @@ const fridge = props => {
     const viewPref = useSelector(state => state.settings.viewPref);
     const products = useSelector(state => state.product.productsInFridge);
     const sortPref = useSelector(state => state.settings.sortFridgePref);
-    
     const [view, setView] = useState(viewPref);
     const viewList = ['regular', 'regular-wide', 'minimal'];
-    const [sortBy, setSortBy] = useState(sortPref.sortBy);
-    const [direction, setDirection] = useState(sortPref.direction);
+    const [sortBy, setSortBy] = useState(sortPref ? sortPref.sortBy : 'id');
+    const [direction, setDirection] = useState(sortPref ? sortPref.direction : 1);
 
     if (products.length) {
         sortObjects(products, sortBy, direction);
