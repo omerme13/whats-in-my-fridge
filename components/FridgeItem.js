@@ -17,7 +17,8 @@ const fridgeItem = ({
     navigation,
     toggleDeleteState,
     filtered,
-    minimal
+    minimal,
+    wide
 }) => {
     const [isChecked, setIsChecked] = useState(false);
     let { id, name, label, quantity, expiryDate, unit, photo } = item;
@@ -64,11 +65,14 @@ const fridgeItem = ({
     }
 
     const displayedName = shortenString(name,
-        minimal
+        wide ? 32 : minimal
             ? isEditState ? 8 : 14
             : isEditState ? 16 : 20
     );
-    const displayedLabel = shortenString(label, minimal ? 7 : 14);
+
+    const displayedLabel = shortenString(label,
+        wide ? 32 : minimal ? 7 : 14
+    );
 
     const iconName = isDeleteState
         ? `check${!isChecked ? "box-blank-circle-outline" : "-circle"}`
@@ -81,6 +85,7 @@ const fridgeItem = ({
         if (!isEditState) {
             setTempQuantity(quantity);
         }
+
     }, [isDeleteState, isEditState]);
 
     useEffect(() => {
@@ -116,13 +121,16 @@ const fridgeItem = ({
                         onPress={toggleIsChecked}
                         style={{
                             ...styles.checkButton,
-                            color: isChecked ? colors.secondary : colors.primaryDarkest
+                            color: isChecked ? colors.secondary : colors.primaryDarkest,
                         }}
                     />
                     <View style={minimal ? styles.nameContainerMin : styles.nameContainer}>
                         <StyledText 
                             type={minimal ? '' : 'title'}
-                            style={minimal ? styles.nameMin : styles.name}
+                            style={minimal 
+                                ? {...styles.nameMin, paddingLeft: isDeleteState ? 16 : 0}
+                                : styles.name
+                            }
                         >
                             {displayedName}
                         </StyledText>
@@ -249,17 +257,18 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         color: colors.primaryDark,
         marginVertical: 0,
-        textTransform: 'none'
+        textTransform: 'none',
     },
     nameMin: {
         color: colors.primaryDark,
-        textAlign: 'left'
+        textAlign: 'left',
     },
     nameContainer: {
         flex: 2,
         justifyContent: 'center',
         overflow: 'hidden',
-        padding: 15
+        paddingVertical: 15,
+        paddingHorizontal: 5,
     },
     nameContainerMin: {
         flex: 2,
@@ -312,7 +321,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 2,
         top: 2,
-        zIndex: 1
+        zIndex: 1,
     },
     labelMin: {
         marginLeft: 'auto',

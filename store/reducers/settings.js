@@ -3,7 +3,8 @@ import * as actions from "../actions/settings";
 const initialState = {
     sortFridgePref : { sortBy: 'id', direction: 1 },
     sortListPref: { sortBy: 'id', direction: 1 },
-    viewPref: 'regular'
+    viewPref: 'regular',
+    areAmericanUnits: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -17,6 +18,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 viewPref: action.view
+            };
+        case actions.TOGGLE_AMERICAN_UNITS:
+            return {
+                ...state,
+                areAmericanUnits: action.pref
             };
     
         case actions.LOAD_SETTINGS:

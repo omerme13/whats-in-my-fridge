@@ -27,7 +27,7 @@ const productAddEdit = props => {
     const isUpdateState = id;
     
     const products = useSelector(state => state.product.productsInFridge);
-    
+    const areAmericanUnits = useSelector(state => state.settings.areAmericanUnits);
     if (isUpdateState) {
         const details = products.find(prod => prod.id === id);
 
@@ -82,7 +82,7 @@ const productAddEdit = props => {
             name: isUpdateState ? name : '',
             label: isUpdateState ? label : '',
             quantity: isUpdateState ? quantity : '',
-            unit: isUpdateState ? unit : 'pcs',
+            unit: isUpdateState ? unit : 'PCS',
             expiryDate: isUpdateState ? expiryDate : null
         },
         inputValidities: {
@@ -215,11 +215,16 @@ const productAddEdit = props => {
                         style={styles.picker}
                         onValueChange={value => setTextHandler('unit', value, true)}
                     >
-                        <Picker.Item label="pcs" value="pcs" />
-                        <Picker.Item label="packages" value="packages" />
-                        <Picker.Item label="Kg" value="Kg" />
-                        <Picker.Item label="Lbs" value="Lbs" />
-                        <Picker.Item label="Litre" value="Litre" />
+                        <Picker.Item label="PCS" value="PCS" />
+                        <Picker.Item label="Packages" value="Packages" />
+                        <Picker.Item
+                            label={areAmericanUnits ? 'LBS' : 'KG'}
+                            value={areAmericanUnits ? 'LBS' : 'KG'} 
+                        />
+                        <Picker.Item
+                            label={areAmericanUnits ? 'OZ' : 'Litre'}
+                            value={areAmericanUnits ? 'OZ' : 'Litre'}
+                        />
                     </Picker>
                 </View>
                 <StyledText type="title" style={{textAlign: 'left', marginTop: 15, color: colors.primaryDarker }}>

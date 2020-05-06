@@ -25,9 +25,10 @@ const filteredFridge = props => {
         filteredProducts = products.filter(prod => (
             prod.label.toLowerCase() === label.toLowerCase()
         ));
-    
+
         label = shortenString(label, 16);
     }
+
 
     props.navigation.setOptions({
         headerTitle: label ? label : '',
@@ -41,6 +42,7 @@ const filteredFridge = props => {
                 navigation={props.navigation}
                 filtered
                 minimal={viewPref === 'minimal' || filterBy !== ''}
+                wide={viewPref === 'regular-wide' && filterBy === ''}
             />
         );
     };

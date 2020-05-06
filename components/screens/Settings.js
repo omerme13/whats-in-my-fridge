@@ -4,22 +4,22 @@ import { useSelector } from 'react-redux';
 
 import SettingSwitch from '../SettingsSwitch';
 import StyledText from '../UI/StyledText';
-import { changeFridgeColumns } from '../../store/actions/settings';
+import { toggleAmericanUnits } from '../../store/actions/settings';
 
 const settings = props => {
-    const isOneColumn = useSelector(state => state.settings.isOneColumn);
-    const [oneFridgeColumn, setOneFridgeColumn] = useState(isOneColumn);
-
+    const areAmericanUnits = useSelector(state => state.settings.areAmericanUnits);
+    const [americanUnits, setAmericanUnits] = useState(areAmericanUnits);
+    
     return (
         <ScrollView>
             <View style={styles.settings}>
                 <View style={styles.settingItem}>
-                    <StyledText type="title" style={{textAlign: 'left'}}>fridge</StyledText>
+                    <StyledText type="title" style={{textAlign: 'left'}}>Units</StyledText>
                     <SettingSwitch
-                        name="Items in one column"
-                        value={oneFridgeColumn}
-                        setValue={setOneFridgeColumn}
-                        dispatchFunc={changeFridgeColumns}
+                        name="Use american units (lbs, oz)"
+                        value={americanUnits}
+                        setValue={setAmericanUnits}
+                        dispatchFunc={toggleAmericanUnits}
                     />
                 </View>
             </View>

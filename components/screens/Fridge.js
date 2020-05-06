@@ -147,6 +147,7 @@ const fridge = props => {
                 addQuantityData={addQuantityData}
                 toggleDeleteState={toggleDeleteState}
                 minimal={view === 'minimal'}
+                wide={view === 'regular-wide'}
             />
         );
     };
