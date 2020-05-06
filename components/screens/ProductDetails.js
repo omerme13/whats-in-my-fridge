@@ -20,6 +20,7 @@ import { convertToSqlDate } from '../../utils/convert';
 const productDetails = props => {
     const id = props.route.params.id;
     const products = useSelector(state => state.product.productsInFridge);
+    const settings = useSelector(state => state.settings);
     const product =  products.find(prod => prod.id === id);
     const { name, label, expiryDate, quantity, unit, toBuy, photo, listItemId } = product;
     const [isToBuy, setIsToBuy] = useState(toBuy);
@@ -64,7 +65,7 @@ const productDetails = props => {
         props.navigation.navigate('Product', { id });
     };
 
-    const formattedExpiryDate = convertDate(expiryDate);
+    let formattedExpiryDate = convertDate(expiryDate, settings.areAmericanUnits, settings.isLongDate);
 
     useEffect(() => {
         setIsToBuy(toBuy);

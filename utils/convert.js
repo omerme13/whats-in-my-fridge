@@ -1,9 +1,21 @@
-export const convertDate = date => {
+export const convertDate = (date, areAmericanUnits, isLong) => {
     if (!date) {
         return null;
     }
-
+    
     const [yy, mm, dd] = date.toISOString().split('T')[0].split('-');
+
+    if (isLong) {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+
+        return `${+dd} ${months[mm - 1]} ${yy}`;
+
+    }
+    if (areAmericanUnits) {
+        return `${mm}-${dd}-${yy}`;
+    }
+
     return `${dd}-${mm}-${yy}`;
 };
 
@@ -35,7 +47,7 @@ export const getIncDecResult = (quantity, operator, unit) => {
     let op = operator === '+' ? 1 : -1;
     let result = +quantity + op;
     
-    if (unit === 'Kg' || unit === 'Lbs') {
+    if (unit === 'KG' || unit === 'LBS') {
         op = op * 0.1;
         result = (+quantity + op).toFixed(1)
     }

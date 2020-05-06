@@ -4,7 +4,8 @@ const initialState = {
     sortFridgePref : { sortBy: 'id', direction: 1 },
     sortListPref: { sortBy: 'id', direction: 1 },
     viewPref: 'regular',
-    areAmericanUnits: false
+    areAmericanUnits: false,
+    isLongDate :false
 };
 
 const reducer = (state = initialState, action) => {
@@ -24,7 +25,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 areAmericanUnits: action.pref
             };
-    
+
+        case actions.TOGGLE_LONG_DATE:
+            return {
+                ...state,
+                isLongDate: action.pref
+            };
+            
         case actions.LOAD_SETTINGS:
             return action.settings || state;
     }

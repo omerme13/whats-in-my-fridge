@@ -6,32 +6,40 @@ import StyledText from './UI/StyledText';
 
 import { colors } from '../utils/variables';
 
-const settingsSwitch = ({ value, dispatchFunc, setValue, name }) => {
+const settingsSwitch = ({ value, dispatchFunc, setValue, name, description }) => {
     const dispatch = useDispatch();
 
     return (
         <View style={styles.settingsSwitch}>
-            <StyledText>{name}</StyledText>
-            <Switch
-                trackColor={{ true: colors.primary }}
-                thumbColor={colors.secondary}
-                value={value} 
-                onValueChange={receivedValue => {
-                    setValue(receivedValue);
-                    dispatch(dispatchFunc(receivedValue))
-                }} 
-            />
+            <View style={styles.header}>
+                <StyledText>{name}</StyledText>
+                <Switch
+                    trackColor={{ true: colors.primary }}
+                    thumbColor={colors.secondary}
+                    value={value} 
+                    onValueChange={receivedValue => {
+                        setValue(receivedValue);
+                        dispatch(dispatchFunc(receivedValue))
+                    }} 
+                />
+            </View>
+            <StyledText style={styles.description}>{description}</StyledText>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     settingsSwitch: {
+        marginVertical: 10,
+    },
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginVertical: 10,
-        paddingVertical: 30
+    },
+    description: {
+        color: 'gray',
+        fontSize: 16
     }
-})
+});
 
 export default settingsSwitch;
