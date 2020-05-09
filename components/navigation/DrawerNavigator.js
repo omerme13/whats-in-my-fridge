@@ -3,34 +3,49 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TabNavigator from './TabNavigator';
+import DrawerContent from './DrawerContent';
 import SettingsNavigator from './SettingsNavigator';
 import AboutNavigator from './AboutNavigator';
 import { colors } from '../../utils/variables';
 
 const Drawer = createDrawerNavigator();
 
-const renderIcon = name => (
-    <MaterialCommunityIcons name={name} size={23} color={colors.primary} />
-);
+const screenOptions = ({ route }) => ({
+    drawerIcon: ({ focused }) => {
+        let iconName;
+        switch (route.name) {
+            case 'Products':
+                iconName = 'food';
+                break;
+            case 'Settings':
+                iconName = 'settings';
+                break;
+            case 'About':
+                iconName = 'information-outline';
+                break;
+            default: iconName = 'food';
+        }
+
+        return (
+            <MaterialCommunityIcons
+                name={iconName}
+                size={23}
+                color={focused ? colors.primary : colors.textLight}
+            /> 
+        ) 
+    }
+})
 
 const DrawerNavigator = () => {
     return (
-        <Drawer.Navigator drawerContentOptions={{activeTintColor: colors.secondary}}>
-            <Drawer.Screen
-                name="Products"
-                component={TabNavigator}
-                options={{drawerIcon: () => renderIcon('food')}}
-            />
-            <Drawer.Screen
-                name="Settings"
-                component={SettingsNavigator}
-                options={{drawerIcon: () => renderIcon('settings')}}
-            />
-            <Drawer.Screen
-                name="About"
-                component={AboutNavigator}
-                options={{drawerIcon: () => renderIcon('information-outline')}}
-            />
+        <Drawer.Navigator
+            drawerContent={DrawerContent}
+            drawerContentOptions={{activeTintColor: colors.primary}}
+            screenOptions={screenOptions}
+        >
+            <Drawer.Screen name="Products" component={TabNavigator} />
+            <Drawer.Screen name="Settings" component={SettingsNavigator} />
+            <Drawer.Screen name="About" component={AboutNavigator} />
         </Drawer.Navigator>
     );
 };
