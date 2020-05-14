@@ -23,7 +23,7 @@ const screenOptions = ({ route }) => ({
             case 'About':
                 iconName = 'information-outline';
                 break;
-            default: iconName = 'food';
+            default: break;
         }
 
         return (

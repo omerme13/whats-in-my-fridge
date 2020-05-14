@@ -9,7 +9,7 @@ const drawerContent = props => {
         <DrawerContentScrollView style={styles.drawerContent}>
             <View style={styles.iconContainer}>
                 <Image
-                    source={require('../../assets/logo.png')}
+                    source={require('../../assets/logo-white.png')}
                     style={styles.icon}
                 />
                 <StyledText style={styles.title}>What's In My Fridge</StyledText>

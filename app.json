@@ -6,14 +6,15 @@
     "platforms": ["android"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/logo-white.png",
     "splash": {
-      "image": "./assets/logo.png",
-      "resizeMode": "contain",
+      "image": "./assets/logo-white.png",
+      "resizeMode": "",
+      "backgroundColor": "#e0f7f3"
     },
     "android": {
         "adaptiveIcon": {
-            "foregroundImage": "./assets/logo.png",
+            "foregroundImage": "./assets/logo-white.png",
             "backgroundColor": "#e0f7f3"
         }
     },
