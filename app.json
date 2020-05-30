@@ -9,7 +9,6 @@
     "icon": "./assets/logo-white.png",
     "splash": {
       "image": "./assets/logo-white.png",
-      "resizeMode": "",
       "backgroundColor": "#e0f7f3"
     },
     "android": {

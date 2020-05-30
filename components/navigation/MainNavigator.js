@@ -6,7 +6,6 @@ import Spinner from '../UI/Spinner';
 import DrawerNavigator from './DrawerNavigator';
 import { loadSettings } from '../../store/actions/settings';
 
-
 const MainNavigator = () => {
     const [isLoading, setIsLoading] = useState(true);
     const dispatch = useDispatch();
