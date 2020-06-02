@@ -8,6 +8,8 @@ import SettingsNavigator from './SettingsNavigator';
 import AboutNavigator from './AboutNavigator';
 import { colors } from '../../utils/variables';
 
+import Notification from '../screens/Notification';
+
 const Drawer = createDrawerNavigator();
 
 const screenOptions = ({ route }) => ({
@@ -46,6 +48,7 @@ const DrawerNavigator = () => {
             <Drawer.Screen name="Products" component={TabNavigator} />
             <Drawer.Screen name="Settings" component={SettingsNavigator} />
             <Drawer.Screen name="About" component={AboutNavigator} />
+            <Drawer.Screen name="Test" component={Notification} />
         </Drawer.Navigator>
     );
 };
