@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         alignItems: 'flex-start',
-        // backgroundColor: colors.primaryLightest
     },
     settingItem: {
         width: '100%',
